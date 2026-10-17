@@ -6,9 +6,10 @@ import tailwindcss from '@tailwindcss/vite';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { docsPlugin } from './tools/docs-plugin.ts';
 
+const docsDir = resolve(import.meta.dirname, '../../packages/shared/content/docs');
+
 /** Every Markdown file in packages/shared/content/docs becomes a prerendered /docs/:slug route. */
-const contentDir = resolve(import.meta.dirname, '../../packages/shared/content/docs');
-const docSlugs = readdirSync(contentDir)
+const docSlugs = readdirSync(docsDir)
   .filter((file) => file.endsWith('.md'))
   .map((file) => file.replace(/\.md$/, ''));
 
@@ -18,7 +19,7 @@ export default defineConfig(({ mode }) => ({
   build: { outDir: '../../dist/apps/web/client', reportCompressedSize: true, emptyOutDir: true, target: ['es2020'] },
   resolve: { mainFields: ['module'] },
   plugins: [
-    docsPlugin(contentDir),
+    docsPlugin(docsDir),
     analog({
       ssr: true,
       static: true,

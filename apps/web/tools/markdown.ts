@@ -17,7 +17,7 @@ export function codeBlock(code: string, info: string | undefined): string {
   return `<pre class="docs-code" data-lang="${escapeHtml(lang)}"><code>${highlight(code.replace(/\n$/, ''), info)}</code></pre>`;
 }
 
-function slugify(text: string): string {
+export function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 

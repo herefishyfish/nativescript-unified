@@ -4,12 +4,13 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMenu, lucideX } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { NAV } from '../docs/content';
+import { DocsSearch } from '../layout/docs-search';
 import { ThemeToggle } from '../layout/theme-toggle';
 
 /** Layout for /docs: top bar, sidebar navigation and the page outlet. */
 @Component({
   selector: 'web-docs-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, HlmButton, NgIcon, ThemeToggle],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, HlmButton, NgIcon, ThemeToggle, DocsSearch],
   providers: [provideIcons({ lucideMenu, lucideX })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -23,6 +24,7 @@ import { ThemeToggle } from '../layout/theme-toggle';
       </a>
       <span class="ml-1 hidden rounded-full border px-2 py-0.5 text-xs text-muted-foreground sm:inline">HTML first</span>
       <div class="ml-auto flex items-center gap-1">
+        <web-docs-search />
         <a hlmBtn variant="ghost" size="sm" routerLink="/docs/introduction" class="hidden sm:inline-flex">Docs</a>
         <web-theme-toggle />
       </div>

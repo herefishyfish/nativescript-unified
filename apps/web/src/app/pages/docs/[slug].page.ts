@@ -3,15 +3,17 @@ import { DomSanitizer, Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { findDoc, neighbours } from '../../docs/content';
 import { DocsDemo } from '../../docs/demo';
+import { DocsToc } from '../../layout/docs-toc';
 
 /** /docs/:slug renders one Markdown file from packages/shared/content/docs. */
 @Component({
   selector: 'web-doc-page',
-  imports: [DocsDemo, RouterLink],
+  imports: [DocsDemo, RouterLink, DocsToc],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (doc(); as d) {
-      <article class="docs-prose mx-auto max-w-3xl" data-testid="doc" (click)="onClick($event)">
+      <div class="mx-auto flex max-w-5xl gap-10">
+      <article class="docs-prose min-w-0 max-w-3xl flex-1" data-testid="doc" (click)="onClick($event)">
         <p class="mb-2 text-sm font-medium text-primary">{{ d.section }}</p>
         @for (block of blocks(); track $index) {
           @if (block.kind === 'demo') {
@@ -34,6 +36,8 @@ import { DocsDemo } from '../../docs/demo';
           }
         </nav>
       </article>
+      <web-docs-toc [items]="toc()" />
+      </div>
     } @else {
       <article class="docs-prose mx-auto max-w-3xl" data-testid="not-found">
         <h1>Page not found</h1>
@@ -48,6 +52,7 @@ export default class DocPage {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly router = inject(Router);
   protected readonly doc = computed(() => findDoc(this.slug()));
+  protected readonly toc = computed(() => { return this.doc()?.headings ?? []; });
   protected readonly around = computed(() => neighbours(this.slug()));
   protected readonly blocks = computed(() => {
     const doc = this.doc();

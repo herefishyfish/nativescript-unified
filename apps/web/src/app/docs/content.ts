@@ -3,6 +3,7 @@ import { DOCS as BUILT, type BuiltDoc } from '~docs';
 
 /** Markdown is parsed at build time by tools/docs-plugin.ts. This module only reads the result. */
 export type { BuiltDoc };
+export type TocItem = BuiltDoc['headings'][number];
 export const DOCS: BuiltDoc[] = sortDocs(BUILT);
 export const NAV = buildNav(DOCS);
 

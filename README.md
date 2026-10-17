@@ -50,7 +50,7 @@ Hex values are estimates, not sampled from the shoe.
 
 - `apps/web` is prerendered (`ssr: true` + `static: true` in `vite.config.mts`); `nx build web` writes static HTML for `/` and every `/docs/:slug` to `dist/apps/web/analog/public`. Routes come from the files in `packages/shared/content/docs`.
 - Docs content is Markdown in `packages/shared/content/docs` (front matter: title, section, order, description). A fenced block tagged `html live` is both shown and rendered as a live demo (Angular JIT, see `apps/web/src/app/docs/demo.ts`).
-- Verify the built site: `npm run web:preview` then `npm run audit:web` (headless Edge via playwright-core; screenshots in `.audit/screenshots`).
+- Verify the built site: `npm run preview:web` then `npm run audit:web` (headless Edge via playwright-core; screenshots in `.audit/screenshots`).
 - Spartan brain/helm are consumed from source via tsconfig paths (`@spartan-ng/brain/*`, `@spartan-ng/helm/*`), not built packages. Their specs were copied but have no test target yet.
 - `embla-carousel-angular@21` and `ngx-scrollbar@19` have Angular 21-era peers; they installed but are unproven on 22.
 - Native does not yet use Spartan helm or Tailwind; `packages/shared` templates use Tailwind classes that only take effect on web until native gets `@nativescript/tailwind`.

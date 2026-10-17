@@ -1,5 +1,5 @@
-﻿// Headless Edge audit of the prerendered docs. Usage: node tools/audit-web.mjs [baseUrl]
-// Needs the static server running (node tools/serve-static.mjs). Screenshots go to .audit/screenshots.
+// Headless Edge audit of the prerendered docs. Usage: node tools/audit-web.mjs [baseUrl]
+// Needs the prerendered site served: npx nx run web:preview (vite preview of dist/apps/web/analog/public). Screenshots go to .audit/screenshots.
 import { mkdirSync } from 'node:fs';
 import { chromium } from 'playwright-core';
 

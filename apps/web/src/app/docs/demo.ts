@@ -1,4 +1,4 @@
-﻿import { NgComponentOutlet } from '@angular/common';
+import { NgComponentOutlet } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy, Component, PendingTasks, Type, effect, inject, input, signal } from '@angular/core';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { NS_ELEMENTS } from '@nativescript-unified/web-polyfills';

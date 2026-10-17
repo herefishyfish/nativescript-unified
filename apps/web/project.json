@@ -2,5 +2,6 @@
   "targets": {
     "build": { "command": "vite build", "options": { "cwd": "apps/web" }, "outputs": ["{workspaceRoot}/dist/apps/web"] },
     "serve": { "command": "vite", "options": { "cwd": "apps/web" } },
+    "preview": { "command": "vite preview --outDir ../../dist/apps/web/analog/public --port 4300 --strictPort", "dependsOn": ["build"], "options": { "cwd": "apps/web" } },
     "typecheck": { "command": "tsc -p tsconfig.app.json --noEmit", "options": { "cwd": "apps/web" } }
   } }

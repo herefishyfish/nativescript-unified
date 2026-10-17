@@ -1,4 +1,4 @@
-﻿{
+{
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "target": "es2022", "module": "preserve", "types": ["node", "vite/client"], "emitDecoratorMetadata": false, "noImplicitOverride": false, "lib": ["ESNext","dom","dom.iterable"] },
   "angularCompilerOptions": { "strictTemplates": true, "strictInjectionParameters": true },

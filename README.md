@@ -1,4 +1,4 @@
-﻿# nativescript-unified
+# nativescript-unified
 
 One Nx monorepo (Angular 22, Vite 8, Nx 23) for an **HTML-first** NativeScript Angular design that runs on web and native.
 Web and native stay separate at the top; shared HTML/features sit underneath.

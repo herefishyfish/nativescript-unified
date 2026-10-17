@@ -1,4 +1,4 @@
-﻿import '@angular/compiler';
+import '@angular/compiler';
 import '@angular/platform-server/init';
 import { BootstrapContext, bootstrapApplication } from '@angular/platform-browser';
 import { renderApplication } from '@angular/platform-server';

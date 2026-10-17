@@ -140,6 +140,32 @@ await mp.waitForTimeout(200);
 check('mobile: menu opens sidebar', await mp.locator('[data-testid=sidebar]').isVisible());
 await mp.screenshot({ path: `${out}/mobile-nav-open.png` });
 
+
+// 6. Prerendered 404 page, themed, and the client carries no Markdown parser.
+{
+  const res = await fetch(`${base}/404.html`);
+  const html = await res.text();
+  check('404.html is emitted and prerendered with content', res.ok && html.includes('data-testid="not-found-page"'));
+  const errors = await open(page, '/404.html');
+  check('404 page renders heading, no console errors', (await page.locator('h1').first().innerText()) === 'Page not found' && errors.length === 0, errors.join(' | '));
+  const spartan = await page.locator('a[data-slot=button], a[hlmbtn]').count();
+  check('404 page uses Spartan buttons', spartan >= 2);
+  await page.evaluate(() => document.documentElement.classList.remove('dark'));
+  const lightBg = await style(page, 'body', 'background-color');
+  await open(page, '/404.html', 'dark');
+  await page.evaluate(() => document.documentElement.classList.add('dark'));
+  const darkBg = await style(page, 'body', 'background-color');
+  check('404 page is themed (background differs in dark mode)', lightBg !== darkBg, `${lightBg} vs ${darkBg}`);
+  await page.screenshot({ path: `${out}/404-dark.png`, fullPage: true });
+  await open(page, '/404.html');
+  await page.screenshot({ path: `${out}/404.png`, fullPage: true });
+  const loaded = [];
+  page.on('response', (r) => r.url().endsWith('.js') && loaded.push(r.url()));
+  await open(page, '/docs/stack-layout');
+  const bodies = await Promise.all(loaded.map((u) => fetch(u).then((r) => r.text())));
+  check('client JS contains no marked/front-matter/prism', !bodies.some((b) => /Prism\.languages|gray-matter|front-matter|marked\.js|new Marked\(/.test(b)));
+  page.removeAllListeners('response');
+}
 await browser.close();
 const failed = results.filter((r) => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} checks passed`);

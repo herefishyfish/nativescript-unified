@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
-import { toBlocks } from '@nativescript-unified/shared';
 import { findDoc, neighbours } from '../../docs/content';
 import { DocsDemo } from '../../docs/demo';
-import { codeBlock, renderTokens } from '../../docs/markdown';
 
 /** /docs/:slug renders one Markdown file from packages/shared/content/docs. */
 @Component({
@@ -54,11 +52,7 @@ export default class DocPage {
   protected readonly blocks = computed(() => {
     const doc = this.doc();
     if (!doc) return [];
-    return toBlocks(doc.tokens).map((block) =>
-      block.kind === 'demo'
-        ? { kind: 'demo' as const, code: block.code, html: this.sanitizer.bypassSecurityTrustHtml(codeBlock(block.code, 'html')) }
-        : { kind: 'markdown' as const, html: this.sanitizer.bypassSecurityTrustHtml(renderTokens(block.tokens)) },
-    );
+    return doc.blocks.map((block) => ({ ...block, html: this.sanitizer.bypassSecurityTrustHtml(block.html) }));
   });
 
   constructor() {

@@ -1,7 +1,7 @@
 ---
 title: Project structure
 section: Getting started
-order: 2
+order: 3
 description: apps/web, apps/native and packages/*.
 ---
 
@@ -16,7 +16,7 @@ packages/
   ui/                Spartan brain + helm, plus styles/ (Tailwind preset, tokens)
   web-polyfills/     Angular components for NativeScript tags on the web
   analog-native/     File-based router and Markdown for NativeScript Angular
-docs/design.md       analog-native design notes
+docs/design.md       analog-native design notes (it calls the package `@nativescript/analog`; here it is `@nativescript-unified/analog-native`)
 ```
 
 ## apps/web
@@ -25,7 +25,7 @@ An AnalogJS app. File routes live in `src/app/pages`. The web core is `src/app/a
 
 ## apps/native
 
-A NativeScript Angular app built with `@nativescript/vite`. File routes live in `src/app/pages`, provided by `analog-native`. It has its own bootstrap in `src/main.ts`. Today it is verified with `tsc` only.
+A NativeScript Angular app built with `@nativescript/vite`. File routes live in `src/app/pages`, provided by `analog-native`. It has its own bootstrap in `src/main.ts`, which calls `installMasonKit()` and `provideFileRouter()`. Today it is verified with `tsc` only. See [Web vs native](/docs/web-vs-native).
 
 ## packages/shared
 
@@ -37,7 +37,7 @@ Spartan UI: `brain` is headless, `helm` is styled. They are consumed from source
 
 ## packages/web-polyfills
 
-Angular components that implement NativeScript view tags on the web. See [Layouts](/docs/stack-layout) and [Label](/docs/label).
+Angular components that implement NativeScript view tags on the web. Layouts: StackLayout, GridLayout, WrapLayout, AbsoluteLayout, DockLayout, FlexboxLayout and SplitView. See [StackLayout](/docs/stack-layout), [Label](/docs/label) and [Polyfill limitations](/docs/polyfill-limitations).
 
 ## packages/analog-native
 
@@ -52,7 +52,9 @@ Workspace packages are imported as `@nativescript-unified/<name>` and mapped in 
 ```bash
 npm install
 npx nx serve web                 # dev server
-npx nx build web                 # prerendered static site
+npx nx build web                 # prerendered static site in dist/apps/web/analog/public
+npx nx run web:preview           # serve that build on port 4300
+npm run audit:web                # headless Edge checks against the preview
 npx nx test web-polyfills        # polyfill unit tests
 npx nx test analog-native        # router unit tests
 npx nx run-many -t typecheck     # tsc for every project

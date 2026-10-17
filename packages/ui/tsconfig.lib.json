@@ -1,0 +1,3 @@
+{ "extends": "../../tsconfig.base.json", "compilerOptions": { "target": "es2022", "module": "preserve", "strict": true, "types": [], "emitDecoratorMetadata": false, "noImplicitOverride": false, "lib": ["ESNext","dom","dom.iterable"] },
+  "angularCompilerOptions": { "strictTemplates": true },
+  "include": ["brain/**/*.ts","helm/**/*.ts"], "exclude": ["**/*.spec.ts","**/*.stories.ts","**/test-setup.ts","brain/src/testing/**","native/**"] }

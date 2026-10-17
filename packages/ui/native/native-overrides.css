@@ -1,0 +1,21 @@
+/* Pixel stand-ins for spartan rules that have no NativeScript equivalent. Name the rule each one replaces. */
+
+/* .spartan-switch-thumb data-checked:translate-x-[calc(100%-2px)]: transforms take no percentages, so the track
+   places a checked thumb at its end instead. */
+.style-vega .group\/switch[data-state='checked'] {
+	justify-content: flex-end;
+}
+
+/* li[hlmPaginationItem] is a block box around an inline-flex link, which MasonKit sizes to the wrong width; a flex
+   item box sizes to the link. */
+.style-vega [data-slot='pagination-item'] {
+	display: flex;
+}
+
+/* .spartan-accordion-content data-[state=closed]:h-0: MasonKit keeps a zero-height panel at its content height, and
+   without the measured --brn-accordion-content-height there is no height animation to preserve. */
+.style-vega .spartan-accordion-content[data-state='closed'] {
+	display: none;
+	/* Android keeps drawing a panel that closes after first layout unless the native view is hidden too. */
+	visibility: collapse;
+}

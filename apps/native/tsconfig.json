@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
+    "paths": {
+      "~/*": ["./src/*"],
+      "@nativescript/analog": ["../../packages/analog-native/src/index.ts"],
+      "@nativescript/analog/vite": ["../../packages/analog-native/vite/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "references.d.ts"],
+  "exclude": ["node_modules", "platforms"]
+}
+

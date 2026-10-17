@@ -1,0 +1,19 @@
+{
+  "name": "web-polyfills",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/web-polyfills/src",
+  "prefix": "ns",
+  "projectType": "library",
+  "tags": ["scope:web"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": { "reportsDirectory": "coverage/packages/web-polyfills" }
+    },
+    "typecheck": {
+      "command": "tsc -p tsconfig.lib.json --noEmit",
+      "options": { "cwd": "packages/web-polyfills" }
+    }
+  }
+}

@@ -1,0 +1,100 @@
+/*
+ * Default styles for <analog-markdown>. Import this before your own rules and
+ * override any selector; lengths are unitless (dip), since px means physical pixels.
+ */
+.markdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12;
+  color: #1f2328;
+  font-size: 16;
+}
+
+/* Block spacing comes from the container gap, so reset MasonKit's user-agent margins. */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6,
+.markdown p,
+.markdown pre { margin: 0; }
+
+.markdown h1 { font-size: 30; font-weight: bold; }
+.markdown h2 { font-size: 24; font-weight: bold; padding-bottom: 4; border-bottom-width: 1; border-bottom-style: solid; border-bottom-color: #d1d9e0; }
+.markdown h3 { font-size: 20; font-weight: bold; }
+.markdown h4 { font-size: 18; font-weight: bold; }
+.markdown h5 { font-size: 16; font-weight: bold; }
+.markdown h6 { font-size: 14; font-weight: bold; color: #59636e; }
+
+.markdown p,
+.markdown li { line-height: 1.5; }
+
+.markdown ul,
+.markdown ol { margin: 0; padding-left: 24; }
+
+.markdown a { color: #0969da; text-decoration: underline; }
+
+.markdown code {
+  font-family: monospace;
+  font-size: 14;
+  background-color: #eff1f3;
+  border-radius: 4;
+  padding: 1 4;
+}
+
+.markdown pre {
+  font-family: monospace;
+  background-color: #f6f8fa;
+  border-radius: 6;
+  padding: 12;
+}
+
+.markdown pre code { background-color: transparent; padding: 0; white-space: pre-wrap; }
+
+.markdown blockquote {
+  margin: 0;
+  padding: 4 12;
+  color: #59636e;
+  border-left: 4 solid #d1d9e0;
+  background-color: #f6f8fa;
+}
+
+.markdown hr { margin: 8 0; height: 1; border-width: 0; background-color: #d1d9e0; }
+
+.markdown img { width: 100%; height: 180; object-fit: cover; border-radius: 6; }
+
+.markdown .md-table {
+  display: grid;
+  border-width: 1;
+  border-style: solid;
+  border-color: #d1d9e0;
+}
+
+.markdown .md-th,
+.markdown .md-td {
+  padding: 6 10;
+  border-width: 0.5;
+  border-style: solid;
+  border-color: #d1d9e0;
+}
+
+.markdown .md-th { font-weight: bold; background-color: #f6f8fa; }
+
+.markdown-route .markdown { padding: 16; }
+
+.ns-dark .markdown { color: #e6edf3; }
+.ns-dark .markdown h2 { border-bottom-color: #30363d; }
+.ns-dark .markdown h6,
+.ns-dark .markdown blockquote { color: #8b949e; }
+.ns-dark .markdown a { color: #4493f8; }
+.ns-dark .markdown code,
+.ns-dark .markdown pre,
+.ns-dark .markdown blockquote,
+.ns-dark .markdown .md-th { background-color: #161b22; }
+.ns-dark .markdown pre code { background-color: transparent; }
+.ns-dark .markdown blockquote { border-left: 4 solid #30363d; }
+.ns-dark .markdown hr { background-color: #30363d; }
+.ns-dark .markdown .md-table,
+.ns-dark .markdown .md-th,
+.ns-dark .markdown .md-td { border-color: #30363d; }

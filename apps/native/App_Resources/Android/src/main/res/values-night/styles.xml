@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Night beats API level, so this replaces values-v21/NativeScriptToolbarStyle. Keep elevation. -->
+    <style name="NativeScriptToolbarStyle" parent="NativeScriptToolbarStyleBase">
+        <item name="android:elevation">4dp</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+</resources>

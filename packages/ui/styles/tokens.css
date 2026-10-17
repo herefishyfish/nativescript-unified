@@ -1,0 +1,76 @@
+/*
+ * Shared colour tokens for web, native and ui.
+ * Inspired by New Balance Numeric Jamie Foy 306 "Sea Salt / Vintage Teal".
+ * Plain hex only (NativeScript CSS has no oklch). Dark mode flips to deep teal.
+ * Web toggles `.dark` on <html>; NativeScript sets `.ns-dark` on the root view.
+ */
+:root,
+.ns-light {
+  --radius: 0.625rem;
+  --background: #f2ebdd; /* sea salt */
+  --foreground: #10302f; /* deep teal-black */
+  --card: #f7f2e7;
+  --card-foreground: #10302f;
+  --popover: #f7f2e7;
+  --popover-foreground: #10302f;
+  --primary: #3e8e84; /* vintage teal */
+  --primary-foreground: #f2ebdd;
+  --secondary: #e3d9c4; /* sand */
+  --secondary-foreground: #10302f;
+  --muted: #e3d9c4;
+  --muted-foreground: #4f6b67;
+  --accent: #cfe2dd;
+  --accent-foreground: #10302f;
+  --destructive: #b4432f;
+  --border: #d3c7ad;
+  --input: #d3c7ad;
+  --ring: #3e8e84;
+  --chart-1: #3e8e84;
+  --chart-2: #10302f;
+  --chart-3: #c9b88f;
+  --chart-4: #7bb5ab;
+  --chart-5: #8a7a55;
+  --sidebar: #e9e0cc;
+  --sidebar-foreground: #10302f;
+  --sidebar-primary: #3e8e84;
+  --sidebar-primary-foreground: #f2ebdd;
+  --sidebar-accent: #cfe2dd;
+  --sidebar-accent-foreground: #10302f;
+  --sidebar-border: #d3c7ad;
+  --sidebar-ring: #3e8e84;
+}
+
+.dark,
+.ns-dark {
+  --background: #0b2423; /* deep teal */
+  --foreground: #f2ebdd;
+  --card: #113130;
+  --card-foreground: #f2ebdd;
+  --popover: #113130;
+  --popover-foreground: #f2ebdd;
+  --primary: #5fb3a8;
+  --primary-foreground: #0b2423;
+  --secondary: #1a403e;
+  --secondary-foreground: #f2ebdd;
+  --muted: #1a403e;
+  --muted-foreground: #a9bdb7;
+  --accent: #1f4c49;
+  --accent-foreground: #f2ebdd;
+  --destructive: #e0715d;
+  --border: #25504d;
+  --input: #25504d;
+  --ring: #5fb3a8;
+  --chart-1: #5fb3a8;
+  --chart-2: #f2ebdd;
+  --chart-3: #c9b88f;
+  --chart-4: #3e8e84;
+  --chart-5: #8a7a55;
+  --sidebar: #0f2b2a;
+  --sidebar-foreground: #f2ebdd;
+  --sidebar-primary: #5fb3a8;
+  --sidebar-primary-foreground: #0b2423;
+  --sidebar-accent: #1f4c49;
+  --sidebar-accent-foreground: #f2ebdd;
+  --sidebar-border: #25504d;
+  --sidebar-ring: #5fb3a8;
+}

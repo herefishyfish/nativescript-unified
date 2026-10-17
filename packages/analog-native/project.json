@@ -1,0 +1,25 @@
+{
+  "name": "analog-native",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/analog-native/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "packages/analog-native/ng-package.json",
+        "tsConfig": "packages/analog-native/tsconfig.lib.json"
+      }
+    },
+    "test": {
+      "command": "vitest run",
+      "options": { "cwd": "packages/analog-native" }
+    },
+    "typecheck": {
+      "command": "tsc -p tsconfig.spec.json --noEmit",
+      "options": { "cwd": "packages/analog-native" }
+    }
+  }
+}
+

@@ -1,0 +1,34 @@
+{
+  "name": "@nativescript/analog",
+  "version": "0.0.1",
+  "description": "AnalogJS-style file-based routing and Markdown content for NativeScript Angular apps built with @nativescript/vite.",
+  "license": "MIT",
+  "keywords": [
+    "nativescript",
+    "angular",
+    "analog",
+    "vite",
+    "markdown",
+    "router"
+  ],
+  "peerDependencies": {
+    "@angular/common": ">=22.0.0",
+    "@angular/core": ">=22.0.0",
+    "@angular/router": ">=22.0.0",
+    "@nativescript/angular": ">=22.0.0",
+    "@nativescript/core": ">=9.0.0",
+    "@triniwiz/nativescript-masonkit": ">=1.0.0-beta.113",
+    "rxjs": "^7.8.0",
+    "vite": ">=8.0.0"
+  },
+  "dependencies": {
+    "front-matter": "^4.0.2",
+    "marked": "^18.1.1",
+    "tslib": "^2.8.0"
+  },
+  "sideEffects": false,
+  "exports": {
+    "./markdown.css": "./markdown.css"
+  },
+  "type": "module"
+}

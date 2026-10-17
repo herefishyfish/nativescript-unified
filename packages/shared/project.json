@@ -1,0 +1,2 @@
+{ "name": "shared", "$schema": "../../node_modules/nx/schemas/project-schema.json", "sourceRoot": "packages/shared/src", "projectType": "library", "tags": ["scope:shared"],
+  "targets": { "typecheck": { "command": "tsc -p tsconfig.lib.json --noEmit", "options": { "cwd": "packages/shared" } } } }

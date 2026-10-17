@@ -1,0 +1,62 @@
+@import '@nativescript/analog/markdown.css';
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12;
+  padding: 16;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16;
+}
+
+a {
+  color: #0969da;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4;
+  padding: 12;
+  border-radius: 8;
+  background-color: #f6f8fa;
+}
+
+.muted {
+  color: #59636e;
+}
+
+.tabs {
+  padding: 12 16;
+  background-color: #eef2f6;
+}
+
+.page h1,
+.page h2,
+.page p {
+  margin: 0;
+}
+
+.ns-dark Page,
+.ns-dark ActionBar {
+  background-color: #0d1117;
+  color: #e6edf3;
+}
+
+.ns-dark a {
+  color: #4493f8;
+}
+
+.ns-dark .card,
+.ns-dark .tabs {
+  background-color: #161b22;
+}
+
+.ns-dark .muted {
+  color: #8b949e;
+}

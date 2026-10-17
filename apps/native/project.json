@@ -1,0 +1,32 @@
+{
+  "name": "native",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/native/src",
+  "targets": {
+    "android": {
+      "command": "ns run android --no-hmr --gradleArgs=-Pabis=arm64-v8a,x86_64",
+      "options": {
+        "cwd": "apps/native"
+      }
+    },
+    "debug-android": {
+      "command": "ns debug android --no-hmr --gradleArgs=-Pabis=arm64-v8a,x86_64",
+      "options": {
+        "cwd": "apps/native"
+      }
+    },
+    "build-android": {
+      "command": "ns build android --gradleArgs=-Pabis=arm64-v8a,x86_64",
+      "options": {
+        "cwd": "apps/native"
+      }
+    },
+    "clean": {
+      "command": "ns clean",
+      "options": {
+        "cwd": "apps/native"
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+import { BooleanInput } from '@angular/cdk/coercion';
+import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input } from '@angular/core';
+import { injectBrnComboboxBase } from './brn-combobox.token';
+
+@Directive({
+	selector: 'input[brnComboboxChipInput]',
+	host: {
+		'[id]': 'id()',
+		type: 'text',
+		role: 'combobox',
+		autocomplete: 'off',
+		autocorrect: 'off',
+		autocapitalize: 'none',
+		spellcheck: 'false',
+		'aria-autocomplete': 'list',
+		'aria-haspopup': 'listbox',
+		'[attr.aria-expanded]': '_isExpanded()',
+		'[attr.aria-invalid]': '_ariaInvalid() ? "true" : null',
+		'[attr.data-invalid]': '_ariaInvalid() ? "true" : null',
+		'[attr.data-matches-spartan-invalid]': '_spartanInvalid() ? "true" : null',
+		'[attr.data-dirty]': '_touched() ? "true" : null',
+		'[attr.data-touched]': '_touched() ? "true" : null',
+		'[attr.disabled]': '_disabled() ? "" : null',
+		'[attr.data-disabled]': '_disabled() ? "" : null',
+		'(keydown)': 'onKeyDown($event)',
+		'(input)': 'onInput($event)',
+	},
+})
+export class BrnComboboxChipInput<T> {
+	private static _id = 0;
+	private readonly _el = inject(ElementRef);
+	private readonly _combobox = injectBrnComboboxBase<T>();
+
+	/** The id of the combobox input */
+	public readonly id = input<string>(`brn-combobox-input-${++BrnComboboxChipInput._id}`);
+
+	/** Manual override for aria-invalid. When not set, auto-detects from the parent combobox error state. */
+	public readonly ariaInvalidInput = input<boolean | undefined, BooleanInput>(undefined, {
+		transform: (v: BooleanInput) => (v === '' || v === undefined ? undefined : booleanAttribute(v)),
+		alias: 'aria-invalid',
+	});
+
+	/** Computed aria-invalid: uses manual override if provided, otherwise reads from parent error state. */
+	protected readonly _ariaInvalid = computed(() => this.ariaInvalidInput() ?? this._combobox.controlState?.()?.invalid);
+
+	protected readonly _dirty = computed(() => this._combobox.controlState?.()?.dirty);
+	protected readonly _touched = computed(() => this._combobox.controlState?.()?.touched);
+	protected readonly _spartanInvalid = computed(() => this._combobox.controlState?.()?.spartanInvalid);
+
+	protected readonly _disabled = this._combobox.disabledState;
+
+	/** Whether the combobox panel is expanded */
+	protected readonly _isExpanded = this._combobox.isExpanded;
+
+	constructor() {
+		this._combobox.registerComboboxChipInput?.(this);
+
+		effect(() => {
+			const search = this._combobox.search();
+
+			if (search === '') {
+				// reset input on popover close
+				this._el.nativeElement.value = '';
+			}
+		});
+	}
+
+	protected onInput(event: Event) {
+		const value = (event.target as HTMLInputElement).value;
+
+		this._combobox.search.set(value);
+		this._combobox.open();
+	}
+
+	/** Listen for keydown events */
+	protected onKeyDown(event: KeyboardEvent): void {
+		if (event.key === 'Enter') {
+			// prevent form submission if inside a form
+			event.preventDefault();
+
+			this._combobox.selectActiveItem();
+		}
+
+		if (this._isExpanded() && event.key === 'Tab') {
+			// Tab moves focus on to the next control. Close the popup without toggling the
+			// highlighted option.
+			this._combobox.close();
+		}
+
+		if (!this._isExpanded()) {
+			if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+				this._combobox.open();
+			}
+
+			if (event.key === 'Escape') {
+				this._combobox.resetValue();
+			}
+		}
+
+		if (this._combobox.search() === '' && event.key === 'Backspace') {
+			this._combobox.removeLastSelectedItem();
+		}
+
+		this._combobox.keyManager.onKeydown(event);
+	}
+}

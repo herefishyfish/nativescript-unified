@@ -1,0 +1,13 @@
+node_modules
+dist
+.nx
+.angular
+.vite
+.analog
+.nitro
+.output
+coverage
+tmp
+platforms
+.ns-vite-build
+*.log

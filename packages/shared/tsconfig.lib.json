@@ -1,0 +1,2 @@
+{ "extends": "../../tsconfig.base.json", "compilerOptions": { "target": "es2022", "module": "preserve", "strict": true, "types": [] },
+  "angularCompilerOptions": { "strictTemplates": true }, "include": ["src/**/*.ts"] }

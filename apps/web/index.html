@@ -5,7 +5,17 @@
     <title>NativeScript Unified</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="HTML-first NativeScript: one design for web and native." />
     <link rel="icon" href="data:," />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('ns-unified-theme');
+          var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="bg-background text-foreground">
     <app-root></app-root>

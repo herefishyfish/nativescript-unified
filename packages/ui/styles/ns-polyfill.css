@@ -1,0 +1,22 @@
+/*
+ * Maps the --ns-* variables read by web-polyfills onto the theme tokens in tokens.css.
+ * Web only: NativeScript CSS does not import this file.
+ */
+:root,
+.dark,
+.ns-light,
+.ns-dark {
+  --ns-foreground: var(--foreground);
+  --ns-card: var(--card);
+  --ns-card-foreground: var(--card-foreground);
+  --ns-primary: var(--primary);
+  --ns-primary-foreground: var(--primary-foreground);
+  --ns-secondary: var(--secondary);
+  --ns-secondary-foreground: var(--secondary-foreground);
+  --ns-muted: var(--muted);
+  --ns-muted-foreground: var(--muted-foreground);
+  --ns-accent: var(--accent);
+  --ns-border: var(--border);
+  --ns-radius: var(--radius);
+  --ns-overlay: rgb(0 0 0 / 0.4);
+}

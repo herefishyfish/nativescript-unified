@@ -1,7 +1,7 @@
 import { ActionBarComponent } from '@nativescript/angular';
 import { Component, inject, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
-import { HrefDirective } from '@nativescript/analog';
+import { HrefDirective } from '@nativescript-unified/analog-native';
 
 @Component({
   selector: 'not-found-page',

@@ -43,7 +43,7 @@ function globCalls(options: NativescriptAnalogOptions): Markers {
 
 const MARKER_PATTERN = /(['"])(__NS_ANALOG_[A-Z_]+__)\1/g;
 
-/** Vite plugin that feeds `@nativescript/analog` its pages and content at build time. */
+/** Vite plugin that feeds `@nativescript-unified/analog-native` its pages and content at build time. */
 export function nativescriptAnalog(options: NativescriptAnalogOptions = {}): Plugin {
   const markers = globCalls(options);
   let root = process.cwd();

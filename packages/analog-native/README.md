@@ -1,4 +1,4 @@
-# @nativescript/analog
+# @nativescript-unified/analog-native
 
 AnalogJS-style file-based routing and Markdown content for NativeScript Angular apps built with [`@nativescript/vite`](https://docs.nativescript.org/configuration/vite).
 
@@ -11,7 +11,7 @@ Front matter parsing and Markdown lexing happen at build time in Vite. The devic
 ## Install
 
 ```sh
-npm install @nativescript/analog @triniwiz/nativescript-masonkit@1.0.0-beta.113
+npm install @nativescript-unified/analog-native @triniwiz/nativescript-masonkit@1.0.0-beta.113
 ```
 
 Peer dependencies: `@angular/core`, `@angular/router` 22+, `@nativescript/angular` 22+, `@nativescript/core` 9+, `@triniwiz/nativescript-masonkit` 1.0.0-beta.113+, and `vite` 8+.
@@ -24,7 +24,7 @@ Add the Vite plugin after `angularConfig`:
 // vite.config.mts
 import { defineConfig, mergeConfig } from 'vite';
 import { angularConfig } from '@nativescript/vite/angular';
-import { nativescriptAnalog } from '@nativescript/analog/vite';
+import { nativescriptAnalog } from '@nativescript-unified/analog-native/vite';
 
 export default defineConfig(({ mode }) =>
   mergeConfig(angularConfig({ mode }), {
@@ -39,7 +39,7 @@ Install MasonKit and provide the file router:
 // src/main.ts
 import { bootstrapApplication, runNativeScriptAngularApp } from '@nativescript/angular';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { provideFileRouter } from '@nativescript/analog';
+import { provideFileRouter } from '@nativescript-unified/analog-native';
 import { installMasonKit } from '@triniwiz/nativescript-masonkit/angular';
 import { AppComponent } from './app/app.component';
 
@@ -67,7 +67,7 @@ import '@triniwiz/nativescript-masonkit';
 Import the default Markdown styles in `app.css`:
 
 ```css
-@import '@nativescript/analog/markdown.css';
+@import '@nativescript-unified/analog-native/markdown.css';
 ```
 
 ## File conventions
@@ -97,13 +97,13 @@ Routed pages that show an `<ActionBar>` must import `ActionBarComponent` from `@
 
 | Export | From | Purpose |
 | --- | --- | --- |
-| `nativescriptAnalog(options?)` | `@nativescript/analog/vite` | Vite plugin. `pagesDirs` and `contentDirs` add root-relative directories. |
-| `provideFileRouter(...features)` | `@nativescript/analog` | `provideNativeScriptRouter` with the generated routes. |
-| `createRoutes(files, options?)` | `@nativescript/analog` | Pure route builder, for custom setups and tests. |
-| `injectContentFiles(filter?)` | `@nativescript/analog` | `{ filename, slug, attributes }[]` for every file under `src/content`. |
-| `injectContent(options?)` | `@nativescript/analog` | `Observable<ContentFile>`. Defaults to the `slug` param; `{ param, subdirectory }` or `{ customFilename }`. |
-| `MarkdownComponent` | `@nativescript/analog` | `<analog-markdown [content]="file" />` renders a `ContentFile` or token array. |
-| `HrefDirective` | `@nativescript/analog` | Import it where you write `<a href>`. App paths navigate with the router, URLs open the browser. |
+| `nativescriptAnalog(options?)` | `@nativescript-unified/analog-native/vite` | Vite plugin. `pagesDirs` and `contentDirs` add root-relative directories. |
+| `provideFileRouter(...features)` | `@nativescript-unified/analog-native` | `provideNativeScriptRouter` with the generated routes. |
+| `createRoutes(files, options?)` | `@nativescript-unified/analog-native` | Pure route builder, for custom setups and tests. |
+| `injectContentFiles(filter?)` | `@nativescript-unified/analog-native` | `{ filename, slug, attributes }[]` for every file under `src/content`. |
+| `injectContent(options?)` | `@nativescript-unified/analog-native` | `Observable<ContentFile>`. Defaults to the `slug` param; `{ param, subdirectory }` or `{ customFilename }`. |
+| `MarkdownComponent` | `@nativescript-unified/analog-native` | `<analog-markdown [content]="file" />` renders a `ContentFile` or token array. |
+| `HrefDirective` | `@nativescript-unified/analog-native` | Import it where you write `<a href>`. App paths navigate with the router, URLs open the browser. |
 
 ```ts
 @Component({

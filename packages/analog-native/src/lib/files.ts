@@ -10,7 +10,7 @@ const CONTENT_ATTRIBUTE_FILES: unknown = '__NS_ANALOG_CONTENT_ATTRIBUTE_FILES__'
 function globbed<T>(value: unknown): T {
   if (typeof value === 'string') {
     throw new Error(
-      `[@nativescript/analog] ${value} was not replaced. Add nativescriptAnalog() from '@nativescript/analog/vite' to vite.config plugins.`,
+      `[@nativescript-unified/analog-native] ${value} was not replaced. Add nativescriptAnalog() from '@nativescript-unified/analog-native/vite' to vite.config plugins.`,
     );
   }
   return value as T;

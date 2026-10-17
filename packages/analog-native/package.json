@@ -1,5 +1,5 @@
 {
-  "name": "@nativescript/analog",
+  "name": "@nativescript-unified/analog-native",
   "version": "0.0.1",
   "description": "AnalogJS-style file-based routing and Markdown content for NativeScript Angular apps built with @nativescript/vite.",
   "license": "MIT",

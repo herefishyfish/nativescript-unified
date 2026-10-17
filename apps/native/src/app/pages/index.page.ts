@@ -1,6 +1,6 @@
 import { ActionBarComponent } from '@nativescript/angular';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { HrefDirective, injectContentFiles } from '@nativescript/analog';
+import { HrefDirective, injectContentFiles } from '@nativescript-unified/analog-native';
 import type { PostAttributes } from '../post';
 
 @Component({

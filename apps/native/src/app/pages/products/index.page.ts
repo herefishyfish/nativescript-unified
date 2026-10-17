@@ -1,5 +1,5 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { HrefDirective } from '@nativescript/analog';
+import { HrefDirective } from '@nativescript-unified/analog-native';
 import { PRODUCTS } from '../../products';
 
 @Component({

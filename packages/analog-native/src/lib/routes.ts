@@ -124,7 +124,7 @@ function markdownRoute(
   children: Route[] | undefined,
 ): Route {
   if (!options.markdownComponent) {
-    throw new Error(`[@nativescript/analog] ${filename} is a Markdown route, but createRoutes() got no markdownComponent.`);
+    throw new Error(`[@nativescript-unified/analog-native] ${filename} is a Markdown route, but createRoutes() got no markdownComponent.`);
   }
   const content = module.default;
   const title = content.attributes['title'];

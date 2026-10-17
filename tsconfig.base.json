@@ -336,10 +336,10 @@
                                           "@spartan-ng/helm/utils":  [
                                                                          "./packages/ui/helm/utils/src/index.ts"
                                                                      ],
-                                          "@nativescript/analog":  [
+                                          "@nativescript-unified/analog-native":  [
                                                                        "./packages/analog-native/src/index.ts"
                                                                    ],
-                                          "@nativescript/analog/vite":  [
+                                          "@nativescript-unified/analog-native/vite":  [
                                                                             "./packages/analog-native/vite/src/index.ts"
                                                                         ],
                                           "@nativescript-unified/web-polyfills":  [

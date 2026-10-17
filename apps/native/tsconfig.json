@@ -6,8 +6,8 @@
     "paths": {
       "~/*": ["./src/*"],
       "@nativescript-unified/shared": ["../../packages/shared/src/index.ts"],
-      "@nativescript/analog": ["../../packages/analog-native/src/index.ts"],
-      "@nativescript/analog/vite": ["../../packages/analog-native/vite/src/index.ts"]
+      "@nativescript-unified/analog-native": ["../../packages/analog-native/src/index.ts"],
+      "@nativescript-unified/analog-native/vite": ["../../packages/analog-native/vite/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts", "references.d.ts", "../../packages/shared/src/**/*.ts"],

@@ -2,7 +2,7 @@ import { ActionBarComponent } from '@nativescript/angular';
 import { DatePipe } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { injectContent, MarkdownComponent } from '@nativescript/analog';
+import { injectContent, MarkdownComponent } from '@nativescript-unified/analog-native';
 import type { PostAttributes } from '../../post';
 
 @Component({

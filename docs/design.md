@@ -1,4 +1,4 @@
-# @nativescript/analog design
+# @nativescript-unified/analog-native design
 
 AnalogJS-style file-based routing and Markdown content for NativeScript Angular apps built with `@nativescript/vite`. Views are written as normal HTML markup (`<div>`, `<p>`, `<h1>`, `<ul>`, `<a href>`) rendered natively by [MasonKit](https://github.com/triniwiz/nativescript-mason) and laid out with CSS flex and grid.
 
@@ -23,13 +23,13 @@ MasonKit has no table elements, so Markdown tables render as a CSS grid of `div`
 
 ## Package layout
 
-One publishable package, `@nativescript/analog`, built with ng-packagr:
+One publishable package, `@nativescript-unified/analog-native`, built with ng-packagr:
 
 | Entry point | Runs in | Contents |
 | --- | --- | --- |
-| `@nativescript/analog` | device | `createRoutes`, `provideFileRouter`, `injectContentFiles`, `injectContent`, `MarkdownComponent`, `MarkdownRouteComponent`, `HrefDirective`, types |
-| `@nativescript/analog/vite` | Node (Vite) | `nativescriptAnalog(options)` Vite plugin |
-| `@nativescript/analog/markdown.css` | app stylesheet | default Markdown styles, scoped under `.markdown` |
+| `@nativescript-unified/analog-native` | device | `createRoutes`, `provideFileRouter`, `injectContentFiles`, `injectContent`, `MarkdownComponent`, `MarkdownRouteComponent`, `HrefDirective`, types |
+| `@nativescript-unified/analog-native/vite` | Node (Vite) | `nativescriptAnalog(options)` Vite plugin |
+| `@nativescript-unified/analog-native/markdown.css` | app stylesheet | default Markdown styles, scoped under `.markdown` |
 
 ## Data shapes
 

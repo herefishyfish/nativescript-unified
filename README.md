@@ -40,7 +40,7 @@ Hex values are estimates, not sampled from the shoe.
 ## Where things came from
 
 - `analog-native`, `apps/native`: `D:\Code\playgrounds\nativescript-analog` (`packages/analog`, `apps/demo`).
-  The import name is still `@nativescript/analog` (path-mapped), unchanged to keep the app code as-is.
+  The import name is still `@nativescript-unified/analog-native` (path-mapped), unchanged to keep the app code as-is.
 - `web-polyfills`: `angular-docs` `origin/main` `packages/libraries/ui` only (layouts, views, text runs, Placeholder,
   ActionBar/Tabs/Pager/Drawer). Dropped: docs content, PLAN/RESEARCH/CONTENT-GAPS, playground, showcase catalog, brand, WebGPU hero, theme service.
 - `ui`: `spartan` working tree on `feat/nativescript` (libs/brain, libs/helm, registry `style-vega.css`).

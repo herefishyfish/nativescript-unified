@@ -11,3 +11,4 @@ tmp
 platforms
 .ns-vite-build
 *.log
+.audit

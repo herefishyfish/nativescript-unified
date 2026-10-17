@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "nativescript-unified",
   "version": "0.0.0",
   "private": true,
@@ -10,6 +10,8 @@
   "scripts": {
     "web": "nx serve web",
     "build:web": "nx build web",
+    "serve:static": "node tools/serve-static.mjs",
+    "audit:web": "node tools/audit-web.mjs",
     "android": "nx run native:android",
     "ios": "nx run native:ios",
     "test": "nx run-many -t test",
@@ -76,3 +78,4 @@
     "vitest": "^4.0.8"
   }
 }
+

@@ -1,4 +1,4 @@
-# nativescript-unified
+﻿# nativescript-unified
 
 One Nx monorepo (Angular 22, Vite 8, Nx 23) for an **HTML-first** NativeScript Angular design that runs on web and native.
 Web and native stay separate at the top; shared HTML/features sit underneath.
@@ -40,7 +40,7 @@ Hex values are estimates, not sampled from the shoe.
 ## Where things came from
 
 - `analog-native`, `apps/native`: `D:\Code\playgrounds\nativescript-analog` (`packages/analog`, `apps/demo`).
-  The import name is still `@nativescript-unified/analog-native` (path-mapped), unchanged to keep the app code as-is.
+  The import name is `@nativescript-unified/analog-native` (path-mapped in `tsconfig.base.json`).
 - `web-polyfills`: `angular-docs` `origin/main` `packages/libraries/ui` only (layouts, views, text runs, Placeholder,
   ActionBar/Tabs/Pager/Drawer). Dropped: docs content, PLAN/RESEARCH/CONTENT-GAPS, playground, showcase catalog, brand, WebGPU hero, theme service.
 - `ui`: `spartan` working tree on `feat/nativescript` (libs/brain, libs/helm, registry `style-vega.css`).
@@ -48,8 +48,11 @@ Hex values are estimates, not sampled from the shoe.
 
 ## Known gaps / decisions
 
-- `apps/web` runs with `ssr: false` (client build). `src/main.server.ts` exists only because the Analog/Nitro build needs an entry.
+- `apps/web` is prerendered (`ssr: true` + `static: true` in `vite.config.mts`); `nx build web` writes static HTML for `/` and every `/docs/:slug` to `dist/apps/web/analog/public`. Routes come from the files in `packages/shared/content/docs`.
+- Docs content is Markdown in `packages/shared/content/docs` (front matter: title, section, order, description). A fenced block tagged `html live` is both shown and rendered as a live demo (Angular JIT, see `apps/web/src/app/docs/demo.ts`).
+- Verify the built site: `npm run serve:static` then `npm run audit:web` (headless Edge via playwright-core; screenshots in `.audit/screenshots`).
 - Spartan brain/helm are consumed from source via tsconfig paths (`@spartan-ng/brain/*`, `@spartan-ng/helm/*`), not built packages. Their specs were copied but have no test target yet.
 - `embla-carousel-angular@21` and `ngx-scrollbar@19` have Angular 21-era peers; they installed but are unproven on 22.
 - Native does not yet use Spartan helm or Tailwind; `packages/shared` templates use Tailwind classes that only take effect on web until native gets `@nativescript/tailwind`.
 - Native verified by `tsc` only (no device/emulator build). Node 24.14 is slightly below Angular 22.2's engine range (24.15), warnings only.
+

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMenu, lucideX } from '@ng-icons/lucide';
@@ -34,7 +34,6 @@ import { ThemeToggle } from '../layout/theme-toggle';
         data-testid="sidebar"
         class="fixed inset-x-0 bottom-0 top-14 z-20 overflow-y-auto border-r bg-sidebar p-4 md:sticky md:block md:h-[calc(100vh-3.5rem)] md:w-64 md:shrink-0"
         [class.hidden]="!open()"
-        [class.md:block]="true"
       >
         @for (section of nav; track section.title) {
           <div class="mb-5">

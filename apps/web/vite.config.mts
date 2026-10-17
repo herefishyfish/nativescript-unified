@@ -3,10 +3,13 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
+import { docsSearchIndex } from '../../tools/docs-search-index.mjs';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
+const docsDir = resolve(import.meta.dirname, '../../packages/shared/content/docs');
+
 /** Every Markdown file in packages/shared/content/docs becomes a prerendered /docs/:slug route. */
-const docSlugs = readdirSync(resolve(import.meta.dirname, '../../packages/shared/content/docs'))
+const docSlugs = readdirSync(docsDir)
   .filter((file) => file.endsWith('.md'))
   .map((file) => file.replace(/\.md$/, ''));
 
@@ -24,6 +27,7 @@ export default defineConfig(({ mode }) => ({
       workspaceRoot: resolve(import.meta.dirname, '../..'),
       vite: { tsconfig: resolve(import.meta.dirname, 'tsconfig.app.json') },
     }),
+    docsSearchIndex(docsDir),
     nxViteTsPaths(),
     tailwindcss(),
   ],

@@ -35,3 +35,4 @@
 .docs-code .token.punctuation { color: var(--muted-foreground); }
 .dark .docs-code .token.attr-name { color: var(--chart-3); }
 .dark .docs-code .token.attr-value, .dark .docs-code .token.string { color: var(--chart-4); }
+.docs-prose :is(h2, h3) { scroll-margin-top: 5rem; }

@@ -1,3 +1,4 @@
+import { slugify } from './markdown';
 import { buildNav, parseDoc, sortDocs, type DocPage } from '@nativescript-unified/shared';
 
 /** Markdown lives in packages/shared so native can reuse the same files. */
@@ -19,4 +20,11 @@ export function neighbours(slug: string): { prev?: DocPage; next?: DocPage } {
   const flat = NAV.flatMap((section) => section.pages.map((page) => page.slug));
   const at = flat.indexOf(slug);
   return { prev: at > 0 ? findDoc(flat[at - 1]) : undefined, next: at >= 0 ? findDoc(flat[at + 1] ?? '') : undefined };
+}
+export interface TocItem { id: string; text: string; depth: 2 | 3 }
+
+export function tocOf(doc: DocPage): TocItem[] {
+  return doc.tokens.flatMap((token) =>
+    token.type === 'heading' && (token.depth === 2 || token.depth === 3) ? [{ id: slugify(token.text), text: token.text, depth: token.depth as 2 | 3 }] : [],
+  );
 }

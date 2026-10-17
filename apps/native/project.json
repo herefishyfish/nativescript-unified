@@ -4,6 +4,7 @@
   "projectType": "application",
   "sourceRoot": "apps/native/src",
   "targets": {
+    "typecheck": { "command": "tsc -p tsconfig.json --noEmit", "options": { "cwd": "apps/native" } },
     "android": {
       "command": "ns run android --no-hmr --gradleArgs=-Pabis=arm64-v8a,x86_64",
       "options": {

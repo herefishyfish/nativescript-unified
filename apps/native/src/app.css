@@ -1,3 +1,4 @@
+@import '../../../packages/ui/styles/tokens.css';
 @import '@nativescript/analog/markdown.css';
 
 .page {

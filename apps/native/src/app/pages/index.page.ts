@@ -12,6 +12,7 @@ import type { PostAttributes } from '../post';
     <scroll>
       <div class="page">
         <nav>
+          <a href="/shared">Shared HTML</a>
           <a href="/about">About</a>
           <a href="/products">Products</a>
           <a href="/docs">Docs</a>

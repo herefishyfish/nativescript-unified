@@ -4,5 +4,5 @@
   "angularCompilerOptions": { "strictTemplates": true, "strictInjectionParameters": true },
   "files": ["src/main.ts"],
   "include": ["src/**/*.ts", "../../packages/shared/src/**/*.ts", "../../packages/web-polyfills/src/**/*.ts"],
-  "exclude": ["**/*.spec.ts"]
+  "exclude": ["**/*.spec.ts", "../../packages/**/*.spec.ts"]
 }

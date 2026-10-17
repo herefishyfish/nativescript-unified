@@ -11,346 +11,345 @@
                                         "ESNext",
                                         "dom"
                                     ],
-                            "baseUrl":  ".",
                             "paths":  {
                                           "@spartan-ng/brain":  [
-                                                                    "packages/ui/brain/src/index.ts"
+                                                                    "./packages/ui/brain/src/index.ts"
                                                                 ],
                                           "@spartan-ng/brain/accordion":  [
-                                                                              "packages/ui/brain/accordion/src/index.ts"
+                                                                              "./packages/ui/brain/accordion/src/index.ts"
                                                                           ],
                                           "@spartan-ng/brain/alert-dialog":  [
-                                                                                 "packages/ui/brain/alert-dialog/src/index.ts"
+                                                                                 "./packages/ui/brain/alert-dialog/src/index.ts"
                                                                              ],
                                           "@spartan-ng/brain/autocomplete":  [
-                                                                                 "packages/ui/brain/autocomplete/src/index.ts"
+                                                                                 "./packages/ui/brain/autocomplete/src/index.ts"
                                                                              ],
                                           "@spartan-ng/brain/avatar":  [
-                                                                           "packages/ui/brain/avatar/src/index.ts"
+                                                                           "./packages/ui/brain/avatar/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/button":  [
-                                                                           "packages/ui/brain/button/src/index.ts"
+                                                                           "./packages/ui/brain/button/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/calendar":  [
-                                                                             "packages/ui/brain/calendar/src/index.ts"
+                                                                             "./packages/ui/brain/calendar/src/index.ts"
                                                                          ],
                                           "@spartan-ng/brain/checkbox":  [
-                                                                             "packages/ui/brain/checkbox/src/index.ts"
+                                                                             "./packages/ui/brain/checkbox/src/index.ts"
                                                                          ],
                                           "@spartan-ng/brain/collapsible":  [
-                                                                                "packages/ui/brain/collapsible/src/index.ts"
+                                                                                "./packages/ui/brain/collapsible/src/index.ts"
                                                                             ],
                                           "@spartan-ng/brain/combobox":  [
-                                                                             "packages/ui/brain/combobox/src/index.ts"
+                                                                             "./packages/ui/brain/combobox/src/index.ts"
                                                                          ],
                                           "@spartan-ng/brain/command":  [
-                                                                            "packages/ui/brain/command/src/index.ts"
+                                                                            "./packages/ui/brain/command/src/index.ts"
                                                                         ],
                                           "@spartan-ng/brain/core":  [
-                                                                         "packages/ui/brain/core/src/index.ts"
+                                                                         "./packages/ui/brain/core/src/index.ts"
                                                                      ],
                                           "@spartan-ng/brain/date-picker":  [
-                                                                                "packages/ui/brain/date-picker/src/index.ts"
+                                                                                "./packages/ui/brain/date-picker/src/index.ts"
                                                                             ],
                                           "@spartan-ng/brain/date-time":  [
-                                                                              "packages/ui/brain/date-time/src/index.ts"
+                                                                              "./packages/ui/brain/date-time/src/index.ts"
                                                                           ],
                                           "@spartan-ng/brain/date-time-luxon":  [
-                                                                                    "packages/ui/brain/date-time-luxon/src/index.ts"
+                                                                                    "./packages/ui/brain/date-time-luxon/src/index.ts"
                                                                                 ],
                                           "@spartan-ng/brain/dialog":  [
-                                                                           "packages/ui/brain/dialog/src/index.ts"
+                                                                           "./packages/ui/brain/dialog/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/drawer":  [
-                                                                           "packages/ui/brain/drawer/src/index.ts"
+                                                                           "./packages/ui/brain/drawer/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/field":  [
-                                                                          "packages/ui/brain/field/src/index.ts"
+                                                                          "./packages/ui/brain/field/src/index.ts"
                                                                       ],
                                           "@spartan-ng/brain/forms":  [
-                                                                          "packages/ui/brain/forms/src/index.ts"
+                                                                          "./packages/ui/brain/forms/src/index.ts"
                                                                       ],
                                           "@spartan-ng/brain/hover-card":  [
-                                                                               "packages/ui/brain/hover-card/src/index.ts"
+                                                                               "./packages/ui/brain/hover-card/src/index.ts"
                                                                            ],
                                           "@spartan-ng/brain/input":  [
-                                                                          "packages/ui/brain/input/src/index.ts"
+                                                                          "./packages/ui/brain/input/src/index.ts"
                                                                       ],
                                           "@spartan-ng/brain/input-otp":  [
-                                                                              "packages/ui/brain/input-otp/src/index.ts"
+                                                                              "./packages/ui/brain/input-otp/src/index.ts"
                                                                           ],
                                           "@spartan-ng/brain/label":  [
-                                                                          "packages/ui/brain/label/src/index.ts"
+                                                                          "./packages/ui/brain/label/src/index.ts"
                                                                       ],
                                           "@spartan-ng/brain/message-scroller":  [
-                                                                                     "packages/ui/brain/message-scroller/src/index.ts"
+                                                                                     "./packages/ui/brain/message-scroller/src/index.ts"
                                                                                  ],
                                           "@spartan-ng/brain/navigation-menu":  [
-                                                                                    "packages/ui/brain/navigation-menu/src/index.ts"
+                                                                                    "./packages/ui/brain/navigation-menu/src/index.ts"
                                                                                 ],
                                           "@spartan-ng/brain/overlay":  [
-                                                                            "packages/ui/brain/overlay/src/index.ts"
+                                                                            "./packages/ui/brain/overlay/src/index.ts"
                                                                         ],
                                           "@spartan-ng/brain/popover":  [
-                                                                            "packages/ui/brain/popover/src/index.ts"
+                                                                            "./packages/ui/brain/popover/src/index.ts"
                                                                         ],
                                           "@spartan-ng/brain/progress":  [
-                                                                             "packages/ui/brain/progress/src/index.ts"
+                                                                             "./packages/ui/brain/progress/src/index.ts"
                                                                          ],
                                           "@spartan-ng/brain/questionnaire":  [
-                                                                                  "packages/ui/brain/questionnaire/src/index.ts"
+                                                                                  "./packages/ui/brain/questionnaire/src/index.ts"
                                                                               ],
                                           "@spartan-ng/brain/radio-group":  [
-                                                                                "packages/ui/brain/radio-group/src/index.ts"
+                                                                                "./packages/ui/brain/radio-group/src/index.ts"
                                                                             ],
                                           "@spartan-ng/brain/resizable":  [
-                                                                              "packages/ui/brain/resizable/src/index.ts"
+                                                                              "./packages/ui/brain/resizable/src/index.ts"
                                                                           ],
                                           "@spartan-ng/brain/select":  [
-                                                                           "packages/ui/brain/select/src/index.ts"
+                                                                           "./packages/ui/brain/select/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/separator":  [
-                                                                              "packages/ui/brain/separator/src/index.ts"
+                                                                              "./packages/ui/brain/separator/src/index.ts"
                                                                           ],
                                           "@spartan-ng/brain/sheet":  [
-                                                                          "packages/ui/brain/sheet/src/index.ts"
+                                                                          "./packages/ui/brain/sheet/src/index.ts"
                                                                       ],
                                           "@spartan-ng/brain/slider":  [
-                                                                           "packages/ui/brain/slider/src/index.ts"
+                                                                           "./packages/ui/brain/slider/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/sonner":  [
-                                                                           "packages/ui/brain/sonner/src/index.ts"
+                                                                           "./packages/ui/brain/sonner/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/switch":  [
-                                                                           "packages/ui/brain/switch/src/index.ts"
+                                                                           "./packages/ui/brain/switch/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/tabs":  [
-                                                                         "packages/ui/brain/tabs/src/index.ts"
+                                                                         "./packages/ui/brain/tabs/src/index.ts"
                                                                      ],
                                           "@spartan-ng/brain/testing":  [
-                                                                            "packages/ui/brain/src/testing/index.ts"
+                                                                            "./packages/ui/brain/src/testing/index.ts"
                                                                         ],
                                           "@spartan-ng/brain/textarea":  [
-                                                                             "packages/ui/brain/textarea/src/index.ts"
+                                                                             "./packages/ui/brain/textarea/src/index.ts"
                                                                          ],
                                           "@spartan-ng/brain/toggle":  [
-                                                                           "packages/ui/brain/toggle/src/index.ts"
+                                                                           "./packages/ui/brain/toggle/src/index.ts"
                                                                        ],
                                           "@spartan-ng/brain/toggle-group":  [
-                                                                                 "packages/ui/brain/toggle-group/src/index.ts"
+                                                                                 "./packages/ui/brain/toggle-group/src/index.ts"
                                                                              ],
                                           "@spartan-ng/brain/tooltip":  [
-                                                                            "packages/ui/brain/tooltip/src/index.ts"
+                                                                            "./packages/ui/brain/tooltip/src/index.ts"
                                                                         ],
                                           "@spartan-ng/helm":  [
-                                                                   "packages/ui/helm/src/index.ts"
+                                                                   "./packages/ui/helm/src/index.ts"
                                                                ],
                                           "@spartan-ng/helm/accordion":  [
-                                                                             "packages/ui/helm/accordion/src/index.ts"
+                                                                             "./packages/ui/helm/accordion/src/index.ts"
                                                                          ],
                                           "@spartan-ng/helm/alert":  [
-                                                                         "packages/ui/helm/alert/src/index.ts"
+                                                                         "./packages/ui/helm/alert/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/alert-dialog":  [
-                                                                                "packages/ui/helm/alert-dialog/src/index.ts"
+                                                                                "./packages/ui/helm/alert-dialog/src/index.ts"
                                                                             ],
                                           "@spartan-ng/helm/aspect-ratio":  [
-                                                                                "packages/ui/helm/aspect-ratio/src/index.ts"
+                                                                                "./packages/ui/helm/aspect-ratio/src/index.ts"
                                                                             ],
                                           "@spartan-ng/helm/attachment":  [
-                                                                              "packages/ui/helm/attachment/src/index.ts"
+                                                                              "./packages/ui/helm/attachment/src/index.ts"
                                                                           ],
                                           "@spartan-ng/helm/autocomplete":  [
-                                                                                "packages/ui/helm/autocomplete/src/index.ts"
+                                                                                "./packages/ui/helm/autocomplete/src/index.ts"
                                                                             ],
                                           "@spartan-ng/helm/avatar":  [
-                                                                          "packages/ui/helm/avatar/src/index.ts"
+                                                                          "./packages/ui/helm/avatar/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/badge":  [
-                                                                         "packages/ui/helm/badge/src/index.ts"
+                                                                         "./packages/ui/helm/badge/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/breadcrumb":  [
-                                                                              "packages/ui/helm/breadcrumb/src/index.ts"
+                                                                              "./packages/ui/helm/breadcrumb/src/index.ts"
                                                                           ],
                                           "@spartan-ng/helm/bubble":  [
-                                                                          "packages/ui/helm/bubble/src/index.ts"
+                                                                          "./packages/ui/helm/bubble/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/button":  [
-                                                                          "packages/ui/helm/button/src/index.ts"
+                                                                          "./packages/ui/helm/button/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/button-group":  [
-                                                                                "packages/ui/helm/button-group/src/index.ts"
+                                                                                "./packages/ui/helm/button-group/src/index.ts"
                                                                             ],
                                           "@spartan-ng/helm/calendar":  [
-                                                                            "packages/ui/helm/calendar/src/index.ts"
+                                                                            "./packages/ui/helm/calendar/src/index.ts"
                                                                         ],
                                           "@spartan-ng/helm/card":  [
-                                                                        "packages/ui/helm/card/src/index.ts"
+                                                                        "./packages/ui/helm/card/src/index.ts"
                                                                     ],
                                           "@spartan-ng/helm/carousel":  [
-                                                                            "packages/ui/helm/carousel/src/index.ts"
+                                                                            "./packages/ui/helm/carousel/src/index.ts"
                                                                         ],
                                           "@spartan-ng/helm/chart":  [
-                                                                         "packages/ui/helm/chart/src/index.ts"
+                                                                         "./packages/ui/helm/chart/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/checkbox":  [
-                                                                            "packages/ui/helm/checkbox/src/index.ts"
+                                                                            "./packages/ui/helm/checkbox/src/index.ts"
                                                                         ],
                                           "@spartan-ng/helm/collapsible":  [
-                                                                               "packages/ui/helm/collapsible/src/index.ts"
+                                                                               "./packages/ui/helm/collapsible/src/index.ts"
                                                                            ],
                                           "@spartan-ng/helm/combobox":  [
-                                                                            "packages/ui/helm/combobox/src/index.ts"
+                                                                            "./packages/ui/helm/combobox/src/index.ts"
                                                                         ],
                                           "@spartan-ng/helm/command":  [
-                                                                           "packages/ui/helm/command/src/index.ts"
+                                                                           "./packages/ui/helm/command/src/index.ts"
                                                                        ],
                                           "@spartan-ng/helm/context-menu":  [
-                                                                                "packages/ui/helm/context-menu/src/index.ts"
+                                                                                "./packages/ui/helm/context-menu/src/index.ts"
                                                                             ],
                                           "@spartan-ng/helm/date-picker":  [
-                                                                               "packages/ui/helm/date-picker/src/index.ts"
+                                                                               "./packages/ui/helm/date-picker/src/index.ts"
                                                                            ],
                                           "@spartan-ng/helm/dialog":  [
-                                                                          "packages/ui/helm/dialog/src/index.ts"
+                                                                          "./packages/ui/helm/dialog/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/drawer":  [
-                                                                          "packages/ui/helm/drawer/src/index.ts"
+                                                                          "./packages/ui/helm/drawer/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/dropdown-menu":  [
-                                                                                 "packages/ui/helm/dropdown-menu/src/index.ts"
+                                                                                 "./packages/ui/helm/dropdown-menu/src/index.ts"
                                                                              ],
                                           "@spartan-ng/helm/empty":  [
-                                                                         "packages/ui/helm/empty/src/index.ts"
+                                                                         "./packages/ui/helm/empty/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/field":  [
-                                                                         "packages/ui/helm/field/src/index.ts"
+                                                                         "./packages/ui/helm/field/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/hover-card":  [
-                                                                              "packages/ui/helm/hover-card/src/index.ts"
+                                                                              "./packages/ui/helm/hover-card/src/index.ts"
                                                                           ],
                                           "@spartan-ng/helm/input":  [
-                                                                         "packages/ui/helm/input/src/index.ts"
+                                                                         "./packages/ui/helm/input/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/input-group":  [
-                                                                               "packages/ui/helm/input-group/src/index.ts"
+                                                                               "./packages/ui/helm/input-group/src/index.ts"
                                                                            ],
                                           "@spartan-ng/helm/input-otp":  [
-                                                                             "packages/ui/helm/input-otp/src/index.ts"
+                                                                             "./packages/ui/helm/input-otp/src/index.ts"
                                                                          ],
                                           "@spartan-ng/helm/item":  [
-                                                                        "packages/ui/helm/item/src/index.ts"
+                                                                        "./packages/ui/helm/item/src/index.ts"
                                                                     ],
                                           "@spartan-ng/helm/kbd":  [
-                                                                       "packages/ui/helm/kbd/src/index.ts"
+                                                                       "./packages/ui/helm/kbd/src/index.ts"
                                                                    ],
                                           "@spartan-ng/helm/label":  [
-                                                                         "packages/ui/helm/label/src/index.ts"
+                                                                         "./packages/ui/helm/label/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/marker":  [
-                                                                          "packages/ui/helm/marker/src/index.ts"
+                                                                          "./packages/ui/helm/marker/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/menubar":  [
-                                                                           "packages/ui/helm/menubar/src/index.ts"
+                                                                           "./packages/ui/helm/menubar/src/index.ts"
                                                                        ],
                                           "@spartan-ng/helm/message":  [
-                                                                           "packages/ui/helm/message/src/index.ts"
+                                                                           "./packages/ui/helm/message/src/index.ts"
                                                                        ],
                                           "@spartan-ng/helm/message-scroller":  [
-                                                                                    "packages/ui/helm/message-scroller/src/index.ts"
+                                                                                    "./packages/ui/helm/message-scroller/src/index.ts"
                                                                                 ],
                                           "@spartan-ng/helm/native-select":  [
-                                                                                 "packages/ui/helm/native-select/src/index.ts"
+                                                                                 "./packages/ui/helm/native-select/src/index.ts"
                                                                              ],
                                           "@spartan-ng/helm/navigation-menu":  [
-                                                                                   "packages/ui/helm/navigation-menu/src/index.ts"
+                                                                                   "./packages/ui/helm/navigation-menu/src/index.ts"
                                                                                ],
                                           "@spartan-ng/helm/pagination":  [
-                                                                              "packages/ui/helm/pagination/src/index.ts"
+                                                                              "./packages/ui/helm/pagination/src/index.ts"
                                                                           ],
                                           "@spartan-ng/helm/popover":  [
-                                                                           "packages/ui/helm/popover/src/index.ts"
+                                                                           "./packages/ui/helm/popover/src/index.ts"
                                                                        ],
                                           "@spartan-ng/helm/progress":  [
-                                                                            "packages/ui/helm/progress/src/index.ts"
+                                                                            "./packages/ui/helm/progress/src/index.ts"
                                                                         ],
                                           "@spartan-ng/helm/questionnaire":  [
-                                                                                 "packages/ui/helm/questionnaire/src/index.ts"
+                                                                                 "./packages/ui/helm/questionnaire/src/index.ts"
                                                                              ],
                                           "@spartan-ng/helm/radio-group":  [
-                                                                               "packages/ui/helm/radio-group/src/index.ts"
+                                                                               "./packages/ui/helm/radio-group/src/index.ts"
                                                                            ],
                                           "@spartan-ng/helm/resizable":  [
-                                                                             "packages/ui/helm/resizable/src/index.ts"
+                                                                             "./packages/ui/helm/resizable/src/index.ts"
                                                                          ],
                                           "@spartan-ng/helm/scroll-area":  [
-                                                                               "packages/ui/helm/scroll-area/src/index.ts"
+                                                                               "./packages/ui/helm/scroll-area/src/index.ts"
                                                                            ],
                                           "@spartan-ng/helm/select":  [
-                                                                          "packages/ui/helm/select/src/index.ts"
+                                                                          "./packages/ui/helm/select/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/separator":  [
-                                                                             "packages/ui/helm/separator/src/index.ts"
+                                                                             "./packages/ui/helm/separator/src/index.ts"
                                                                          ],
                                           "@spartan-ng/helm/sheet":  [
-                                                                         "packages/ui/helm/sheet/src/index.ts"
+                                                                         "./packages/ui/helm/sheet/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/sidebar":  [
-                                                                           "packages/ui/helm/sidebar/src/index.ts"
+                                                                           "./packages/ui/helm/sidebar/src/index.ts"
                                                                        ],
                                           "@spartan-ng/helm/skeleton":  [
-                                                                            "packages/ui/helm/skeleton/src/index.ts"
+                                                                            "./packages/ui/helm/skeleton/src/index.ts"
                                                                         ],
                                           "@spartan-ng/helm/slider":  [
-                                                                          "packages/ui/helm/slider/src/index.ts"
+                                                                          "./packages/ui/helm/slider/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/sonner":  [
-                                                                          "packages/ui/helm/sonner/src/index.ts"
+                                                                          "./packages/ui/helm/sonner/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/spinner":  [
-                                                                           "packages/ui/helm/spinner/src/index.ts"
+                                                                           "./packages/ui/helm/spinner/src/index.ts"
                                                                        ],
                                           "@spartan-ng/helm/switch":  [
-                                                                          "packages/ui/helm/switch/src/index.ts"
+                                                                          "./packages/ui/helm/switch/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/table":  [
-                                                                         "packages/ui/helm/table/src/index.ts"
+                                                                         "./packages/ui/helm/table/src/index.ts"
                                                                      ],
                                           "@spartan-ng/helm/tabs":  [
-                                                                        "packages/ui/helm/tabs/src/index.ts"
+                                                                        "./packages/ui/helm/tabs/src/index.ts"
                                                                     ],
                                           "@spartan-ng/helm/textarea":  [
-                                                                            "packages/ui/helm/textarea/src/index.ts"
+                                                                            "./packages/ui/helm/textarea/src/index.ts"
                                                                         ],
                                           "@spartan-ng/helm/toggle":  [
-                                                                          "packages/ui/helm/toggle/src/index.ts"
+                                                                          "./packages/ui/helm/toggle/src/index.ts"
                                                                       ],
                                           "@spartan-ng/helm/toggle-group":  [
-                                                                                "packages/ui/helm/toggle-group/src/index.ts"
+                                                                                "./packages/ui/helm/toggle-group/src/index.ts"
                                                                             ],
                                           "@spartan-ng/helm/tooltip":  [
-                                                                           "packages/ui/helm/tooltip/src/index.ts"
+                                                                           "./packages/ui/helm/tooltip/src/index.ts"
                                                                        ],
                                           "@spartan-ng/helm/typography":  [
-                                                                              "packages/ui/helm/typography/src/index.ts"
+                                                                              "./packages/ui/helm/typography/src/index.ts"
                                                                           ],
                                           "@spartan-ng/helm/utils":  [
-                                                                         "packages/ui/helm/utils/src/index.ts"
+                                                                         "./packages/ui/helm/utils/src/index.ts"
                                                                      ],
                                           "@nativescript/analog":  [
-                                                                       "packages/analog-native/src/index.ts"
+                                                                       "./packages/analog-native/src/index.ts"
                                                                    ],
                                           "@nativescript/analog/vite":  [
-                                                                            "packages/analog-native/vite/src/index.ts"
+                                                                            "./packages/analog-native/vite/src/index.ts"
                                                                         ],
                                           "@nativescript-unified/web-polyfills":  [
-                                                                                      "packages/web-polyfills/src/index.ts"
+                                                                                      "./packages/web-polyfills/src/index.ts"
                                                                                   ],
                                           "@nativescript-unified/shared":  [
-                                                                               "packages/shared/src/index.ts"
+                                                                               "./packages/shared/src/index.ts"
                                                                            ],
                                           "@nativescript-unified/ui/*":  [
-                                                                             "packages/ui/*"
+                                                                             "./packages/ui/*"
                                                                          ]
                                       }
                         }

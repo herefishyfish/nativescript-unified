@@ -1,8 +1,9 @@
-{
+﻿{
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "target": "es2022", "module": "preserve", "types": ["node", "vite/client"], "emitDecoratorMetadata": false, "noImplicitOverride": false, "lib": ["ESNext","dom","dom.iterable"] },
   "angularCompilerOptions": { "strictTemplates": true, "strictInjectionParameters": true },
-  "files": ["src/main.ts"],
+  "files": ["src/main.ts", "src/main.server.ts"],
   "include": ["src/**/*.ts", "../../packages/shared/src/**/*.ts", "../../packages/web-polyfills/src/**/*.ts"],
   "exclude": ["**/*.spec.ts", "../../packages/**/*.spec.ts"]
 }
+

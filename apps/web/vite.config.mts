@@ -1,4 +1,4 @@
-import { resolve } from 'node:path';
+﻿import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
@@ -11,7 +11,9 @@ export default defineConfig(({ mode }) => ({
   resolve: { mainFields: ['module'] },
   plugins: [
     analog({
-      ssr: false,
+      ssr: true,
+      static: true,
+      prerender: { routes: ['/'] },
       nitro: { preset: 'static' },
       workspaceRoot: resolve(import.meta.dirname, '../..'),
       vite: { tsconfig: resolve(import.meta.dirname, 'tsconfig.app.json') },
@@ -22,3 +24,4 @@ export default defineConfig(({ mode }) => ({
   server: { fs: { allow: ['../..'] } },
   define: { 'import.meta.vitest': mode !== 'production' },
 }));
+

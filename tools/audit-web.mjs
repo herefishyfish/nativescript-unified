@@ -4,7 +4,7 @@ import { mkdirSync } from 'node:fs';
 import { chromium } from 'playwright-core';
 
 const base = process.argv[2] ?? 'http://localhost:4300';
-const out = '.audit/screenshots';
+const out = process.env.AUDIT_OUT ?? '.audit/screenshots';
 mkdirSync(out, { recursive: true });
 
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
@@ -141,6 +141,30 @@ check('mobile: menu opens sidebar', await mp.locator('[data-testid=sidebar]').is
 await mp.screenshot({ path: `${out}/mobile-nav-open.png` });
 
 
+// Sidebar fills the viewport below the header at 1280x800, also after scrolling.
+{
+  const tall = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  const sp = await tall.newPage();
+  await open(sp, '/docs/project-structure');
+  const measure = async () => sp.evaluate(() => {
+    const s = document.querySelector('[data-testid=sidebar]').getBoundingClientRect();
+    const h = document.querySelector('header').getBoundingClientRect();
+    return { top: Math.round(s.top), bottom: Math.round(s.bottom), headerBottom: Math.round(h.bottom), vh: innerHeight };
+  });
+  const at0 = await measure();
+  check('sidebar spans header bottom to viewport bottom (top of page)', at0.top === at0.headerBottom && at0.bottom === at0.vh, JSON.stringify(at0));
+  await sp.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' }));
+  await sp.waitForTimeout(300);
+  const at1 = await measure();
+  check('sidebar still spans header bottom to viewport bottom after scrolling', at1.top === at1.headerBottom && at1.bottom === at1.vh, JSON.stringify(at1));
+  await sp.screenshot({ path: `${out}/sidebar-scrolled.png` });
+  await sp.setViewportSize({ width: 1920, height: 1080 });
+  await sp.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
+  await sp.waitForTimeout(300);
+  const wide = await measure();
+  check('sidebar spans header bottom to viewport bottom at 1920x1080 scrolled', wide.top === wide.headerBottom && wide.bottom === wide.vh, JSON.stringify(wide));
+  await tall.close();
+}
 // 6. Prerendered 404 page, themed, and the client carries no Markdown parser.
 {
   const res = await fetch(`${base}/404.html`);

@@ -30,11 +30,11 @@ import { ThemeToggle } from '../layout/theme-toggle';
       </div>
     </header>
 
-    <div class="mx-auto flex max-w-7xl">
+    <div class="mx-auto flex max-w-7xl items-start">
       <nav
         aria-label="Documentation"
         data-testid="sidebar"
-        class="fixed inset-x-0 bottom-0 top-14 z-20 overflow-y-auto border-r bg-sidebar p-4 md:sticky md:block md:h-[calc(100vh-3.5rem)] md:w-64 md:shrink-0"
+        class="fixed inset-x-0 bottom-0 top-14 z-20 overflow-y-auto border-r bg-sidebar p-4 md:sticky md:top-14 md:block md:h-[calc(100dvh-3.5rem)] md:max-h-[calc(100dvh-3.5rem)] md:w-64 md:shrink-0 md:self-start"
         [class.hidden]="!open()"
       >
         @for (section of nav; track section.title) {

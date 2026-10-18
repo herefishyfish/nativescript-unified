@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowRight, lucideBookOpen, lucideLayoutGrid, lucideLayers, lucidePalette, lucideRoute, lucideSlidersHorizontal } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { FEATURES } from '@nativescript-unified/shared';
 import { NsLabel, NsStackLayout } from '@nativescript-unified/web-polyfills';
+import { Seo } from '../core/seo';
 import { SiteHeader } from '../layout/site-header';
 
 const SNIPPET = `<StackLayout orientation="horizontal">
@@ -19,7 +20,7 @@ const SNIPPET = `<StackLayout orientation="horizontal">
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <web-site-header />
-    <main>
+    <main id="main-content" tabindex="-1" class="outline-none">
       <section class="home-hero" data-testid="hero">
         <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:px-8 md:py-20 lg:grid-cols-[1.1fr_1fr]">
           <div>
@@ -79,6 +80,13 @@ const SNIPPET = `<StackLayout orientation="horizontal">
 export default class HomePage {
   protected readonly features = FEATURES;
   protected readonly snippet = SNIPPET;
+
+  constructor() {
+    inject(Seo).set({
+      description: 'HTML-first NativeScript docs: one set of pages for web and native, with Angular Elements that render legacy NativeScript layouts like StackLayout in the browser.',
+      path: '/',
+    });
+  }
   protected readonly links = [
     { title: 'Introduction', body: 'What the project is and how the pieces fit.', href: '/docs/introduction', icon: 'lucideBookOpen' },
     { title: 'File routing', body: 'Pages from the pages folder, on web and native.', href: '/docs/file-routing', icon: 'lucideRoute' },

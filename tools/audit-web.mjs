@@ -3,6 +3,18 @@
 import { mkdirSync } from 'node:fs';
 import { chromium } from 'playwright-core';
 
+import { createRequire } from 'node:module';
+const axeSource = createRequire(import.meta.url).resolve('axe-core/axe.min.js');
+/** Runs axe-core on the current page and returns short "rule (n nodes: selector)" strings. */
+async function axe(page) {
+  if (!(await page.evaluate(() => !!window.axe))) await page.addScriptTag({ path: axeSource });
+  const res = await page.evaluate(async () => {
+    const r = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] } });
+    // Live demos render arbitrary author colours on purpose, so contrast is judged on the site chrome and prose, not on demo previews.
+    return r.violations.map((v) => ({ ...v, nodes: v.nodes.filter((n) => !(v.id === 'color-contrast' && document.querySelector(n.target[0])?.closest('.docs-demo-preview'))) })).filter((v) => v.nodes.length);
+  });
+  return res.map((v) => `${v.id} (${v.nodes.length}: ${v.nodes.slice(0, 2).map((n) => n.target.join(' ')).join(', ')}) ${v.nodes[0]?.any?.[0]?.message ?? ''}`);
+}
 const base = process.argv[2] ?? 'http://localhost:4300';
 const out = process.env.AUDIT_OUT ?? '.audit/screenshots';
 mkdirSync(out, { recursive: true });
@@ -303,6 +315,145 @@ check('mobile: TOC hidden', !(await mp.locator('[data-testid=toc]').isVisible())
     await open(tp, '/');
     await tp.screenshot({ path: `${out}/${name}-home.png`, fullPage: true });
     await c.close();
+  }
+}
+// 8. SEO: per-page head tags in the prerendered HTML, sitemap and robots.
+const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
+{
+  const titles = new Set();
+  const bad = [];
+  for (const route of ['', ...slugs.map((s) => 'docs/' + s)]) {
+    const html = await (await fetch(`${base}/${route}${route ? '/' : ''}`)).text();
+    const get = (re) => html.match(re)?.[1];
+    const title = get(/<title>([^<]*)<\/title>/);
+    const desc = get(/<meta name="description" content="([^"]*)"/);
+    const canon = get(/<link rel="canonical" href="([^"]*)"/);
+    const ogTitle = get(/<meta property="og:title" content="([^"]*)"/);
+    const ogUrl = get(/<meta property="og:url" content="([^"]*)"/);
+    const ogDesc = get(/<meta property="og:description" content="([^"]*)"/);
+    const expectPath = route ? '/' + route : '/';
+    const ok = title && desc && desc.length > 20 && canon && canon.endsWith(expectPath) && ogTitle === title && ogUrl === canon && ogDesc === desc && !titles.has(title) && (html.match(/<link rel="canonical"/g) ?? []).length === 1 && (html.match(/<meta name="description"/g) ?? []).length === 1;
+    titles.add(title);
+    if (!ok) bad.push(`${route || '/'} ${JSON.stringify({ title, desc: desc?.length, canon })}`);
+  }
+  check(`SEO: all ${slugs.length + 1} prerendered pages have a unique title, one description, one canonical, matching Open Graph tags`, bad.length === 0, bad.join(' | '));
+  const h404 = await (await fetch(`${base}/404.html`)).text();
+  check('SEO: 404 page is noindex and not in the sitemap', h404.includes('content="noindex, follow"'));
+  const sm = await (await fetch(`${base}/sitemap.xml`)).text();
+  const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  check(`sitemap.xml lists home + every docs page (${locs.length})`, locs.length === slugs.length + 1 && slugs.every((s) => locs.some((l) => l.endsWith('/docs/' + s))) && !locs.some((l) => l.includes('404')));
+  const robots = await (await fetch(`${base}/robots.txt`)).text();
+  check('robots.txt allows crawling and points at the sitemap', /Allow: \//.test(robots) && /Sitemap: https?:\/\/\S+\/sitemap\.xml/.test(robots));
+  const noHash = await (await fetch(`${base}/docs/introduction/`)).text();
+  check('html lang is set', /<html[^>]*lang="en"/.test(noHash));
+}
+
+// 9. Landmarks, skip link, aria-current, focus order.
+{
+  for (const route of ['/', '/docs/introduction', '/404.html']) {
+    await open(page, route);
+    const lm = await page.evaluate(() => ({ main: document.querySelectorAll('main, [role=main]').length, banner: document.querySelectorAll('header').length, h1: document.querySelectorAll('h1').length, navs: [...document.querySelectorAll('nav')].map((n) => n.getAttribute('aria-label')) }));
+    check(`landmarks ${route}: exactly one <main>, one <h1>, every <nav> labelled`, lm.main === 1 && lm.h1 === 1 && lm.navs.every(Boolean), JSON.stringify(lm));
+  }
+  await open(page, '/docs/introduction');
+  await page.keyboard.press('Tab');
+  const first = await page.evaluate(() => ({ testid: document.activeElement?.getAttribute('data-testid'), visible: (() => { const r = document.activeElement.getBoundingClientRect(); return r.width > 1 && r.height > 1 && r.top >= 0; })() }));
+  check('skip link is the first Tab stop and becomes visible on focus', first.testid === 'skip-link' && first.visible, JSON.stringify(first));
+  await page.keyboard.press('Enter');
+  check('activating the skip link focuses <main> without leaving the page', (await page.evaluate(() => document.activeElement?.id)) === 'main-content' && page.url().endsWith('/docs/introduction'));
+  const cur = page.locator('[data-testid=sidebar] a[aria-current=page]');
+  check('sidebar marks exactly the current page with aria-current=page', (await cur.count()) === 1 && (await cur.innerText()).trim() === 'Introduction');
+  await page.locator('[data-testid=sidebar] a', { hasText: 'GridLayout' }).click();
+  await page.waitForURL('**/docs/grid-layout');
+  check('aria-current follows client-side navigation', (await page.locator('[data-testid=sidebar] a[aria-current=page]').innerText()).trim() === 'GridLayout' && (await page.locator('[data-testid=sidebar] a[aria-current=page]').count()) === 1);
+  // Focus ring on keyboard focus.
+  await page.locator('[data-testid=sidebar] a', { hasText: 'Label' }).first().focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  const ring = await page.evaluate(() => { const s = getComputedStyle(document.activeElement); return { outline: s.outlineStyle + ' ' + s.outlineWidth, shadow: s.boxShadow }; });
+  check('keyboard-focused sidebar link shows a visible focus indicator', ring.outline.startsWith('solid') && !ring.outline.endsWith(' 0px'), JSON.stringify(ring));
+}
+
+// 10. Keyboard operation: theme toggle, search, mobile menu.
+{
+  await open(page, '/docs/introduction');
+  await page.evaluate(() => { localStorage.setItem('ns-unified-theme', 'light'); document.documentElement.classList.remove('dark'); });
+  await page.reload({ waitUntil: 'networkidle' });
+  const toggle = page.locator('[data-testid=theme-toggle]');
+  check('theme toggle exposes aria-pressed state', (await toggle.getAttribute('aria-pressed')) === 'false');
+  await toggle.focus();
+  await page.keyboard.press('Space');
+  await page.waitForTimeout(150);
+  check('theme toggle works with Space and updates aria-pressed', (await toggle.getAttribute('aria-pressed')) === 'true' && (await page.evaluate(() => document.documentElement.classList.contains('dark'))));
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(150);
+  check('theme toggle works with Enter', (await toggle.getAttribute('aria-pressed')) === 'false');
+  const sBtn = page.locator('[data-testid=search-open]');
+  await sBtn.focus();
+  await page.keyboard.press('Enter');
+  const input = page.locator('[data-testid=search-input]');
+  await input.waitFor();
+  check('search opens from the keyboard and focus moves into the input', await input.evaluate((el) => el === document.activeElement));
+  await input.fill('layout');
+  await page.locator('[data-testid=search-hit]').first().waitFor();
+  const roles = await page.evaluate(() => ({ combobox: document.querySelector('[data-testid=search-input]').getAttribute('role'), listbox: !!document.querySelector('[role=listbox] [role=option]'), activedesc: document.querySelector('[data-testid=search-input]').getAttribute('aria-activedescendant') }));
+  check('search is an ARIA combobox/listbox with aria-activedescendant', roles.combobox === 'combobox' && roles.listbox && roles.activedesc === 'search-hit-0', JSON.stringify(roles));
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(150);
+  check('ArrowDown moves the active option', (await input.getAttribute('aria-activedescendant')) === 'search-hit-1' && (await page.locator('#search-hit-1').getAttribute('aria-selected')) === 'true');
+  const axeDlg = await axe(page);
+  check('axe: search dialog open has no violations', axeDlg.length === 0, axeDlg.join(' | '));
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(250);
+  check('Escape closes search and focus returns to the trigger', (await page.evaluate(() => document.activeElement?.getAttribute('data-testid'))) === 'search-open');
+  await page.keyboard.press('Control+k');
+  await input.waitFor();
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(250);
+  // Mobile menu.
+  await open(mp, '/docs/grid-layout');
+  const nt = mp.locator('[data-testid=nav-toggle]');
+  check('mobile menu button has aria-expanded=false and aria-controls the sidebar', (await nt.getAttribute('aria-expanded')) === 'false' && (await nt.getAttribute('aria-controls')) === 'docs-sidebar');
+  await nt.focus();
+  await mp.keyboard.press('Enter');
+  await mp.waitForTimeout(150);
+  check('mobile menu opens from the keyboard (aria-expanded=true)', (await nt.getAttribute('aria-expanded')) === 'true' && (await mp.locator('[data-testid=sidebar]').isVisible()));
+  await mp.keyboard.press('Escape');
+  await mp.waitForTimeout(150);
+  check('Escape closes the mobile menu and refocuses its button', !(await mp.locator('[data-testid=sidebar]').isVisible()) && (await mp.evaluate(() => document.activeElement?.getAttribute('data-testid'))) === 'nav-toggle');
+}
+
+// 11. Reduced motion.
+{
+  const rm = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
+  const rp = await rm.newPage();
+  await open(rp, '/docs/project-structure');
+  const m = await rp.evaluate(() => ({ html: getComputedStyle(document.documentElement).scrollBehavior, btn: getComputedStyle(document.querySelector('[data-testid=theme-toggle]')).transitionDuration }));
+  check('prefers-reduced-motion: no smooth scrolling, transitions ~0', m.html === 'auto' && parseFloat(m.btn) < 0.001, JSON.stringify(m));
+  const before = await rp.evaluate(() => scrollY);
+  await rp.locator('[data-testid=toc] a').nth(3).click();
+  await rp.waitForTimeout(60);
+  check('prefers-reduced-motion: TOC jump is instant', (await rp.evaluate(() => scrollY)) > before + 50);
+  await rm.close();
+  const nm = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const np = await nm.newPage();
+  await open(np, '/docs/introduction');
+  check('default motion keeps smooth scrolling', (await np.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)) === 'smooth');
+  await nm.close();
+}
+
+// 12. axe-core (WCAG 2.0/2.1 A+AA and best practices) on every page, light and dark.
+{
+  for (const scheme of ['light', 'dark']) {
+    const bad = [];
+    for (const p of ['', ...pages.slice(1), '404.html']) {
+      await open(page, '/' + p, scheme);
+      await page.evaluate((dark) => document.documentElement.classList.toggle('dark', dark), scheme === 'dark');
+      await page.waitForTimeout(150);
+      const v = await axe(page);
+      if (v.length) bad.push(`/${p}: ${v.join('; ')}`);
+    }
+    check(`axe ${scheme}: 0 violations across ${pages.length + 1} pages`, bad.length === 0, bad.join(' | '));
   }
 }await browser.close();
 const failed = results.filter((r) => !r.ok);

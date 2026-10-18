@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
-import { DomSanitizer, Title } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
+import { Seo } from '../../core/seo';
 import { findDoc, neighbours } from '../../docs/content';
 import { DocsDemoFrame } from '../../layout/docs-demo-frame';
 import { DocsToc } from '../../layout/docs-toc';
@@ -22,7 +23,7 @@ import { DocsToc } from '../../layout/docs-toc';
             <div [innerHTML]="block.html"></div>
           }
         }
-        <nav class="mt-12 flex justify-between gap-4 border-t pt-6 text-sm">
+        <nav aria-label="Pagination" class="mt-12 flex justify-between gap-4 border-t pt-6 text-sm">
           @if (around().prev; as p) {
             <a [routerLink]="['/docs', p.slug]" class="rounded-lg border bg-card px-4 py-2.5 transition-colors hover:bg-accent">&larr; {{ p.title }}</a>
           } @else {
@@ -58,10 +59,14 @@ export default class DocPage {
   });
 
   constructor() {
-    const title = inject(Title);
+    const seo = inject(Seo);
     effect(() => {
       const doc = this.doc();
-      title.setTitle(doc ? `${doc.title} | NativeScript Unified` : 'Not found | NativeScript Unified');
+      seo.set(
+        doc
+          ? { title: doc.title, description: doc.description, path: `/docs/${doc.slug}` }
+          : { title: 'Page not found', description: 'There is no docs page at this address.', path: `/docs/${this.slug()}`, noindex: true },
+      );
     });
   }
 

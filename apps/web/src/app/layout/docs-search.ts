@@ -16,32 +16,32 @@ import { search, type SearchEntry, type SearchHit } from '../docs/search';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '(document:keydown)': 'onKey($event)' },
   template: `
-    <button hlmBtn variant="outline" size="sm" type="button" class="gap-2 text-muted-foreground" aria-label="Search docs" data-testid="search-open" (click)="show()">
-      <ng-icon name="lucideSearch" size="16" />
-      <span class="hidden sm:inline">Search docs</span>
-      <kbd hlmKbd class="hidden sm:inline-flex">{{ shortcut() }} K</kbd>
+    <button hlmBtn variant="outline" size="sm" type="button" class="gap-2 text-muted-foreground" aria-keyshortcuts="Control+K Meta+K" aria-haspopup="dialog" data-testid="search-open" (click)="show()">
+      <ng-icon name="lucideSearch" size="16" aria-hidden="true" />
+      <span class="sr-only sm:not-sr-only">Search docs</span>
+      <kbd hlmKbd class="hidden sm:inline-flex" aria-hidden="true">{{ shortcut() }} K</kbd>
     </button>
     <hlm-dialog [state]="open() ? 'open' : 'closed'" (closed)="open.set(false)">
       <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-xl" [showCloseButton]="false" data-testid="search-dialog">
         <hlm-dialog-header>
           <h2 hlmDialogTitle class="sr-only">Search docs</h2>
         </hlm-dialog-header>
-        <input hlmInput type="search" placeholder="Search the docs…" aria-label="Search docs" data-testid="search-input" autocomplete="off" class="h-10 rounded-md border px-3"
+        <input hlmInput type="search" placeholder="Search the docs…" aria-label="Search docs" role="combobox" aria-autocomplete="list" aria-controls="search-results" [attr.aria-expanded]="hits().length > 0" [attr.aria-activedescendant]="hits().length ? 'search-hit-' + active() : null" data-testid="search-input" autocomplete="off" class="h-10 rounded-md border px-3"
           [ngModel]="query()" (ngModelChange)="query.set($event); active.set(0)" (keydown)="onInputKey($event)" />
-        <ul class="max-h-80 overflow-y-auto" data-testid="search-results">
+        <p class="sr-only" role="status" aria-live="polite">{{ status() }}</p>
+        <ul id="search-results" role="listbox" aria-label="Search results" class="max-h-80 overflow-y-auto" data-testid="search-results">
           @for (hit of hits(); track hit.slug + hit.id; let i = $index) {
-            <li>
-              <button type="button" class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-accent" [class.bg-accent]="i === active()" data-testid="search-hit" (click)="go(hit)">
+            <li role="presentation">
+              <button type="button" role="option" tabindex="-1" [id]="'search-hit-' + i" [attr.aria-selected]="i === active()" class="block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-accent" [class.bg-accent]="i === active()" data-testid="search-hit" (click)="go(hit)">
                 <span class="font-medium">{{ hit.title }}@if (hit.heading) {<span class="text-muted-foreground"> › {{ hit.heading }}</span>}</span>
                 <span class="block truncate text-xs text-muted-foreground">{{ hit.snippet }}</span>
               </button>
             </li>
-          } @empty {
-            @if (query()) {
-              <li class="px-3 py-6 text-center text-sm text-muted-foreground" data-testid="search-empty">No results for "{{ query() }}"</li>
-            }
           }
         </ul>
+        @if (query() && !hits().length) {
+          <p class="px-3 py-6 text-center text-sm text-muted-foreground" data-testid="search-empty">No results for "{{ query() }}"</p>
+        }
       </hlm-dialog-content>
     </hlm-dialog>
   `,
@@ -58,6 +58,11 @@ export class DocsSearch {
   protected readonly query = signal('');
   protected readonly active = signal(0);
   protected readonly hits = computed<SearchHit[]>(() => search(this.entries(), this.query()));
+  protected readonly status = computed(() => {
+    if (!this.query()) return '';
+    const n = this.hits().length;
+    return n ? `${n} result${n === 1 ? '' : 's'}` : 'No results';
+  });
 
   protected async show(): Promise<void> {
     this.query.set('');
@@ -77,6 +82,7 @@ export class DocsSearch {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
       this.active.update((i) => (n ? (i + (event.key === 'ArrowDown' ? 1 : n - 1)) % n : 0));
+      setTimeout(() => document.getElementById('search-hit-' + this.active())?.scrollIntoView({ block: 'nearest' }));
     } else if (event.key === 'Enter' && n) this.go(this.hits()[this.active()]);
   }
 

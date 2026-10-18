@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, booleanAttribute, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, booleanAttribute, input, output, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMenu, lucideX } from '@ng-icons/lucide';
@@ -16,8 +16,8 @@ import { ThemeToggle } from './theme-toggle';
   template: `
     <header class="flex h-14 items-center gap-2 border-b bg-background/90 px-4 backdrop-blur">
       @if (showMenu()) {
-        <button hlmBtn variant="ghost" size="icon" type="button" class="md:hidden" aria-label="Toggle navigation" data-testid="nav-toggle" (click)="menuToggle.emit()">
-          <ng-icon [name]="menuOpen() ? 'lucideX' : 'lucideMenu'" size="18" />
+        <button hlmBtn variant="ghost" size="icon" type="button" class="md:hidden" aria-label="Toggle navigation" aria-controls="docs-sidebar" [attr.aria-expanded]="menuOpen()" data-testid="nav-toggle" #navToggle (click)="menuToggle.emit()">
+          <ng-icon [name]="menuOpen() ? 'lucideX' : 'lucideMenu'" size="18" aria-hidden="true" />
         </button>
       }
       <a routerLink="/" class="flex items-center gap-2 font-semibold tracking-tight">
@@ -37,4 +37,8 @@ export class SiteHeader {
   readonly showMenu = input(false, { transform: booleanAttribute });
   readonly menuOpen = input(false);
   readonly menuToggle = output<void>();
+  private readonly toggle = viewChild<ElementRef<HTMLElement>>('navToggle');
+  focusToggle(): void {
+    this.toggle()?.nativeElement.focus();
+  }
 }

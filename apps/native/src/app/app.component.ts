@@ -5,6 +5,7 @@ import { PageRouterOutlet } from '@nativescript/angular';
   selector: 'ns-app',
   imports: [PageRouterOutlet],
   schemas: [NO_ERRORS_SCHEMA],
-  template: `<page-router-outlet />`,
+  template: `<page-router-outlet class="style-vega" />`,
 })
 export class AppComponent {}
+

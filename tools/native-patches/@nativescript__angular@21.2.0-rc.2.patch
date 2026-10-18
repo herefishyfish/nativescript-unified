@@ -1,0 +1,39 @@
+diff --git a/fesm2022/nativescript-angular.mjs b/fesm2022/nativescript-angular.mjs
+index 1c399efb889c1629dc06d4fdfd148bd35101f33c..cdbd3a5dae385281e416af33bb8f054e4a5ae4f1 100644
+--- a/fesm2022/nativescript-angular.mjs
++++ b/fesm2022/nativescript-angular.mjs
+@@ -672,7 +672,11 @@ function runNativeScriptAngularApp(options) {
+     if (oldAddEventListener) {
+         global.NativeScriptGlobals.events.addEventListener = oldAddEventListener;
+     }
+-    if (import.meta['webpackHot']) {
++    // Under the @nativescript/vite dev session the app has already launched behind a placeholder root, so the launch
++    // event this function waits for never comes. import.meta.hot is absent once this module is pre-bundled, hence
++    // the placeholder flag the session sets.
++    const isViteHot = !!import.meta['hot'] || !!globalThis.__NS_DEV_PLACEHOLDER_ROOT_EARLY__;
++    if (import.meta['webpackHot'] || isViteHot) {
+         // handle HMR Application.run
+         global['__dispose_app_ng_platform__'] = () => {
+             disposePlatform('hotreload');
+@@ -1456,7 +1460,12 @@ class ViewUtil {
+             return;
+         }
+         // Unknown attribute value -- just set it to our object as is.
++        const previous = view[attributeName];
+         view[attributeName] = value;
++        // CSS attribute selectors ([data-state=open]) re-match on `<name>Change`, which a plain property never emits.
++        if (previous !== value && typeof view.notify === 'function') {
++            view.notify({ eventName: `${attributeName}Change`, object: view, value, oldValue: previous });
++        }
+     }
+     removeParentReferencesFromItems(items) {
+         for (const item of items) {
+@@ -1891,6 +1900,8 @@ class NativeScriptRenderer {
+         if (NativeScriptDebug.enabled) {
+             NativeScriptDebug.rendererLog(`NativeScriptRenderer.removeAttribute ${namespace ? namespace + ':' : ''}${el}.${name}`);
+         }
++        // `[attr.x]="null"` removes the attribute; clearing the property un-matches `[x]` selectors.
++        this.viewUtil.setProperty(el, name, undefined, namespace);
+     }
+     addClass(el, name) {
+         if (NativeScriptDebug.enabled) {

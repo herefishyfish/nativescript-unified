@@ -1,0 +1,439 @@
+diff --git a/nativescript.webpack.js b/nativescript.webpack.js
+index 7d367c62f554413e2aa20fa183d405db71a498ba..4bd863c245112b6c99631e6b72b871ad21a07622 100644
+--- a/nativescript.webpack.js
++++ b/nativescript.webpack.js
+@@ -11,7 +11,7 @@ module.exports = (webpack) => {
+   const addPostCSSPlugins = (options = {}) => {
+     return webpack.merge(options, {
+       postcssOptions: {
+-        plugins: ["postcss-preset-env", "@tailwindcss/postcss", "@nativescript/tailwind", "@csstools/postcss-is-pseudo-class"],
++        plugins: ["postcss-preset-env", "@tailwindcss/postcss", "@nativescript/tailwind"],
+       },
+     });
+   };
+diff --git a/package.json b/package.json
+index a1b940b5f732e7c6fd22847cb466c1fa120cd7f6..96a7d404d1ecdaf12c03efde681502b87611c68a 100644
+--- a/package.json
++++ b/package.json
+@@ -47,7 +47,7 @@
+   },
+   "dependencies": {
+     "@hookun/parse-animation-shorthand": "^0.1.4",
+-    "@csstools/postcss-is-pseudo-class": "~5.0.1",
++
+     "@csstools/postcss-oklab-function": "^4.0.0",
+     "@tailwindcss/postcss": "^4.0.0",
+     "postcss-preset-env": "^10.1.3"
+diff --git a/src/expandAnimations.js b/src/expandAnimations.js
+index e5fcd404ba8a8e43c205636a329ba73c9a7c0368..d826082ad0993742e0de5104cc749edc693798a4 100644
+--- a/src/expandAnimations.js
++++ b/src/expandAnimations.js
+@@ -1,51 +1,53 @@
+-const { parseSingle, serialize } = require("@hookun/parse-animation-shorthand");
++const innermostVarRE = /var\(\s*(--[\w-]+)\s*(?:,((?:[^()]|\([^()]*\))*))?\)/;
+ 
+ /**
+- * @param {@} options
++ * NativeScript parses `animation*` declarations for every rule when a stylesheet
++ * loads, and one value it cannot parse (a `var()`) throws and drops the whole
++ * sheet. Resolve each `var(--x, fallback)` to its fallback; `null` when a var has none.
++ */
++function resolveVarFallbacks(value) {
++  let match;
++  while ((match = innermostVarRE.exec(value))) {
++    if (match[2] === undefined) return null;
++    // Lightning CSS drops the space between adjacent var() tokens, so pad each substitution
++    value = value.replace(match[0], ` ${match[2].trim()} `);
++  }
++  return value.replace(/\s+/g, " ").trim();
++}
++
++/**
++ * NativeScript core 8.2+ parses the `animation` shorthand itself, so values are
++ * only made static here rather than expanded into longhands.
++ *
+  * @returns {import('postcss').Plugin}
+  */
+-module.exports = (options = { debug: false }) => {
++module.exports = () => {
+   return {
+     postcssPlugin: "postcss-nativescript-animations",
+     Declaration(decl) {
+-      try {
+-        // replace animation: *
+-        // with    animation-*:
+-        if (decl.prop === "animation") {
+-          const styles = parseSingle(decl.value);
+-          if (styles.duration && Number.isInteger(styles.duration)) {
+-            styles.duration = `${styles.duration / 1000}s`;
+-          }
+-          Object.entries(styles)
+-            .filter(([, value]) => typeof value === "object")
+-            .map(([key, value]) => [
+-              key,
+-              serialize({ [key]: value }).split(" ")[0],
+-            ])
+-            .map(([key, value]) => (styles[key] = value));
+-
+-          Object.entries(styles)
+-            .filter(([, value]) => value !== "unset")
+-            .map(([key, value]) =>
+-              decl.parent.insertAfter(
+-                decl,
+-                decl.clone({
+-                  prop: `animation-${camelToKebab(key)}`,
+-                  value: `${value}`,
+-                })
+-              )
+-            );
+-
+-          decl.remove();
+-        }
+-      } catch (err) {
+-        // ignore errors, and just keep the animation as-is
++      // Keyframe values are parsed eagerly and cannot resolve var(); tw-animate-css's enter/exit
++      // keyframes are built from them (`opacity: var(--tw-enter-opacity, 1)` parses to NaN and throws).
++      if (decl.value.includes("var(") && decl.parent?.parent?.type === "atrule" && decl.parent.parent.name.endsWith("keyframes")) {
++        return decl.remove();
+       }
++      if (!decl.prop.startsWith("animation")) {
++        return;
++      }
++      // postcss-preset-env inserts a pre-resolved fallback copy before the original, with the
++      // spaces between var() tokens lost. NativeScript plays (and parses) every animation
++      // declaration rather than the last one, so only the cascade winner is kept.
++      if (decl.parent.some((sibling) => sibling !== decl && sibling.prop === decl.prop && sibling.parent.index(sibling) > decl.parent.index(decl))) {
++        return decl.remove();
++      }
++      if (!decl.value.includes("var(")) {
++        return;
++      }
++      const resolved = resolveVarFallbacks(decl.value);
++      if (resolved === null) {
++        return decl.remove();
++      }
++      decl.value = resolved;
+     },
+   };
+ };
+ module.exports.postcss = true;
+-
+-function camelToKebab(input) {
+-  return input.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+-}
+diff --git a/src/removeUnsupported.js b/src/removeUnsupported.js
+index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..b305b6d552261ea9cad1896b5a5c1f6b0c4fdd8a 100644
+--- a/src/removeUnsupported.js
++++ b/src/removeUnsupported.js
+@@ -7,7 +7,9 @@ function isSupportedProperty(prop, val = null) {
+   if (!rules) return false;
+ 
+   if (val) {
+-    if (unsupportedValues.some((unit) => val.endsWith(unit))) {
++    // The patched core passes intrinsic sizes through width/height to MasonKit (Taffy); min/max sizes still reject them.
++    const intrinsicSize = (prop === "width" || prop === "height") && intrinsicSizes.includes(val);
++    if (!intrinsicSize && unsupportedValues.some((unit) => val.endsWith(unit))) {
+       return false;
+     }
+ 
+@@ -27,6 +29,60 @@ function isSupportedSelector(selector) {
+   return !hasUnsupportedPseudoSelector;
+ }
+ 
++function foldMinMax(value) {
++  let failed = false;
++  const folded = value.replace(/(^|[^\w-])(min|max)\(([^()]*(?:\([^()]*\)[^()]*)*)\)/g, (_, before, fn, args) => {
++    const literals = args
++      .split(/,(?![^(]*\))/)
++      .map((arg) => arg.trim())
++      .filter((arg) => /^-?[\d.]+(px|%)?$/.test(arg));
++    if (literals.length !== 1) {
++      failed = true;
++      return _;
++    }
++    return before + literals[0];
++  });
++  return failed ? null : folded;
++}
++
++function foldPercentCalc(value) {
++  const match = /^calc\((.*)\)$/.exec(value.trim());
++  if (!match || (match[1].match(/%/g) || []).length !== 1) return null;
++  const arithmetic = match[1].replace("%", "");
++  if (!/^[\d.\s+\-*/()]+$/.test(arithmetic)) return null;
++  const result = Function(`"use strict"; return (${arithmetic});`)();
++  return Number.isFinite(result) ? `${+result.toFixed(4)}%` : null;
++}
++
++// `&` means `:is(<parent>)`. Plain substitution is only equivalent where `&` leads the selector or the parent is
++// a single compound; `:where([data-slot=x]) &` under `.style-vega .y` must stay `:where(...) :is(.style-vega .y)`.
++function nestSelector(parent, selector) {
++  if (!selector.includes("&")) return `${parent} ${selector}`;
++  const complex = /[\s>+~]/.test(parent.trim());
++  const wrapped = complex ? `:is(${parent})` : parent;
++  const leading = selector.trimStart().startsWith("&");
++  let first = true;
++  return selector.replace(/&/g, () => {
++    const replacement = first && leading ? parent : wrapped;
++    first = false;
++    return replacement;
++  });
++}
++
++function unnest(container) {
++  container.each((node) => {
++    if (node.nodes) unnest(node);
++  });
++  if (container.type !== "rule") return;
++  let anchor = container;
++  container.each((child) => {
++    if (child.type !== "rule") return;
++    child.selectors = container.selectors.flatMap((parent) => child.selectors.map((selector) => nestSelector(parent, selector)));
++    anchor.after(child);
++    anchor = child;
++  });
++}
++
+ function isPlaceholderPseudoSelector(selector) {
+   return selector.includes("::placeholder");
+ }
+@@ -38,6 +94,11 @@ function isPlaceholderPseudoSelector(selector) {
+ module.exports = (options = { debug: false }) => {
+   return {
+     postcssPlugin: "postcss-nativescript",
++    // @tailwindcss/postcss emits variants as nested rules (`& > :not(:first-child)`); flatten them
++    // before anything else looks at selectors, since NativeScript's parser has no nesting.
++    Once(root) {
++      unnest(root);
++    },
+     AtRule: {
+       // remove @media rules because they
+       // are currently not supported
+@@ -46,6 +107,15 @@ module.exports = (options = { debug: false }) => {
+         mediaAtRule.remove();
+       },
+ 
++      // The css2json loader's parser (reworkcss) stops at the first @container or
++      // @starting-style block with "missing '}'" and silently drops the rest of the sheet.
++      container(containerAtRule) {
++        containerAtRule.remove();
++      },
++      "starting-style"(startingStyleAtRule) {
++        startingStyleAtRule.remove();
++      },
++
+       // Flatten @supports rules instead of removing them.
+       // NativeScript Core 8.9.1+ supports color-mix() (see NativeScript/NativeScript#10718),
+       // and Tailwind v4 wraps opacity modifier utilities in @supports(color: color-mix(...)).
+@@ -91,12 +161,6 @@ module.exports = (options = { debug: false }) => {
+         return rule.remove();
+       }
+ 
+-      // remove rules that contain CSS nesting (& selector) - not supported in NativeScript
+-      // Tailwind v4 uses nesting for variants like dark mode and space utilities
+-      if (rule.selector.includes('&')) {
+-        return rule.remove();
+-      }
+-
+       // replace :root and :host pseudo selector, introduced in Tailwind 4+ with .ns-root for var handling.
+       if (rule.selector.includes(":root") || rule.selector.includes(":host")) {
+         const rootClasses = '.ns-root, .ns-modal';
+@@ -105,6 +169,12 @@ module.exports = (options = { debug: false }) => {
+         );
+       }
+       
++      // every NativeScript view has a boolean `hidden` property, so preflight's
++      // `[hidden] { display: none }` would match (and hide) all of them
++      if (/\[hidden[\]=]/.test(rule.selector)) {
++        return rule.remove();
++      }
++
+       // remove rules with unsupported selectors
+       if (!isSupportedSelector(rule.selector)) {
+         return rule.remove();
+@@ -138,15 +208,20 @@ module.exports = (options = { debug: false }) => {
+         // rule.selector.replace('::placeholder', '')
+       }
+ 
+-      // remove :where() pseudo selector, introduced in Tailwind 3.4.
+-      if (rule.selector.includes(":where(")) {
+-        rule.selectors = rule.selectors.map((selector) =>
+-          selector.replace(/:where\((.+)\)/, "$1")
+-        );
++      // NativeScript core 9 matches :is(), :where() and :not() itself, so they are kept.
++      // Views carry no `dir`: treat ltr: variants as always on and rtl: variants as off.
++      if (rule.selector.includes("dir")) {
++        const selectors = rule.selectors
++          .filter((selector) => !/:dir\(rtl\)|\[dir=["']?rtl/.test(selector))
++          .map((selector) => selector.replace(ltrConditionRE, ""));
++        if (selectors.length === 0) {
++          return rule.remove();
++        }
++        rule.selectors = selectors;
+       }
+ 
+       // replace space and divide selectors to use a simpler selector that works in ns (v4 and newer)
+-      if (rule.selector.includes(":not(:last-child)")) {
++      if (rule.selector.includes(":not(:last-child)") && /\.(space|divide)-[xy]/.test(rule.selector)) {
+         rule.selectors = rule.selectors.map((selector) => {
+           return selector.replace(":not(:last-child)", "* + *");
+         });
+@@ -179,6 +254,10 @@ module.exports = (options = { debug: false }) => {
+       }
+ 
+ 
++      if (!decl.value || !decl.value.trim()) {
++        return decl.remove();
++      }
++
+       // invalid with core 8.8+ at moment
+       // Note: could be supported at somepoint
+       if (decl.prop === "placeholder-color" && decl.value?.includes("color-mix")) {
+@@ -187,7 +266,7 @@ module.exports = (options = { debug: false }) => {
+ 
+       // invalid with core 8.8+ at moment
+       // Note: could be supported at somepoint
+-      if (decl.value?.includes("currentColor")) {
++      if (/currentcolor/i.test(decl.value)) {
+         return decl.remove();
+       }
+ 
+@@ -236,6 +315,57 @@ module.exports = (options = { debug: false }) => {
+           });
+       }
+ 
++      // Tailwind v4 emits logical properties (ps-*, ms-*, rounded-s-*, border-s, start-*); map them to
++      // their physical left-to-right equivalents, which is what NativeScript and MasonKit read.
++      if (logicalProperties[decl.prop]) {
++        for (const prop of logicalProperties[decl.prop]) {
++          decl.cloneBefore({ prop });
++        }
++        return decl.remove();
++      }
++      if (decl.prop === "text-align" && (decl.value === "start" || decl.value === "end")) {
++        decl.value = decl.value === "start" ? "left" : "right";
++      }
++
++      if (transformFunctions[decl.prop] && !decl.prop.startsWith("--")) {
++        if (decl.value === "none") {
++          return decl.remove();
++        }
++        const args = decl.value.split(/\s+(?![^(]*\))/).join(", ");
++        return decl.replaceWith(decl.clone({ prop: "transform", value: `${transformFunctions[decl.prop]}(${args})` }));
++      }
++
++      // CSS-wide keywords are not resolved by NativeScript styling; e.g. preflight's
++      // `font-size: inherit` on <button> becomes NaN in MasonKit and recurses.
++      if (!decl.prop.startsWith("--") && cssWideKeywords.includes(decl.value)) {
++        return decl.remove();
++      }
++
++      // NativeScript has no min()/max(). Spartan uses them as caps next to a variable, e.g.
++      // rounded-[min(var(--radius-md),8px)], so the one literal argument stands in for the whole expression.
++      if (!decl.prop.startsWith("--") && /(^|[^\w-])(min|max)\(/.test(decl.value)) {
++        const folded = foldMinMax(decl.value);
++        if (folded === null) {
++          return decl.remove();
++        }
++        decl.value = folded;
++      }
++
++      // core cannot evaluate a percentage inside calc() and throws applying it. Pure arithmetic on one
++      // percentage (w-3/4 is `calc(3/4 * 100%)`) folds to a plain percentage; mixed units (100% - 1px) are dropped.
++      if (!decl.prop.startsWith("--") && /calc\([^;]*%/.test(decl.value)) {
++        const folded = foldPercentCalc(decl.value);
++        if (folded === null) {
++          return decl.remove();
++        }
++        decl.value = folded;
++      }
++
++      // percentage font sizes (preflight small/sub/sup) have no parent-relative resolution
++      if (decl.prop === "font-size" && decl.value.endsWith("%")) {
++        return decl.remove();
++      }
++
+       // remove unsupported properties
+       if (
+         !decl.prop.startsWith("--") &&
+@@ -339,18 +469,76 @@ const supportedProperties = {
+   "tab-text-color": true,
+   "tab-text-font-size": true,
+   "text-transform": true,
+-  "text-align": ["left", "center", "right"],
++  "text-align": ["left", "center", "right", "start", "end", "justify"],
+   "text-decoration": ["none", "line-through", "underline"],
+   "text-shadow": true,
+   "text-transform": ["none", "capitalize", "uppercase", "lowercase"],
+   "tint-color": true,
+   transform: true,
+   rotate: true,
+-  "vertical-align": ["top", "center", "middle", "bottom", "stretch"],
++  "vertical-align": true,
+   visibility: ["visible", "collapse"],
+   width: true,
+   "z-index": true,
+ };
+ 
+-const unsupportedPseudoSelectors = [":focus-within", ":hover"];
+-const unsupportedValues = ["max-content", "min-content", "vh", "vw"];
++// MasonKit resolves :hover, :active, :focus and :disabled, so only :focus-within is dropped.
++const unsupportedPseudoSelectors = [":focus-within"];
++
++// Tailwind v4's ltr: variant condition, e.g. `:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)`
++const ltrConditionRE = /:where\(:dir\(ltr\),\s*\[dir="ltr"\],\s*\[dir="ltr"\] \*\)|:dir\(ltr\)/g;
++
++const logicalProperties = {};
++for (const [logical, left, right] of [
++  ["inline-start", "left", null],
++  ["inline-end", "right", null],
++  ["block-start", "top", null],
++  ["block-end", "bottom", null],
++  ["inline", "left", "right"],
++  ["block", "top", "bottom"],
++]) {
++  const sides = [left, right].filter(Boolean);
++  logicalProperties[`margin-${logical}`] = sides.map((side) => `margin-${side}`);
++  logicalProperties[`padding-${logical}`] = sides.map((side) => `padding-${side}`);
++  logicalProperties[`inset-${logical}`] = sides;
++  logicalProperties[`border-${logical}`] = sides.map((side) => `border-${side}`);
++  for (const part of ["width", "color", "style"]) {
++    logicalProperties[`border-${logical}-${part}`] = sides.map((side) => `border-${side}-${part}`);
++  }
++}
++Object.assign(logicalProperties, {
++  "border-start-start-radius": ["border-top-left-radius"],
++  "border-start-end-radius": ["border-top-right-radius"],
++  "border-end-start-radius": ["border-bottom-left-radius"],
++  "border-end-end-radius": ["border-bottom-right-radius"],
++});
++
++// Individual transform properties are not read by NativeScript or MasonKit; `transform` is.
++const transformFunctions = { translate: "translate", rotate: "rotate", scale: "scale" };
++
++const cssWideKeywords = ["inherit", "initial", "unset", "revert", "revert-layer"];
++
++// Properties @triniwiz/nativescript-masonkit styles on its web-shaped elements
++// (layout, grid, positioning, text and decoration), on top of the core set above.
++const masonKitProperties = [
++  "aspect-ratio", "backdrop-filter", "background-attachment", "background-blend-mode",
++  "background-clip", "background-origin", "background-position-x", "background-position-y",
++  "border", "border-bottom", "border-image", "border-left", "border-right", "border-style",
++  "border-top", "bottom", "box-sizing", "caret-color", "clear", "column-gap", "display",
++  "filter", "flex-basis", "flex-flow", "float", "font-feature-settings", "font-stretch",
++  "gap", "grid-area", "grid-auto-columns", "grid-auto-flow", "grid-auto-rows", "grid-column",
++  "grid-column-end", "grid-column-gap", "grid-column-start", "grid-gap", "grid-row",
++  "grid-row-end", "grid-row-gap", "grid-row-start", "grid-template-areas",
++  "grid-template-columns", "grid-template-rows", "hyphens", "inset", "left",
++  "list-style-position", "list-style-type", "max-height", "max-width", "object-fit",
++  "object-position", "overflow", "overflow-x", "overflow-y", "padding-block-start",
++  "padding-block-end", "padding-inline-start", "padding-inline-end", "position", "right",
++  "row-gap", "scrollbar-width", "text-decoration-color", "text-decoration-line",
++  "text-decoration-style", "text-decoration-thickness", "text-justify", "text-overflow",
++  "text-wrap", "top", "unicode-bidi", "white-space", "word-spacing", "writing-mode",
++];
++for (const prop of masonKitProperties) {
++  supportedProperties[prop] = true;
++}
++const intrinsicSizes = ["max-content", "min-content", "fit-content"];
++const unsupportedValues = [...intrinsicSizes, "vh", "vw"];

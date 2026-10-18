@@ -16,7 +16,7 @@
     "ios": "nx run native:ios",
     "test": "nx run-many -t test",
     "typecheck": "nx run-many -t typecheck",
-    "postinstall": "node tools/patch-nativescript-vite.mjs"
+    "postinstall": "node tools/apply-native-patches.mjs && node tools/patch-nativescript-vite.mjs"
   },
   "dependencies": {
     "@angular/cdk": "~22.2.0",

@@ -13,6 +13,8 @@ import type { PostAttributes } from '../post';
       <div class="page">
         <nav>
           <a href="/shared">Shared HTML</a>
+          <a href="/guide">Guide</a>
+          <a href="/ui">Spartan UI</a>
           <a href="/about">About</a>
           <a href="/products">Products</a>
           <a href="/docs">Docs</a>
@@ -33,3 +35,4 @@ import type { PostAttributes } from '../post';
 export default class HomePage {
   readonly posts = injectContentFiles<PostAttributes>((file) => file.filename.startsWith('/src/content/blog/'));
 }
+

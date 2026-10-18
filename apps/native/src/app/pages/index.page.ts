@@ -1,38 +1,26 @@
 import { ActionBarComponent } from '@nativescript/angular';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { HrefDirective, injectContentFiles } from '@nativescript-unified/analog-native';
-import type { PostAttributes } from '../post';
+import { GuideList } from '../tabs/guide-list';
+import { HomeTab } from '../tabs/home-tab';
+import { UiDemo } from '../tabs/ui-demo';
 
+/** Top-level navigation: native Material bottom tabs (Home, Guide, UI). Detail pages push over this shell. */
 @Component({
   selector: 'home-page',
-  imports: [ActionBarComponent, HrefDirective],
+  imports: [ActionBarComponent, GuideList, HomeTab, UiDemo],
   schemas: [NO_ERRORS_SCHEMA],
   template: `
-    <ActionBar title="Analog on NativeScript" />
-    <scroll>
-      <div class="page">
-        <nav>
-          <a href="/shared">Shared HTML</a>
-          <a href="/guide">Guide</a>
-          <a href="/ui">Spartan UI</a>
-          <a href="/about">About</a>
-          <a href="/products">Products</a>
-          <a href="/docs">Docs</a>
-          <a href="/login">Login</a>
-          <a href="/no/such/page">Broken link</a>
-        </nav>
-        <h1>Blog</h1>
-        @for (post of posts; track post.slug) {
-          <div class="card">
-            <h2><a [href]="'/blog/' + post.slug">{{ post.attributes.title }}</a></h2>
-            <p class="muted">{{ post.attributes.description }}</p>
-          </div>
-        }
-      </div>
-    </scroll>
+    <ActionBar title="NativeScript Unified" />
+    <MDTabs tabsPosition="bottom" selectedIndex="0" class="main-tabs">
+      <MDTabStrip class="main-strip">
+        <MDTabStripItem><Label text="Home"></Label></MDTabStripItem>
+        <MDTabStripItem><Label text="Guide"></Label></MDTabStripItem>
+        <MDTabStripItem><Label text="UI"></Label></MDTabStripItem>
+      </MDTabStrip>
+      <MDTabContentItem><home-tab /></MDTabContentItem>
+      <MDTabContentItem><guide-list /></MDTabContentItem>
+      <MDTabContentItem><ui-demo /></MDTabContentItem>
+    </MDTabs>
   `,
 })
-export default class HomePage {
-  readonly posts = injectContentFiles<PostAttributes>((file) => file.filename.startsWith('/src/content/blog/'));
-}
-
+export default class HomePage {}

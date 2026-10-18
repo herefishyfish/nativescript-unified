@@ -156,3 +156,34 @@ a {
   border-color: var(--border);
 }
 
+
+/* Native Material tabs (@nativescript-community/ui-material-tabs) on theme tokens. */
+TabStrip,
+.main-strip,
+.demo-code-strip {
+  background-color: var(--card);
+  selected-item-color: var(--primary);
+  un-selected-item-color: var(--muted-foreground);
+  highlight-color: var(--primary);
+}
+
+TabStripItem Label {
+  font-size: 14;
+  font-weight: 600;
+}
+
+Tabs {
+  background-color: var(--background);
+}
+
+.code-scroll {
+  background-color: var(--background);
+}
+
+.code-block {
+  font-family: monospace;
+  font-size: 12;
+  padding: 12;
+  color: var(--foreground);
+  background-color: var(--card);
+}

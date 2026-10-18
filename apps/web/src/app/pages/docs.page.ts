@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NAV } from '../docs/content';
 import { SiteHeader } from '../layout/site-header';
@@ -8,12 +8,14 @@ import { SiteHeader } from '../layout/site-header';
   selector: 'web-docs-layout',
   imports: [RouterOutlet, RouterLink, RouterLinkActive, SiteHeader],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '(document:keydown.escape)': 'closeMenu()' },
   template: `
-    <web-site-header showMenu [menuOpen]="open()" (menuToggle)="open.set(!open())" />
+    <web-site-header #header showMenu [menuOpen]="open()" (menuToggle)="open.set(!open())" />
 
     <!-- Three columns: the sidebar column grows with the window so its background reaches the left edge on wide screens. -->
     <div class="md:grid md:grid-cols-[minmax(16rem,1fr)_minmax(0,68rem)_minmax(0,1fr)]">
       <nav
+        id="docs-sidebar"
         aria-label="Documentation"
         data-testid="sidebar"
         class="fixed inset-x-0 bottom-0 top-14 z-20 overflow-y-auto border-r bg-sidebar md:sticky md:top-14 md:block md:h-[calc(100dvh-3.5rem)] md:max-h-[calc(100dvh-3.5rem)] md:self-start"
@@ -29,6 +31,7 @@ import { SiteHeader } from '../layout/site-header';
                     <a
                       [routerLink]="['/docs', page.slug]"
                       routerLinkActive="bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                      ariaCurrentWhenActive="page"
                       class="block rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
                       (click)="open.set(false)"
                       >{{ page.title }}</a
@@ -40,7 +43,7 @@ import { SiteHeader } from '../layout/site-header';
           }
         </div>
       </nav>
-      <main class="min-w-0 px-4 py-8 md:px-10 md:py-10">
+      <main id="main-content" tabindex="-1" class="min-w-0 px-4 py-8 outline-none md:px-10 md:py-10">
         <router-outlet />
       </main>
     </div>
@@ -49,4 +52,12 @@ import { SiteHeader } from '../layout/site-header';
 export default class DocsLayout {
   protected readonly nav = NAV;
   protected readonly open = signal(false);
+  private readonly header = viewChild<SiteHeader>('header');
+
+  /** Escape closes the mobile menu and returns focus to its button. */
+  protected closeMenu(): void {
+    if (!this.open()) return;
+    this.open.set(false);
+    this.header()?.focusToggle();
+  }
 }

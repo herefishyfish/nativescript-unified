@@ -1,0 +1,88 @@
+diff --git a/ui/core/view/index.android.js b/ui/core/view/index.android.js
+index b17d5f174ff636be2ac5a18ad06e7986a177f3bc..8eb3422c998b047cb31e14e5995b6cb120bcd88e 100644
+--- a/ui/core/view/index.android.js
++++ b/ui/core/view/index.android.js
+@@ -1570,7 +1570,7 @@ function createNativePercentLengthProperty(options) {
+                 setPercent = options.setPercent || percentNotSupported;
+                 options = null;
+             }
+-            if (length == 'auto' || length == null || isCssWideKeyword(length)) {
++            if (length == 'auto' || length == null || typeof length === 'string' || isCssWideKeyword(length)) {
+                 // tslint:disable-line
+                 setPixels(this.nativeViewProtected, auto);
+             }
+diff --git a/ui/styling/css-selector.js b/ui/styling/css-selector.js
+index 702ca508f27ace527938860dfe4b13dbcbb93c2f..09527749b17476d65d2fd6c5c7583b71d89c2920 100644
+--- a/ui/styling/css-selector.js
++++ b/ui/styling/css-selector.js
+@@ -67,6 +67,11 @@ function getNodePreviousDirectSibling(node) {
+  */
+ const notifyingAttributes = new WeakMap();
+ function attributeNotifiesChanges(node, attribute) {
++    // Framework renderers (NativeScript Angular) raise `<attribute>Change` for bound data-/aria- attributes, which
++    // carry component state ([data-state=open]); track them so those selectors re-match.
++    if (attribute.startsWith('data-') || attribute.startsWith('aria-')) {
++        return true;
++    }
+     const prototype = Object.getPrototypeOf(node);
+     if (!prototype) {
+         return false;
+@@ -382,7 +387,9 @@ export class FunctionalPseudoClassSelector extends PseudoClassSelector {
+         return true;
+     }
+     trackChanges(node, map) {
+-        this.selectors.forEach((sel) => sel.trackChanges(node, map));
++        // A complex argument (:is([data-size] *)) depends on ancestors, so track along them as a top-level complex
++        // selector does; tracking only `node` misses an ancestor attribute that arrives after the first match.
++        this.selectors.forEach((sel) => (sel instanceof ComplexSelector ? sel.accumulateChanges(node, map) : sel.trackChanges(node, map)));
+     }
+ }
+ let NotFunctionalPseudoClassSelector = class NotFunctionalPseudoClassSelector extends FunctionalPseudoClassSelector {
+diff --git a/ui/styling/length-shared.js b/ui/styling/length-shared.js
+index 341c9fe46ad27e1d48567b4a416148f2b5b4e9d8..9076cef62e8efff57f8b70d48308178939950fec 100644
+--- a/ui/styling/length-shared.js
++++ b/ui/styling/length-shared.js
+@@ -2,7 +2,14 @@
+ // Only put platform-agnostic logic here.
+ import { layout } from '../../utils/layout-helper';
+ import { isCssWideKeyword } from '../core/properties/property-shared';
++// CSS intrinsic sizes pass through like 'auto': core layouts treat them as auto, and layout engines that size
++// by content (MasonKit's Taffy) read the keyword from the width/height setters.
++const INTRINSIC_SIZES = new Set(['min-content', 'max-content', 'fit-content']);
++const isIntrinsicSize = (value) => typeof value === 'string' && INTRINSIC_SIZES.has(value);
+ function equalsCommon(a, b) {
++    if (isIntrinsicSize(a) || isIntrinsicSize(b)) {
++        return a === b;
++    }
+     if (a == 'auto' || isCssWideKeyword(a)) {
+         return b == 'auto' || isCssWideKeyword(b);
+     }
+@@ -27,6 +34,9 @@ function equalsCommon(a, b) {
+     return a.value == b.value && a.unit == b.unit;
+ }
+ function convertToStringCommon(length) {
++    if (isIntrinsicSize(length)) {
++        return length;
++    }
+     if (length == 'auto' || isCssWideKeyword(length)) {
+         return 'auto';
+     }
+@@ -40,7 +50,7 @@ function convertToStringCommon(length) {
+     return val + length.unit;
+ }
+ function toDevicePixelsCommon(length, auto = Number.NaN, parentAvailableWidth = Number.NaN) {
+-    if (length == 'auto' || isCssWideKeyword(length)) {
++    if (length == 'auto' || isIntrinsicSize(length) || isCssWideKeyword(length)) {
+         return auto;
+     }
+     if (typeof length === 'number') {
+@@ -69,6 +79,9 @@ export var PercentLength;
+         if (fromValue == 'auto') {
+             return 'auto';
+         }
++        if (typeof fromValue === 'string' && isIntrinsicSize(fromValue.trim())) {
++            return fromValue.trim();
++        }
+         if (typeof fromValue === 'string') {
+             let stringValue = fromValue.trim();
+             const percentIndex = stringValue.indexOf('%');

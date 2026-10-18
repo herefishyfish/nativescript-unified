@@ -1,6 +1,52 @@
+@import 'tailwindcss';
+@import '../../../packages/ui/brain/hlm-tailwind-preset.css';
+@import '../../../packages/ui/styles/style-vega.css';
+/* Shared cream/teal tokens (plain hex). NativeScript stamps .ns-light / .ns-dark on the root view. */
 @import '../../../packages/ui/styles/tokens.css';
+@import '../../../packages/ui/native/native-overrides.css';
 @import '@nativescript-unified/analog-native/markdown.css';
 
+/* Tailwind only scans the app by default; the shared HTML and helm variant functions carry classes too. */
+@source '../../../packages/shared/src';
+@source '../../../packages/analog-native/src';
+@source '../../../packages/ui/helm';
+@source '../../../packages/ui/native';
+
+/* NativeScript stamps ns-dark on the root view instead of the web's .dark. */
+@custom-variant dark (&:is(.ns-dark *));
+
+/* NativeScript drops media queries, so helm's motion-safe: animations (spinner, skeleton) would never run. */
+@custom-variant motion-safe (&);
+
+:root {
+  --font-sans: sans-serif;
+  --font-mono: monospace;
+  --surface: var(--card);
+  --surface-foreground: var(--foreground);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+.lucide {
+  font-family: lucide;
+}
+
+/* Page chrome */
+Page,
+ActionBar {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+ActionBar {
+  background-color: var(--card);
+}
+
+/* Plain-HTML pages from the analog-native demo, now on theme tokens. */
 .page {
   display: flex;
   flex-direction: column;
@@ -16,7 +62,7 @@ nav {
 }
 
 a {
-  color: #0969da;
+  color: var(--primary);
 }
 
 .card {
@@ -25,16 +71,17 @@ a {
   gap: 4;
   padding: 12;
   border-radius: 8;
-  background-color: #f6f8fa;
+  background-color: var(--card);
+  color: var(--card-foreground);
 }
 
 .muted {
-  color: #59636e;
+  color: var(--muted-foreground);
 }
 
 .tabs {
   padding: 12 16;
-  background-color: #eef2f6;
+  background-color: var(--secondary);
 }
 
 .page h1,
@@ -43,21 +90,68 @@ a {
   margin: 0;
 }
 
-.ns-dark Page,
-.ns-dark ActionBar {
-  background-color: #0d1117;
-  color: #e6edf3;
+/* Markdown (analog-native) on theme tokens instead of its GitHub-ish defaults (light and dark share one rule). */
+.markdown {
+  color: var(--foreground);
 }
 
-.ns-dark a {
-  color: #4493f8;
+.markdown a,
+.ns-dark .markdown a {
+  color: var(--primary);
 }
 
-.ns-dark .card,
-.ns-dark .tabs {
-  background-color: #161b22;
+.markdown h2,
+.ns-dark .markdown h2 {
+  border-bottom-color: var(--border);
 }
 
-.ns-dark .muted {
-  color: #8b949e;
+.markdown h6,
+.ns-dark .markdown h6 {
+  color: var(--muted-foreground);
 }
+
+.markdown code,
+.ns-dark .markdown code {
+  background-color: var(--muted);
+}
+
+.markdown pre,
+.ns-dark .markdown pre {
+  background-color: var(--card);
+}
+
+.markdown pre code,
+.ns-dark .markdown pre code {
+  background-color: transparent;
+}
+
+.markdown blockquote,
+.ns-dark .markdown blockquote {
+  color: var(--muted-foreground); background-color: var(--card); border-left: 4 solid var(--border);
+}
+
+.markdown hr,
+.ns-dark .markdown hr {
+  background-color: var(--border);
+}
+
+.markdown .md-table,
+.ns-dark .markdown .md-table {
+  border-color: var(--border);
+}
+
+.markdown .md-th,
+.ns-dark .markdown .md-th {
+  background-color: var(--muted); color: var(--foreground);
+}
+
+.markdown .md-td,
+.ns-dark .markdown .md-td {
+  border-color: var(--border);
+}
+
+.markdown .md-th,
+.ns-dark .markdown .md-th {
+  border-color: var(--border);
+}
+

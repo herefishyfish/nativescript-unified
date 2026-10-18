@@ -33,7 +33,7 @@ The palette is inspired by the New Balance Numeric Jamie Foy 306 in "Sea Salt / 
 
 ## Dark mode
 
-On the web, dark mode is the `dark` class on `<html>`. Use the toggle in the top bar. Your choice is stored in `localStorage`, and the first visit follows the operating system setting. On native the equivalent is the `ns-dark` class on the root view.
+On the web, dark mode is the `dark` class on `<html>`. Use the toggle in the top bar. Your choice is stored in `localStorage` under `ns-unified-theme`. An inline script in `index.html` applies it before first paint, and the first visit follows the operating system setting. On native the equivalent is the `ns-dark` class on the root view, and `.ns-light` is the light counterpart. The native `app.css` imports `tokens.css`.
 
 ## Polyfill variables
 

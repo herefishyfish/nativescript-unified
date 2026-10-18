@@ -26,7 +26,7 @@ Whether MasonKit on a device renders `<button>` and `<input>` has not been check
 
 ## HtmlView and ContentView
 
-`<HtmlView html="...">` renders an HTML string, and `selectable` allows text selection. `<ContentView>` holds a single child.
+`<HtmlView html="...">` renders an HTML string through `[innerHTML]`, and `selectable` allows text selection. `<ContentView>` projects its content into a column. `Page` and `Frame` are not registered; see [Polyfill limitations](/docs/polyfill-limitations).
 
 ```html live
 <HtmlView html="<b>Bold</b> and <i>italic</i> from an HTML string"></HtmlView>

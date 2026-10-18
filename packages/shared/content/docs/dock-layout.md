@@ -14,7 +14,7 @@ description: Children docked to the edges.
 | `dock` | child | `top`, `bottom`, `left` or `right`. Anything else lands in the centre. |
 | `stretchLastChild` | DockLayout | Default `true`: the last child fills the centre and its `dock` is ignored. |
 
-The polyfill uses a three-by-three CSS grid with one cell per edge. Several children on the same edge share that cell.
+The polyfill uses a CSS grid with columns `auto 1fr auto` and rows `auto 1fr auto`. `top` and `bottom` children span all three columns, `left` and `right` sit in the middle row, and the centre is the middle cell. Several children on the same edge share that cell.
 
 ```html live
 <DockLayout class="gap-2" style="height: 220px">

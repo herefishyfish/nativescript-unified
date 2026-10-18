@@ -43,8 +43,10 @@ Note that the polyfills are Angular components that you import where you use the
 ## What this site covers
 
 1. [Project structure](/docs/project-structure) and [File-based routing](/docs/file-routing).
-2. The six layouts: [StackLayout](/docs/stack-layout), [GridLayout](/docs/grid-layout), [FlexboxLayout](/docs/flexbox-layout), [WrapLayout](/docs/wrap-layout), [DockLayout](/docs/dock-layout) and [AbsoluteLayout](/docs/absolute-layout).
-3. The views the polyfills implement, starting at [Label](/docs/label).
-4. [Theming](/docs/theming).
+2. The seven layouts: [StackLayout](/docs/stack-layout), [GridLayout](/docs/grid-layout), [FlexboxLayout](/docs/flexbox-layout), [WrapLayout](/docs/wrap-layout), [DockLayout](/docs/dock-layout), [AbsoluteLayout](/docs/absolute-layout) and [SplitView](/docs/split-view).
+3. The views the polyfills implement, starting at [Label](/docs/label), plus [Navigation views](/docs/navigation-views).
+4. Guides: [Theming](/docs/theming), [Markdown content on native](/docs/markdown-on-native), [Writing shared HTML features](/docs/shared-features), [Polyfill limitations](/docs/polyfill-limitations) and the [FAQ](/docs/faq).
+
+New here? Start with [Installation](/docs/installation) and [Web vs native](/docs/web-vs-native).
 
 This site is the web half of the work. The native app builds today only as a type check; it has not yet been run on a device.

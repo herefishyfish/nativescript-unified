@@ -1,7 +1,7 @@
 ---
 title: File-based routing
 section: Getting started
-order: 3
+order: 5
 description: One pages/ convention on web and native.
 ---
 
@@ -18,7 +18,9 @@ Both apps use the [AnalogJS](https://analogjs.org/docs/features/routing/overview
 | `pages/(auth)/login.page.ts` | `/login` |
 | `pages/[...notfound].page.ts` | `**` |
 
-Static segments sort before `:param` segments, and `**` sorts last. A layout page renders its children through `<router-outlet>`.
+Static segments sort before `:param` segments, and `**` sorts last. A layout page renders its children through `<router-outlet>`. A `(group)` folder name adds no URL segment, and `index` is the empty path.
+
+A page can also export `routeMeta` with any `Route` field except `path`, `component` and `children`, for example `title` or `canActivate`.
 
 ## On the web
 
@@ -27,7 +29,9 @@ Static segments sort before `:param` segments, and `**` sorts last. A layout pag
 ```text
 apps/web/src/app/pages/
   index.page.ts          /
+  [...not-found].page.ts **
   docs.page.ts           layout for /docs (top bar, sidebar, outlet)
+  docs/index.page.ts     /docs
   docs/[slug].page.ts    /docs/:slug, renders one Markdown file
 ```
 
@@ -41,7 +45,9 @@ Differences you should know about:
 
 - `analog-native` also accepts `.md` files in `pages/` as Markdown routes.
 - Optional catch-all routes (`[[...slug]]`) and Analog server features (`.server.ts`, `load`) are not supported on native.
+- A routed page that shows an `<ActionBar>` imports `ActionBarComponent` from `@nativescript/angular`, or the bar keeps the app name.
+- Navigating between child routes of a layout does not add a back-stack entry on native.
 - Front matter parsing and Markdown lexing happen at build time, so the device bundle contains neither `marked` nor a YAML parser.
 - Links to app paths (`/about`) navigate with the router. Full URLs open in the browser.
 
-Details are in `docs/design.md` at the repository root.
+Details are in `docs/design.md` at the repository root. To write Markdown routes and content, see [Markdown content on native](/docs/markdown-on-native).

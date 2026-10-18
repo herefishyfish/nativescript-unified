@@ -91,7 +91,8 @@ a {
 }
 
 /* Markdown (analog-native) on theme tokens instead of its GitHub-ish defaults (light and dark share one rule). */
-.markdown {
+.markdown,
+.ns-dark .markdown {
   color: var(--foreground);
 }
 

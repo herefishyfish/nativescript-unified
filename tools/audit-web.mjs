@@ -46,7 +46,7 @@ const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } })
 const page = await ctx.newPage();
 
 // 2. Pages: render, no console errors, screenshot.
-const pages = ['', 'docs/introduction', 'docs/project-structure', 'docs/file-routing', 'docs/stack-layout', 'docs/grid-layout', 'docs/flexbox-layout', 'docs/wrap-layout', 'docs/dock-layout', 'docs/absolute-layout', 'docs/label', 'docs/image', 'docs/scroll-view', 'docs/list-view', 'docs/controls', 'docs/indicators', 'docs/button-and-text-field', 'docs/theming', 'docs/installation', 'docs/web-vs-native', 'docs/shared-features', 'docs/markdown-on-native', 'docs/polyfill-limitations', 'docs/faq', 'docs/navigation-views', 'docs/split-view'];
+const pages = ['', 'docs/introduction', 'docs/project-structure', 'docs/file-routing', 'docs/stack-layout', 'docs/grid-layout', 'docs/flexbox-layout', 'docs/wrap-layout', 'docs/dock-layout', 'docs/absolute-layout', 'docs/label', 'docs/image', 'docs/scroll-view', 'docs/list-view', 'docs/controls', 'docs/indicators', 'docs/button-and-text-field', 'docs/theming', 'docs/installation', 'docs/web-vs-native', 'docs/shared-features', 'docs/markdown-on-native', 'docs/polyfill-limitations', 'docs/faq', 'docs/navigation-views', 'docs/split-view', 'docs/html-first', 'docs/html-layout', 'docs/legacy-tags', 'docs/components', 'docs/ui-button', 'docs/ui-badge', 'docs/ui-card', 'docs/ui-form-controls', 'docs/ui-tabs', 'docs/ui-accordion', 'docs/ui-dialog', 'docs/ui-alert', 'docs/ui-feedback'];
 for (const p of pages) {
   const errors = await open(page, '/' + p);
   const h1 = await page.locator('h1').first().innerText();
@@ -242,8 +242,8 @@ check('mobile: TOC hidden', !(await mp.locator('[data-testid=toc]').isVisible())
   const vctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, permissions: ['clipboard-read', 'clipboard-write'] });
   const vp = await vctx.newPage();
   await open(vp, '/');
-  check('home: hero with h1, two CTAs and a live StackLayout demo', (await vp.locator('[data-testid=hero] h1').innerText()).includes('HTML first') && (await vp.locator('[data-testid=hero] a[hlmbtn], [data-testid=hero] a[data-slot=button]').count()) === 2 && (await vp.locator('[data-testid=home-stack]').count()) === 1);
-  check('home: live StackLayout is a flex row', (await style(vp, '[data-testid=home-stack]', 'flex-direction')) === 'row');
+  check('home: hero with h1, two CTAs and a live HTML and helm demo', (await vp.locator('[data-testid=hero] h1').innerText()).includes('HTML first') && (await vp.locator('[data-testid=hero] a[hlmbtn], [data-testid=hero] a[data-slot=button]').count()) === 2 && (await vp.locator('[data-testid=home-flex]').count()) === 1);
+  check('home: live demo is plain HTML in a flex row', (await style(vp, '[data-testid=home-flex]', 'flex-direction')) === 'row');
   check('home: three what/why cards and six quick links', (await vp.locator('[data-testid=feature-card]').count()) === 3 && (await vp.locator('[data-testid=quick-link]').count()) === 6);
   const hrefs = await vp.locator('[data-testid=quick-link]').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
   const statuses = await Promise.all(hrefs.map((h) => fetch(base + h + '/').then((r) => r.status)));
@@ -442,6 +442,76 @@ const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
   await nm.close();
 }
 
+// 11b. Forward-first structure: sidebar groups, legacy banners, live helm components.
+{
+  const legacySlugs = ['stack-layout', 'grid-layout', 'flexbox-layout', 'wrap-layout', 'dock-layout', 'absolute-layout', 'split-view', 'label', 'image', 'scroll-view', 'list-view', 'controls', 'button-and-text-field', 'indicators', 'navigation-views', 'polyfill-limitations'];
+  await open(page, '/docs/introduction');
+  const groups = await page.locator('[data-testid=sidebar] h2').allInnerTexts();
+  check('sidebar groups lead with HTML first and Components, then Legacy NativeScript tags', JSON.stringify(groups.map((g) => g.toLowerCase())) === JSON.stringify(['getting started', 'html first', 'components', 'legacy nativescript tags', 'guides']), groups.join(' | '));
+  const legacyLinks = await page.locator('[data-testid=sidebar] h2:has-text("Legacy") + ul a').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+  check('Legacy group lists the overview plus all 16 legacy pages', legacyLinks.length === 17 && legacySlugs.every((s) => legacyLinks.includes('/docs/' + s)) && legacyLinks.includes('/docs/legacy-tags'), legacyLinks.join(','));
+  const noBanner = [];
+  for (const slug of legacySlugs) {
+    await open(page, '/docs/' + slug);
+    const text = await page.locator('[data-testid=doc] .docs-callout').first().innerText().catch(() => '');
+    if (!/legacy support/i.test(text)) noBanner.push(slug);
+  }
+  check('every legacy page opens with a legacy-support callout', noBanner.length === 0, noBanner.join(','));
+  const noHint = [];
+  for (const slug of legacySlugs.filter((s) => s !== 'polyfill-limitations')) {
+    await open(page, '/docs/' + slug);
+    if (!(await page.locator('[data-testid=doc] h2', { hasText: 'HTML-first equivalent' }).count())) noHint.push(slug);
+  }
+  check('every legacy page except polyfill-limitations has an HTML-first equivalent section', noHint.length === 0, noHint.join(','));
+
+  await open(page, '/docs/introduction');
+  check('introduction leads with a live helm card and buttons, not a polyfill demo', (await page.locator('[data-testid=doc] .docs-demo-preview [hlmcard] button[hlmbtn]').count()) === 2 && (await page.locator('[data-testid=doc] .docs-demo-preview stacklayout').count()) === 0);
+
+  const preview = '[data-testid=doc] .docs-demo-preview';
+  await open(page, '/docs/ui-button');
+  check('Button page: variants, sizes and disabled render as styled buttons', (await page.locator(`${preview} button[hlmbtn]`).count()) === 11 && (await page.locator(`${preview} a[hlmbtn]`).count()) === 1);
+  await open(page, '/docs/ui-badge');
+  check('Badge page: 6 variants', (await page.locator(`${preview} [hlmbadge]`).count()) === 6);
+  await open(page, '/docs/ui-card');
+  check('Card page: card with header, title, content and footer', (await page.locator(`${preview} [hlmcard] [hlmcardtitle]`).count()) === 1 && (await page.locator(`${preview} [hlmcardfooter] button`).count()) === 2);
+  await open(page, '/docs/ui-tabs');
+  const tabs = page.locator(`${preview} [hlmtabs]`).first();
+  check('Tabs page: first tab active, second panel hidden', (await tabs.getByText('Make changes to your account here.').isVisible()) && !(await tabs.getByText('Change your password here.').isVisible()));
+  await tabs.getByRole('tab', { name: 'Password' }).click();
+  check('Tabs page: clicking Password shows its panel', (await tabs.getByText('Change your password here.').isVisible()) && !(await tabs.getByText('Make changes to your account here.').isVisible()));
+  await open(page, '/docs/ui-accordion');
+  const acc = page.locator(`${preview} hlm-accordion`).first();
+  await acc.getByRole('button', { name: 'Is it HTML first?' }).click();
+  await page.waitForTimeout(400);
+  check('Accordion page: trigger sets aria-expanded and shows content', (await acc.getByRole('button', { name: 'Is it HTML first?' }).getAttribute('aria-expanded')) === 'true' && (await acc.getByText('Yes. Pages are plain HTML').isVisible()));
+  await open(page, '/docs/ui-form-controls');
+  check('Form controls page: input, textarea, checkbox, switch and 3 radios render', (await page.locator(`${preview} input[hlminput]`).count()) === 1 && (await page.locator(`${preview} textarea[hlmtextarea]`).count()) === 1 && (await page.locator(`${preview} hlm-checkbox`).count()) === 1 && (await page.locator(`${preview} hlm-switch`).count()) === 1 && (await page.locator(`${preview} hlm-radio`).count()) === 3);
+  const sw = page.locator(`${preview} hlm-switch button[role=switch], ${preview} hlm-switch [role=switch]`).first();
+  check('Switch starts off', (await page.locator(preview).getByText('Notifications are off').count()) === 1);
+  await sw.click();
+  check('Switch click flips the demo text to on', (await page.locator(preview).getByText('Notifications are on').count()) === 1);
+  await page.locator(`${preview} hlm-checkbox button, ${preview} hlm-checkbox [role=checkbox]`).first().click();
+  check('Checkbox click flips the demo text', (await page.locator(preview).getByText('Terms accepted').count()) === 1);
+  await open(page, '/docs/ui-dialog');
+  await page.locator(`${preview} button[hlmdialogtrigger]`).click();
+  await page.waitForSelector('hlm-dialog-content', { timeout: 3000 }).catch(() => {});
+  check('Dialog page: trigger opens a dialog with its title and description', (await page.locator('hlm-dialog-content').getByText('Edit profile').isVisible().catch(() => false)) && (await page.locator('hlm-dialog-content').getByText('Make changes to your profile').isVisible().catch(() => false)));
+  await page.screenshot({ path: `${out}/ui-dialog-open.png` });
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  check('Dialog closes on Escape', (await page.locator('hlm-dialog-content').count()) === 0);
+  await open(page, '/docs/ui-alert');
+  check('Alert page: two role=alert elements', (await page.locator(`${preview} [role=alert]`).count()) === 2);
+  await open(page, '/docs/ui-feedback');
+  check('Feedback page: progress, skeletons, avatar and separator render', (await page.locator(`${preview} hlm-progress`).count()) === 1 && (await page.locator(`${preview} [hlmskeleton]`).count()) === 3 && (await page.locator(`${preview} hlm-avatar`).count()) === 1 && (await page.locator(`${preview} hlm-separator`).count()) === 1);
+  await open(page, '/docs/html-layout');
+  check('html-layout: demos are plain HTML (no polyfill tags)', (await page.locator('[data-testid=doc] .docs-demo-preview stacklayout, [data-testid=doc] .docs-demo-preview gridlayout').count()) === 0 && (await style(page, `${preview} .grid`, 'display')) === 'grid');
+  await open(page, '/docs/grid-layout');
+  const gridEq = page.locator('[data-testid=doc] .docs-demo-preview .grid').first();
+  check('grid-layout migration demo is a CSS grid with 2 columns', (await gridEq.evaluate((e) => getComputedStyle(e).gridTemplateColumns.split(' ').length)) === 2);
+  await open(page, '/');
+  check('home: no polyfill tags in the hero demo, quick links lead with HTML first, legacy last', (await page.locator('[data-testid=hero] stacklayout').count()) === 0 && (await page.locator('[data-testid=quick-link]').first().getAttribute('href')) === '/docs/introduction' && (await page.locator('[data-testid=quick-link]').last().getAttribute('href')) === '/docs/legacy-tags');
+}
 // 12. axe-core (WCAG 2.0/2.1 A+AA and best practices) on every page, light and dark.
 {
   for (const scheme of ['light', 'dark']) {

@@ -1,11 +1,14 @@
 ---
 title: Label and text runs
-section: Views
-order: 20
+section: Legacy NativeScript tags
+order: 48
 description: Label, FormattedString and Span.
 ---
 
 # Label and text runs
+
+> [!NOTE]
+> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [plain text elements](/docs/html-first). See [Legacy NativeScript tags](/docs/legacy-tags).
 
 ## Label
 
@@ -30,3 +33,15 @@ description: Label, FormattedString and Span.
 ```
 
 In the HTML-first design you can also write ordinary text elements (`<p>`, `<strong>`, `<em>`). On a device MasonKit nests them into a single native text run. The polyfills exist for code that already uses the NativeScript tags.
+
+## HTML-first equivalent
+
+Write ordinary text elements. `<Label text="...">` is a `<p>` or `<span>`, and `<FormattedString>` with `<Span>` children is inline markup:
+
+```html live
+<p>
+  <strong>Bold </strong>
+  <span class="text-primary font-semibold">and teal </span>
+  and plain.
+</p>
+```

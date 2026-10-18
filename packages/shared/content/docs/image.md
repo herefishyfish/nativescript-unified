@@ -1,11 +1,14 @@
 ---
 title: Image
-section: Views
-order: 21
+section: Legacy NativeScript tags
+order: 49
 description: Image with src and alt.
 ---
 
 # Image
+
+> [!NOTE]
+> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [the plain `img` element](/docs/html-first). See [Legacy NativeScript tags](/docs/legacy-tags).
 
 `<Image>` renders an `<img>`. It takes `src` and `alt`, and the image is capped at the width of its container.
 
@@ -14,3 +17,7 @@ description: Image with src and alt.
 ```
 
 Nothing is rendered when `src` is empty.
+
+## HTML-first equivalent
+
+Use `<img>` with `src` and `alt`. Add `max-w-full` if you want the same width cap the polyfill applies.

@@ -1,11 +1,14 @@
 ---
 title: Polyfill limitations
-section: Guides
-order: 33
+section: Legacy NativeScript tags
+order: 56
 description: What web-polyfills does not do, taken from its source.
 ---
 
 # Polyfill limitations
+
+> [!NOTE]
+> **Legacy support.** These are the limits of the web polyfills for NativeScript tags. They do not apply to HTML-first code. See [Legacy NativeScript tags](/docs/legacy-tags).
 
 `packages/web-polyfills` exists so a legacy NativeScript tree renders in a browser. It is a fallback, not a port of NativeScript. These limits come from reading its source.
 
@@ -62,6 +65,6 @@ Angular outputs and model inputs carry plain values, for example `checkedChange`
 </StackLayout>
 ```
 
-## Planned
+## Scope
 
-Native styling for Spartan, and any new views, are planned. Nothing in this list is promised for a date.
+The polyfills are legacy support for existing NativeScript markup. New UI belongs in [Components](/docs/components).

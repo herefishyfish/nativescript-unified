@@ -7,7 +7,7 @@ description: What each app owns, what they share, and how to decide where code g
 
 # Web vs native
 
-Web and native diverge often, so they are two apps at the top of the workspace. Each has its own pages and its own core. Shared HTML and features sit underneath both.
+Web and native diverge often, so they are two apps at the top of the workspace. Each has its own pages and its own core. Shared HTML and features sit underneath both. The approach on both is [HTML first](/docs/html-first).
 
 ## The core of each app
 
@@ -20,13 +20,14 @@ Web and native diverge often, so they are two apps at the top of the workspace. 
 | View layer | Browser DOM | MasonKit, installed by `installMasonKit()` before bootstrap |
 | Build | Vite with `@analogjs/platform`, prerendered | Vite with `@nativescript/vite` and the `nativescriptAnalog()` plugin |
 | Dark mode | `dark` class on `<html>` | `ns-dark` class on the root view |
-| Styling | Tailwind and Spartan | `app.css`, which imports `tokens.css` only |
+| Styling | Tailwind and Spartan helm | Tailwind through `@nativescript/tailwind` and Spartan helm, with the same `tokens.css` |
+| Legacy NativeScript tags | Rendered by `web-polyfills`, for existing markup only | Real native views |
 
 ## Pages
 
 Both use `src/app/pages` and the same file conventions, but a page is written for its platform.
 
-A web page imports `RouterLink`, Spartan helm components and polyfills. A native page imports `ActionBarComponent` from `@nativescript/angular`, sets `NO_ERRORS_SCHEMA`, and wraps its content in `<scroll>`:
+A web page imports `RouterLink` and Spartan helm components. A native page imports `ActionBarComponent` from `@nativescript/angular`, sets `NO_ERRORS_SCHEMA`, and wraps its content in `<scroll>`:
 
 ```ts
 @Component({
@@ -43,11 +44,11 @@ A web page imports `RouterLink`, Spartan helm components and polyfills. A native
 export default class SharedPage {}
 ```
 
-That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders is the same component that `apps/web/src/app/pages/index.page.ts` renders.
+That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders lives in `packages/shared`, and the web home page reads the same `FEATURES` data.
 
 ## What is shared
 
-`packages/shared` holds HTML-first components and content. They use plain elements and Tailwind classes, with no platform imports. Here is the shape of the shared home feature, running live:
+`packages/shared` holds HTML-first components and content. They use plain elements and Tailwind classes, with no platform imports. Here is the shape of a shared feature, running live:
 
 ```html live
 <div class="flex flex-col gap-4 p-4 rounded-lg border bg-background text-foreground">
@@ -64,8 +65,8 @@ That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders
 
 1. If it is plain HTML plus tokens and has no platform imports, put it in `packages/shared`. See [Writing shared HTML features](/docs/shared-features).
 2. If it needs a router service, a native API, or a Spartan component, put it in the app that uses it.
-3. If a legacy NativeScript tag must render in a browser, it belongs in `packages/web-polyfills`. Native never imports that package, because on a device those tags are real views.
+3. If a legacy NativeScript tag must render in a browser, it belongs in `packages/web-polyfills`. Native never imports that package, because on a device those tags are real views. See [Legacy NativeScript tags](/docs/legacy-tags).
 
-## Known gap
+## Spartan on native
 
-The shared templates use Tailwind classes. Those only take effect on the web today. Native gets `@nativescript/tailwind` later, and that is planned work, not done. Until then the native app styles shared markup with its own CSS.
+`apps/native/src/app/pages/ui.page.ts` imports `HlmButton`, `HlmBadge` and `HlmCardImports`, and `packages/ui/native` holds the glue helm needs on NativeScript. That page has been type-checked and bundled. It has not been confirmed on a device in these docs, so treat native helm as in progress. See [Components](/docs/components) for what is demonstrated on the web.

@@ -15,7 +15,7 @@ The palette is inspired by the New Balance Numeric Jamie Foy 306 in "Sea Salt / 
 | --- | --- | --- |
 | `--background` | `#f2ebdd` | `#0b2423` |
 | `--foreground` | `#10302f` | `#f2ebdd` |
-| `--primary` | `#3e8e84` | `#5fb3a8` |
+| `--primary` | `#27695f` | `#5fb3a8` |
 | `--secondary`, `--muted` | `#e3d9c4` | `#1a403e` |
 | `--accent` | `#cfe2dd` | `#1f4c49` |
 | `--border` | `#d3c7ad` | `#25504d` |

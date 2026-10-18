@@ -23,7 +23,7 @@ description: Label, FormattedString and Span.
 <Label>
   <FormattedString>
     <Span text="Bold " font-weight="700"></Span>
-    <Span text="and teal " color="#3e8e84"></Span>
+    <Span text="and teal " color="var(--primary)"></Span>
     <Span text="and plain."></Span>
   </FormattedString>
 </Label>

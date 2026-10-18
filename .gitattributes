@@ -1,0 +1,9 @@
+*.md text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.mjs text eol=lf
+*.mts text eol=lf
+*.cjs text eol=lf
+*.patch text eol=lf

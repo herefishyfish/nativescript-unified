@@ -32,7 +32,7 @@ npx nx run native:android         # needs the NativeScript CLI + Android SDK (no
 
 `packages/ui/styles/tokens.css` is the single source of colour tokens (shadcn-style names, plain hex), inspired by
 New Balance Numeric Jamie Foy 306 "Sea Salt / Vintage Teal": background `#F2EBDD`, foreground `#10302F`,
-primary `#3E8E84`, muted sand `#E3D9C4`. Dark mode (`.dark` on web, `.ns-dark` on native) flips to deep teal.
+primary `#27695F`, muted sand `#E3D9C4`. Dark mode (`.dark` on web, `.ns-dark` on native) flips to deep teal.
 Hex values are estimates, not sampled from the shoe.
 - web: `apps/web/src/styles.css` imports `packages/ui/styles/index.css` (tailwind + Spartan preset + style-vega + tokens).
 - native: `apps/native/src/app.css` imports `tokens.css` only (NativeScript CSS, no Tailwind yet).

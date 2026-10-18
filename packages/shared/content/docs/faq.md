@@ -1,7 +1,7 @@
 ---
 title: FAQ
 section: Guides
-order: 34
+order: 61
 description: Short answers, each checked against the workspace.
 ---
 
@@ -21,7 +21,7 @@ According to `docs/design.md`: the AnalogJS router calls plain `provideRouter`, 
 
 ## Can I write `<StackLayout>` on the web?
 
-Yes, if you import the component. See [StackLayout](/docs/stack-layout) and [Polyfill limitations](/docs/polyfill-limitations).
+Yes, if you import the component, but it is legacy support for existing NativeScript markup. New code should use HTML. See [HTML first](/docs/html-first), [StackLayout](/docs/stack-layout) and [Polyfill limitations](/docs/polyfill-limitations).
 
 ## Why are the polyfills not custom elements?
 
@@ -29,7 +29,7 @@ A custom element name needs a hyphen, and `StackLayout` has none.
 
 ## Can I use `<Button>` or `<TextField>`?
 
-Not through the polyfills. Use HTML elements or Spartan. See [Button and TextField](/docs/button-and-text-field).
+Not through the polyfills. Use HTML elements or Spartan. See [Button](/docs/ui-button), [Form controls](/docs/ui-form-controls) and [Button and TextField](/docs/button-and-text-field).
 
 ## Can a demo react to input?
 

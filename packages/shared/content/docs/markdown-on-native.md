@@ -1,7 +1,7 @@
 ---
 title: Markdown content on native
 section: Guides
-order: 32
+order: 60
 description: Content files, front matter and the Markdown renderer in analog-native.
 ---
 

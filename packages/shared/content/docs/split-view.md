@@ -1,11 +1,14 @@
 ---
 title: SplitView
-section: Layouts
-order: 16
+section: Legacy NativeScript tags
+order: 47
 description: Primary, supplementary, secondary and inspector columns.
 ---
 
 # SplitView
+
+> [!NOTE]
+> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [CSS grid](/docs/html-layout). See [Legacy NativeScript tags](/docs/legacy-tags).
 
 `<SplitView>` is a column layout driven by roles. Each child sets `splitRole` to `primary`, `supplementary`, `secondary` or `inspector`.
 
@@ -32,3 +35,14 @@ Columns follow the roles that are actually present, in the order primary, supple
 ```
 
 The polyfill maps it to a CSS grid with one column per present role.
+
+## HTML-first equivalent
+
+The polyfill is a CSS grid with one column per present role. With two roles and a 0.3 primary fraction, the HTML version is a two-column grid:
+
+```html live
+<div class="grid grid-cols-[30%_1fr] gap-2" style="height: 140px">
+  <div class="p-2 rounded bg-primary text-primary-foreground">primary</div>
+  <div class="p-2 rounded bg-secondary text-secondary-foreground">secondary</div>
+</div>
+```

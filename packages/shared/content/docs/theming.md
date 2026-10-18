@@ -1,7 +1,7 @@
 ---
 title: Theming
-section: Guides
-order: 30
+section: HTML first
+order: 14
 description: Colour tokens, dark mode and the NativeScript polyfill variables.
 ---
 

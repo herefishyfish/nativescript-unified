@@ -1,11 +1,14 @@
 ---
 title: Navigation views
-section: Views
-order: 27
+section: Legacy NativeScript tags
+order: 55
 description: ActionBar, NavigationButton, Tabs, Pager and Drawer, with iOS and Material approximations.
 ---
 
 # Navigation views
+
+> [!NOTE]
+> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [helm tabs](/docs/ui-tabs) and [dialog](/docs/ui-dialog). See [Legacy NativeScript tags](/docs/legacy-tags).
 
 These views are implemented by the polyfills. Four of them take `platform="ios"` or `platform="material"`, which restyles them as an approximation of the native look. The default is `default`.
 
@@ -69,3 +72,7 @@ Tapping the scrim closes it too.
 ## Looks per platform
 
 On `ios`, `Tabs` becomes a bottom bar and `Pager` shows only dots. On `material`, `ActionBar` uses the primary colour and `Drawer` has rounded end corners. These are CSS approximations, as described in [Polyfill limitations](/docs/polyfill-limitations).
+
+## HTML-first equivalent
+
+For web-style tabs, use [Tabs](/docs/ui-tabs). The workspace also has helm `drawer`, `sheet`, `sidebar` and `navigation-menu` folders in `packages/ui/helm`, which have no pages here yet. On native, the example app uses the real `ActionBar` from `@nativescript/angular`, so ActionBar is not something you replace there. See [Web vs native](/docs/web-vs-native).

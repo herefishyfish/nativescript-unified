@@ -1,7 +1,7 @@
 ---
 title: Writing shared HTML features
-section: Guides
-order: 31
+section: HTML first
+order: 15
 description: Rules for components in packages/shared that render on web and native.
 ---
 
@@ -56,4 +56,4 @@ On web, import the component in a page and use its selector. On native, do the s
 
 ## Tailwind on native
 
-The classes above only style the web build today. Wiring `@nativescript/tailwind` into `apps/native` is planned. Until then, shared markup renders on native without those utility styles.
+`apps/native` lists `@nativescript/tailwind` and `tailwindcss`, and its `app.css` imports Tailwind and the shared tokens, so the same classes are meant to style native. That has been bundled, not confirmed on a device in these docs.

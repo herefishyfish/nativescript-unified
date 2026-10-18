@@ -32,8 +32,9 @@ describe('nativescriptAnalog load hook', () => {
     expect(file.slug).toBe('hello');
     expect(file.attributes).toEqual({ title: 'Hello World', date: '2026-10-01T00:00:00.000Z', tags: ['intro'] });
     expect(file.content).not.toContain('title:');
-    expect(file.tokens.map((token) => token.type)).toEqual(['heading', 'space', 'paragraph']);
-    const paragraph = file.tokens[2] as { tokens: { type: string; href?: string }[] };
+    // marked emits a space token only for CRLF line endings, so ignore it to keep the test line-ending neutral.
+    expect(file.tokens.map((token) => token.type).filter((type) => type !== 'space')).toEqual(['heading', 'paragraph']);
+    const paragraph = file.tokens.find((token) => token.type === 'paragraph') as { tokens: { type: string; href?: string }[] };
     expect(paragraph.tokens.map((token) => token.type)).toEqual(['text', 'strong', 'text', 'link', 'text']);
     expect(paragraph.tokens[3].href).toBe('/about');
   });

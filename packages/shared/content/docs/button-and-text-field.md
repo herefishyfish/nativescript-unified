@@ -1,11 +1,14 @@
 ---
 title: Button and TextField
-section: Views
-order: 26
+section: Legacy NativeScript tags
+order: 53
 description: What is not polyfilled, and the HTML-first alternative.
 ---
 
 # Button and TextField
+
+> [!NOTE]
+> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [helm buttons](/docs/ui-button) and [form controls](/docs/ui-form-controls). See [Legacy NativeScript tags](/docs/legacy-tags).
 
 The `web-polyfills` package has **no** `<Button>` or `<TextField>` component. The full list of tags it implements is:
 
@@ -31,3 +34,7 @@ Whether MasonKit on a device renders `<button>` and `<input>` has not been check
 ```html live
 <HtmlView html="<b>Bold</b> and <i>italic</i> from an HTML string"></HtmlView>
 ```
+
+## HTML-first equivalent
+
+This page already points the same way: there is no polyfill for these two tags because HTML and Spartan cover them. See [Button](/docs/ui-button) and [Form controls](/docs/ui-form-controls).

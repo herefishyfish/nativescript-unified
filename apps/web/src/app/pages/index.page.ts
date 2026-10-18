@@ -1,22 +1,22 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowRight, lucideBookOpen, lucideLayoutGrid, lucideLayers, lucidePalette, lucideRoute, lucideSlidersHorizontal } from '@ng-icons/lucide';
+import { lucideArrowRight, lucideArchive, lucideBookOpen, lucideBoxes, lucideCode, lucidePalette, lucideRoute } from '@ng-icons/lucide';
+import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { FEATURES } from '@nativescript-unified/shared';
-import { NsLabel, NsStackLayout } from '@nativescript-unified/web-polyfills';
 import { Seo } from '../core/seo';
 import { SiteHeader } from '../layout/site-header';
 
-const SNIPPET = `<StackLayout orientation="horizontal">
-  <Label text="Plain NativeScript"></Label>
-  <Label text="rendered on the web"></Label>
-</StackLayout>`;
+const SNIPPET = `<div class="flex flex-row items-center gap-3">
+  <button hlmBtn>Plain HTML</button>
+  <span hlmBadge variant="secondary">Spartan helm</span>
+</div>`;
 
 @Component({
   selector: 'web-home-page',
-  imports: [RouterLink, HlmButton, NsStackLayout, NsLabel, SiteHeader, NgIcon],
-  providers: [provideIcons({ lucideArrowRight, lucideBookOpen, lucideLayoutGrid, lucideLayers, lucidePalette, lucideRoute, lucideSlidersHorizontal })],
+  imports: [RouterLink, HlmButton, HlmBadge, SiteHeader, NgIcon],
+  providers: [provideIcons({ lucideArrowRight, lucideArchive, lucideBookOpen, lucideBoxes, lucideCode, lucidePalette, lucideRoute })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <web-site-header />
@@ -27,22 +27,22 @@ const SNIPPET = `<StackLayout orientation="horizontal">
             <p class="docs-eyebrow">NativeScript docs, rewritten</p>
             <h1 class="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">NativeScript, <span class="text-primary">HTML first</span></h1>
             <p class="mt-5 max-w-xl text-lg text-muted-foreground">
-              Write native apps with plain HTML and Tailwind. Web and native stay separate at the top and share the pages in the middle. Legacy
-              <code class="rounded bg-muted px-1.5 py-0.5 text-[0.9em]">&lt;StackLayout&gt;</code> trees still render on the web.
+              Write pages with plain HTML, CSS flex and grid, Tailwind and Spartan components. Web and native stay separate at the top and share the pages in the middle.
+              Existing NativeScript tags such as <code class="rounded bg-muted px-1.5 py-0.5 text-[0.9em]">&lt;StackLayout&gt;</code> are supported on the web as legacy.
             </p>
             <div class="mt-8 flex flex-wrap gap-3">
               <a hlmBtn size="lg" routerLink="/docs/introduction" data-testid="read-docs">Read the docs <ng-icon name="lucideArrowRight" size="16" /></a>
-              <a hlmBtn size="lg" variant="outline" routerLink="/docs/stack-layout">StackLayout demo</a>
+              <a hlmBtn size="lg" variant="outline" routerLink="/docs/components">Browse components</a>
             </div>
           </div>
 
           <div class="docs-demo home-demo" data-testid="home-demo">
-            <div class="docs-demo-tabs"><span class="px-3 py-2 text-xs font-medium text-muted-foreground">Live StackLayout</span></div>
+            <div class="docs-demo-tabs"><span class="px-3 py-2 text-xs font-medium text-muted-foreground">Live HTML and helm</span></div>
             <div class="docs-demo-preview">
-              <StackLayout orientation="horizontal" class="items-center gap-3" data-testid="home-stack">
-                <Label text="Plain NativeScript" class="rounded-md bg-primary px-3 py-2 text-primary-foreground"></Label>
-                <Label text="rendered on the web" class="rounded-md bg-muted px-3 py-2"></Label>
-              </StackLayout>
+              <div class="flex flex-row items-center gap-3" data-testid="home-flex">
+                <button hlmBtn>Plain HTML</button>
+                <span hlmBadge variant="secondary">Spartan helm</span>
+              </div>
             </div>
             <div class="docs-code-wrap"><pre class="docs-code"><code>{{ snippet }}</code></pre></div>
           </div>
@@ -83,16 +83,15 @@ export default class HomePage {
 
   constructor() {
     inject(Seo).set({
-      description: 'HTML-first NativeScript docs: one set of pages for web and native, with Angular Elements that render legacy NativeScript layouts like StackLayout in the browser.',
+      description: 'HTML-first NativeScript docs: plain HTML, Tailwind and Spartan components for web and native, with legacy NativeScript tags supported on the web.',
       path: '/',
     });
   }
   protected readonly links = [
     { title: 'Introduction', body: 'What the project is and how the pieces fit.', href: '/docs/introduction', icon: 'lucideBookOpen' },
+    { title: 'HTML first', body: 'Plain HTML, flex and grid, Tailwind and what replaces each NativeScript tag.', href: '/docs/html-first', icon: 'lucideCode' },
+    { title: 'Components', body: 'Live Spartan helm examples: button, card, tabs, dialog and more.', href: '/docs/components', icon: 'lucideBoxes' },
     { title: 'File routing', body: 'Pages from the pages folder, on web and native.', href: '/docs/file-routing', icon: 'lucideRoute' },
-    { title: 'Project structure', body: 'web, native and the shared layer.', href: '/docs/project-structure', icon: 'lucideLayers' },
-    { title: 'Layouts', body: 'StackLayout, GridLayout and friends on the web.', href: '/docs/stack-layout', icon: 'lucideLayoutGrid' },
-    { title: 'Controls', body: 'Switch, Slider, SegmentedBar and more.', href: '/docs/controls', icon: 'lucideSlidersHorizontal' },
     { title: 'Theming', body: 'The cream and teal tokens, and dark mode.', href: '/docs/theming', icon: 'lucidePalette' },
-  ];
-}
+    { title: 'Legacy NativeScript tags', body: 'Legacy support: existing StackLayout and GridLayout markup on the web.', href: '/docs/legacy-tags', icon: 'lucideArchive' },
+  ];}

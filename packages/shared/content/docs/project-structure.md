@@ -37,7 +37,7 @@ Spartan UI: `brain` is headless, `helm` is styled. They are consumed from source
 
 ## packages/web-polyfills
 
-Angular components that implement NativeScript view tags on the web. Layouts: StackLayout, GridLayout, WrapLayout, AbsoluteLayout, DockLayout, FlexboxLayout and SplitView. See [StackLayout](/docs/stack-layout), [Label](/docs/label) and [Polyfill limitations](/docs/polyfill-limitations).
+Legacy support: Angular components that implement NativeScript view tags on the web, so existing NativeScript markup renders in a browser. Layouts: StackLayout, GridLayout, WrapLayout, AbsoluteLayout, DockLayout, FlexboxLayout and SplitView. See [Legacy NativeScript tags](/docs/legacy-tags), [StackLayout](/docs/stack-layout), [Label](/docs/label) and [Polyfill limitations](/docs/polyfill-limitations).
 
 ## packages/analog-native
 

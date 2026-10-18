@@ -13,6 +13,17 @@ const docSlugs = readdirSync(docsDir)
   .filter((file) => file.endsWith('.md'))
   .map((file) => file.replace(/\.md$/, ''));
 
+const siteUrl = (process.env.VITE_SITE_URL || 'https://nativescript-unified.example').replace(/\/+$/, '');
+
+/** sitemap.xml and robots.txt for the prerendered public folder. */
+function writeSeoFiles(routes: string[]): void {
+  const dir = resolve(import.meta.dirname, '../../dist/apps/web/analog/public');
+  mkdirSync(dir, { recursive: true });
+  const urls = routes.map((r) => `  <url><loc>${siteUrl}${r}</loc></url>`);
+  writeFileSync(resolve(dir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`);
+  writeFileSync(resolve(dir, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`);
+}
+
 export default defineConfig(({ mode }) => ({
   root: import.meta.dirname,
   publicDir: 'src/public',
@@ -29,6 +40,7 @@ export default defineConfig(({ mode }) => ({
         postRenderingHooks: [
           async (page) => {
             if (page.route !== '/404' || !page.contents) return;
+            writeSeoFiles(['/', ...docSlugs.map((slug) => `/docs/${slug}`)]);
             const out = resolve(import.meta.dirname, '../../dist/apps/web/analog/public/404.html');
             mkdirSync(dirname(out), { recursive: true });
             writeFileSync(out, page.contents);

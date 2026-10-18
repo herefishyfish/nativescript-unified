@@ -46,7 +46,7 @@ export class NsImage {
   selector: 'ScrollView',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[attr.orientation]': 'orientation() === "horizontal" ? "horizontal" : "vertical"' },
-  template: `<div class="scroller"><ng-content /></div>`,
+  template: `<div class="scroller" tabindex="0"><ng-content /></div>`,
   styles: `
     :host { display: flex; flex-direction: column; min-height: 0px; }
     .scroller { display: flex; flex-direction: column; flex: 1; overflow-x: hidden; overflow-y: auto; }
@@ -79,7 +79,7 @@ export class NsActivityIndicator {
   selector: 'Progress',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="track" role="progressbar" [attr.aria-valuenow]="value()" [attr.aria-valuemin]="0" [attr.aria-valuemax]="max()">
+    <div class="track" role="progressbar" aria-label="Progress" [attr.aria-valuenow]="value()" [attr.aria-valuemin]="0" [attr.aria-valuemax]="max()">
       <div class="fill" [style.width.%]="pct()"></div>
     </div>
   `,
@@ -105,7 +105,7 @@ export class NsProgress {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[attr.checked]': 'on() ? "" : null' },
   template: `
-    <button type="button" class="sw" role="switch" [attr.aria-checked]="on()" (click)="toggle()">
+    <button type="button" class="sw" role="switch" aria-label="Switch" [attr.aria-checked]="on()" (click)="toggle()">
       <span class="knob"></span>
     </button>
   `,
@@ -129,7 +129,7 @@ export class NsSwitch {
 @Component({
   selector: 'Slider',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<input type="range" [min]="min()" [max]="max()" [value]="current()" (input)="onInput($event)" />`,
+  template: `<input type="range" aria-label="Slider" [min]="min()" [max]="max()" [value]="current()" (input)="onInput($event)" />`,
   styles: `
     :host { display: flex; }
     input { flex: 1; width: 100%; }
@@ -154,7 +154,7 @@ export class NsSlider {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <form class="bar" (submit)="onSubmit($event)">
-      <input [value]="text()" [placeholder]="hint()" (input)="onInput($event)" />
+      <input [attr.aria-label]="hint() || 'Search'" [value]="text()" [placeholder]="hint()" (input)="onInput($event)" />
     </form>
   `,
   styles: `
@@ -222,7 +222,7 @@ export class NsSegmentedBar implements OnDestroy {
   selector: 'ListPicker',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <select [value]="index()" (change)="onChange($event)">
+    <select aria-label="Picker" [value]="index()" (change)="onChange($event)">
       @for (item of options(); track $index) {
         <option [value]="$index" [selected]="$index === index()">{{ item }}</option>
       }

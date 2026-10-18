@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, signal, viewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMenu, lucideX } from '@ng-icons/lucide';
@@ -13,13 +13,14 @@ import { ThemeToggle } from '../layout/theme-toggle';
   imports: [RouterOutlet, RouterLink, RouterLinkActive, HlmButton, NgIcon, ThemeToggle, DocsSearch],
   providers: [provideIcons({ lucideMenu, lucideX })],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '(document:keydown.escape)': 'closeMenu()' },
   template: `
     <header class="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background/90 px-4 backdrop-blur">
-      <button hlmBtn variant="ghost" size="icon" type="button" class="md:hidden" aria-label="Toggle navigation" data-testid="nav-toggle" (click)="open.set(!open())">
-        <ng-icon [name]="open() ? 'lucideX' : 'lucideMenu'" size="18" />
+      <button hlmBtn variant="ghost" size="icon" type="button" class="md:hidden" aria-label="Toggle navigation" aria-controls="docs-sidebar" [attr.aria-expanded]="open()" data-testid="nav-toggle" #navToggle (click)="open.set(!open())">
+        <ng-icon [name]="open() ? 'lucideX' : 'lucideMenu'" size="18" aria-hidden="true" />
       </button>
       <a routerLink="/" class="flex items-center gap-2 font-semibold">
-        <span class="inline-block size-5 rounded-md bg-primary"></span>
+        <span class="inline-block size-5 rounded-md bg-primary" aria-hidden="true"></span>
         NativeScript Unified
       </a>
       <span class="ml-1 hidden rounded-full border px-2 py-0.5 text-xs text-muted-foreground sm:inline">HTML first</span>
@@ -32,6 +33,7 @@ import { ThemeToggle } from '../layout/theme-toggle';
 
     <div class="mx-auto flex max-w-7xl items-start">
       <nav
+        id="docs-sidebar"
         aria-label="Documentation"
         data-testid="sidebar"
         class="fixed inset-x-0 bottom-0 top-14 z-20 overflow-y-auto border-r bg-sidebar p-4 md:sticky md:top-14 md:block md:h-[calc(100dvh-3.5rem)] md:max-h-[calc(100dvh-3.5rem)] md:w-64 md:shrink-0 md:self-start"
@@ -46,6 +48,7 @@ import { ThemeToggle } from '../layout/theme-toggle';
                   <a
                     [routerLink]="['/docs', page.slug]"
                     routerLinkActive="bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                    ariaCurrentWhenActive="page"
                     class="block rounded-md px-2 py-1.5 text-sm hover:bg-sidebar-accent"
                     (click)="open.set(false)"
                     >{{ page.title }}</a
@@ -56,7 +59,7 @@ import { ThemeToggle } from '../layout/theme-toggle';
           </div>
         }
       </nav>
-      <main class="min-w-0 flex-1 px-4 py-8 md:px-10">
+      <main id="main-content" tabindex="-1" class="min-w-0 flex-1 px-4 py-8 outline-none md:px-10">
         <router-outlet />
       </main>
     </div>
@@ -65,4 +68,12 @@ import { ThemeToggle } from '../layout/theme-toggle';
 export default class DocsLayout {
   protected readonly nav = NAV;
   protected readonly open = signal(false);
+  private readonly toggle = viewChild<ElementRef<HTMLElement>>('navToggle');
+
+  /** Escape closes the mobile menu and returns focus to its button. */
+  protected closeMenu(): void {
+    if (!this.open()) return;
+    this.open.set(false);
+    this.toggle()?.nativeElement.focus();
+  }
 }

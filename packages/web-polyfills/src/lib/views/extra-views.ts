@@ -51,7 +51,7 @@ export class NsContentView {}
 @Component({
   selector: 'DatePicker',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<input type="date" [attr.min]="minBound()" [attr.max]="maxBound()" [value]="iso()" (input)="onInput($event)" />`,
+  template: `<input type="date" aria-label="Date" [attr.min]="minBound()" [attr.max]="maxBound()" [value]="iso()" (input)="onInput($event)" />`,
   styles: `
     :host { display: flex; }
     input { flex: 1; width: 100%; padding: 8px 12px; border: 1px solid var(--ns-border); border-radius: var(--ns-radius); background: var(--ns-card); color: var(--ns-foreground); font-size: 16px; }
@@ -90,7 +90,7 @@ export class NsDatePicker {
 @Component({
   selector: 'TimePicker',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<input type="time" [attr.min]="minClock()" [attr.max]="maxClock()" [value]="clock()" (input)="onInput($event)" />`,
+  template: `<input type="time" aria-label="Time" [attr.min]="minClock()" [attr.max]="maxClock()" [value]="clock()" (input)="onInput($event)" />`,
   styles: `
     :host { display: flex; }
     input { flex: 1; width: 100%; padding: 8px 12px; border: 1px solid var(--ns-border); border-radius: var(--ns-radius); background: var(--ns-card); color: var(--ns-foreground); font-size: 16px; }
@@ -141,9 +141,9 @@ export class NsHtmlView {
   selector: 'ListView',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="list" role="list">
+    <div class="list">
       @for (item of rows(); track $index) {
-        <button type="button" class="row" role="listitem" (click)="pick($index)">{{ item }}</button>
+        <button type="button" class="row" (click)="pick($index)">{{ item }}</button>
       }
     </div>
   `,

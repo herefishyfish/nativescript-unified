@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HomeFeature } from '@nativescript-unified/shared';
 import { NsLabel, NsStackLayout } from '@nativescript-unified/web-polyfills';
+import { Seo } from '../core/seo';
 import { ThemeToggle } from '../layout/theme-toggle';
 
 @Component({
@@ -10,7 +11,7 @@ import { ThemeToggle } from '../layout/theme-toggle';
   imports: [HomeFeature, HlmButton, RouterLink, NsStackLayout, NsLabel, ThemeToggle],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10">
+    <main id="main-content" tabindex="-1" class="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10 outline-none">
       <div class="flex justify-end"><web-theme-toggle /></div>
       <app-home-feature />
       <StackLayout orientation="horizontal" class="items-center gap-3">
@@ -18,7 +19,14 @@ import { ThemeToggle } from '../layout/theme-toggle';
         <a hlmBtn variant="outline" routerLink="/docs/stack-layout">StackLayout demo</a>
         <Label text="This row is a &lt;StackLayout&gt;"></Label>
       </StackLayout>
-    </div>
+    </main>
   `,
 })
-export default class HomePage {}
+export default class HomePage {
+  constructor() {
+    inject(Seo).set({
+      description: 'HTML-first NativeScript docs: one set of pages for web and native, with Angular Elements that render legacy NativeScript layouts like StackLayout in the browser.',
+      path: '/',
+    });
+  }
+}

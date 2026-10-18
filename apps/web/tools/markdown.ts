@@ -14,7 +14,7 @@ export function highlight(code: string, info: string | undefined): string {
 
 export function codeBlock(code: string, info: string | undefined): string {
   const lang = (info ?? '').split(/\s+/)[0] || 'text';
-  return `<pre class="docs-code" data-lang="${escapeHtml(lang)}"><code>${highlight(code.replace(/\n$/, ''), info)}</code></pre>`;
+  return `<pre class="docs-code" tabindex="0" data-lang="${escapeHtml(lang)}"><code>${highlight(code.replace(/\n$/, ''), info)}</code></pre>`;
 }
 
 export function slugify(text: string): string {

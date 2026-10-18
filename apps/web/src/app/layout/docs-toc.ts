@@ -60,7 +60,8 @@ export class DocsToc {
 
   protected jump(event: Event, id: string): void {
     event.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
     history.replaceState(null, '', '#' + id);
     this.active.set(id);
   }

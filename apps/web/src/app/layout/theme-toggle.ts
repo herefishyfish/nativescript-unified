@@ -10,8 +10,8 @@ import { ThemeService } from '../core/theme';
   providers: [provideIcons({ lucideMoon, lucideSun })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <button hlmBtn variant="ghost" size="icon" type="button" aria-label="Toggle dark mode" data-testid="theme-toggle" (click)="theme.toggle()">
-      <ng-icon [name]="theme.dark() ? 'lucideSun' : 'lucideMoon'" size="18" />
+    <button hlmBtn variant="ghost" size="icon" type="button" aria-label="Dark mode" [attr.aria-pressed]="theme.dark()" data-testid="theme-toggle" (click)="theme.toggle()">
+      <ng-icon [name]="theme.dark() ? 'lucideSun' : 'lucideMoon'" size="18" aria-hidden="true" />
     </button>
   `,
 })

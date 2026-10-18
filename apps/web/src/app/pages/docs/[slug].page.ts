@@ -2,37 +2,34 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input } f
 import { DomSanitizer, Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { findDoc, neighbours } from '../../docs/content';
-import { DocsDemo } from '../../docs/demo';
+import { DocsDemoFrame } from '../../layout/docs-demo-frame';
 import { DocsToc } from '../../layout/docs-toc';
 
 /** /docs/:slug renders one Markdown file from packages/shared/content/docs. */
 @Component({
   selector: 'web-doc-page',
-  imports: [DocsDemo, RouterLink, DocsToc],
+  imports: [DocsDemoFrame, RouterLink, DocsToc],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (doc(); as d) {
-      <div class="mx-auto flex max-w-5xl gap-10">
+      <div class="mx-auto flex max-w-5xl gap-10 xl:max-w-6xl">
       <article class="docs-prose min-w-0 max-w-3xl flex-1" data-testid="doc" (click)="onClick($event)">
-        <p class="mb-2 text-sm font-medium text-primary">{{ d.section }}</p>
+        <p class="docs-eyebrow">{{ d.section }}</p>
         @for (block of blocks(); track $index) {
           @if (block.kind === 'demo') {
-            <figure class="docs-demo" data-testid="demo">
-              <div class="docs-demo-preview"><docs-demo [code]="block.code" /></div>
-              <div class="docs-demo-code" [innerHTML]="block.html"></div>
-            </figure>
+            <web-demo-frame [code]="block.code" [html]="block.html" />
           } @else {
             <div [innerHTML]="block.html"></div>
           }
         }
         <nav class="mt-12 flex justify-between gap-4 border-t pt-6 text-sm">
           @if (around().prev; as p) {
-            <a [routerLink]="['/docs', p.slug]" class="rounded-md border px-4 py-2 hover:bg-accent">&larr; {{ p.title }}</a>
+            <a [routerLink]="['/docs', p.slug]" class="rounded-lg border bg-card px-4 py-2.5 transition-colors hover:bg-accent">&larr; {{ p.title }}</a>
           } @else {
             <span></span>
           }
           @if (around().next; as n) {
-            <a [routerLink]="['/docs', n.slug]" class="rounded-md border px-4 py-2 hover:bg-accent">{{ n.title }} &rarr;</a>
+            <a [routerLink]="['/docs', n.slug]" class="rounded-lg border bg-card px-4 py-2.5 transition-colors hover:bg-accent">{{ n.title }} &rarr;</a>
           }
         </nav>
       </article>
@@ -70,6 +67,16 @@ export default class DocPage {
 
   /** Markdown links to other docs pages are plain <a href>. Route them without a full reload. */
   protected onClick(event: MouseEvent): void {
+    const copy = (event.target as Element | null)?.closest<HTMLElement>('[data-copy]');
+    if (copy) {
+      const text = copy.parentElement?.querySelector('pre')?.textContent ?? '';
+      void navigator.clipboard?.writeText(text).then(() => {
+        copy.textContent = 'Copied';
+        copy.dataset['copied'] = 'true';
+        setTimeout(() => { copy.textContent = 'Copy'; delete copy.dataset['copied']; }, 1500);
+      });
+      return;
+    }
     const link = (event.target as Element | null)?.closest('a[href]');
     const href = link?.getAttribute('href');
     if (!href || !href.startsWith('/') || href.startsWith('//') || event.metaKey || event.ctrlKey) return;

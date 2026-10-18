@@ -225,7 +225,86 @@ check('TOC scroll-spy highlights the heading being read', (await page.locator('[
 await page.screenshot({ path: `${out}/toc-scrolled.png` });
 await open(mp, '/docs/project-structure');
 check('mobile: TOC hidden', !(await mp.locator('[data-testid=toc]').isVisible()));
-await browser.close();
+// 8. Visual polish: home page, code copy, demo tabs, callouts, wide screens, tablet and mobile.
+{
+  const vctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, permissions: ['clipboard-read', 'clipboard-write'] });
+  const vp = await vctx.newPage();
+  await open(vp, '/');
+  check('home: hero with h1, two CTAs and a live StackLayout demo', (await vp.locator('[data-testid=hero] h1').innerText()).includes('HTML first') && (await vp.locator('[data-testid=hero] a[hlmbtn], [data-testid=hero] a[data-slot=button]').count()) === 2 && (await vp.locator('[data-testid=home-stack]').count()) === 1);
+  check('home: live StackLayout is a flex row', (await style(vp, '[data-testid=home-stack]', 'flex-direction')) === 'row');
+  check('home: three what/why cards and six quick links', (await vp.locator('[data-testid=feature-card]').count()) === 3 && (await vp.locator('[data-testid=quick-link]').count()) === 6);
+  const hrefs = await vp.locator('[data-testid=quick-link]').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+  const statuses = await Promise.all(hrefs.map((h) => fetch(base + h + '/').then((r) => r.status)));
+  check('home: every quick link resolves to a prerendered page', statuses.every((s) => s === 200), hrefs.join(','));
+  check('home: no horizontal overflow at 1280', await vp.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await vp.screenshot({ path: `${out}/home-visual.png`, fullPage: true });
+  await open(vp, '/', 'dark');
+  await vp.evaluate(() => localStorage.setItem('ns-unified-theme', 'dark'));
+  await vp.reload({ waitUntil: 'networkidle' });
+  await vp.screenshot({ path: `${out}/home-visual-dark.png`, fullPage: true });
+  await vp.evaluate(() => localStorage.removeItem('ns-unified-theme'));
+
+  // Demo frame tabs and the copy button.
+  await open(vp, '/docs/stack-layout');
+  const frame = vp.locator('[data-testid=demo]').first();
+  check('demo frame: Preview tab selected, preview visible, code hidden', (await frame.locator('[role=tab][aria-selected=true]').innerText()) === 'Preview' && (await frame.locator('.docs-demo-preview').isVisible()) && !(await frame.locator('.docs-demo-code').isVisible()));
+  await frame.locator('[data-testid=demo-tab-code]').click();
+  await vp.waitForTimeout(250);
+  check('demo frame: Code tab shows the code and hides the preview', (await frame.locator('.docs-demo-code').isVisible()) && !(await frame.locator('.docs-demo-preview').isVisible()));
+  await frame.locator('.docs-demo-code').hover();
+  await frame.locator('[data-copy]').click();
+  await vp.waitForTimeout(150);
+  const clip = (await vp.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, '\n');
+  const shown = await frame.locator('.docs-demo-code pre').innerText();
+  check('copy button puts the code on the clipboard and says Copied', clip.trim() === shown.trim() && clip.includes('StackLayout') && (await frame.locator('[data-copy]').innerText()) === 'Copied');
+  await frame.screenshot({ path: `${out}/demo-code-tab.png` });
+  await frame.locator('[data-testid=demo-tab-preview]').click();
+  await frame.screenshot({ path: `${out}/demo-preview-tab.png` });
+
+  // Callouts: no docs page uses one yet, so inject the markup the Markdown renderer emits and check the styling.
+  await vp.evaluate(() => {
+    const art = document.querySelector('article.docs-prose');
+    for (const kind of ['note', 'tip', 'warning']) {
+      const el = document.createElement('aside');
+      el.className = `docs-callout docs-callout-${kind}`;
+      el.setAttribute('data-audit-callout', kind);
+      el.innerHTML = `<p class="docs-callout-title">${kind}</p><p>Callout body text.</p>`;
+      art.insertBefore(el, art.children[2]);
+    }
+  });
+  const borders = await vp.locator('[data-audit-callout]').evaluateAll((els) => els.map((e) => getComputedStyle(e).borderLeftColor + '|' + getComputedStyle(e).backgroundColor));
+  check('callouts: note, tip and warning have distinct colours', new Set(borders).size === 3, borders.join(' ; '));
+  await vp.locator('[data-audit-callout=note]').screenshot({ path: `${out}/callout-note.png` });
+
+  // Wide screens: sidebar background reaches the left window edge.
+  const edges = [];
+  for (const [w, h] of [[1280, 800], [1920, 1080], [2560, 1300]]) {
+    await vp.setViewportSize({ width: w, height: h });
+    await open(vp, '/docs/project-structure');
+    const r = await vp.evaluate(() => { const s = document.querySelector('[data-testid=sidebar]').getBoundingClientRect(); const m = document.querySelector('main').getBoundingClientRect(); return { left: Math.round(s.left), right: Math.round(s.right), mainLeft: Math.round(m.left), overflow: document.documentElement.scrollWidth > innerWidth }; });
+    edges.push(`${w}:${JSON.stringify(r)}`);
+    check(`wide: sidebar starts at x=0 and abuts main at ${w}px, no overflow`, r.left === 0 && r.right === r.mainLeft && !r.overflow, JSON.stringify(r));
+    if (w === 2560) await vp.screenshot({ path: `${out}/wide-2560.png` });
+  }
+  await vctx.close();
+
+  // Tablet (768 and 820 are above the md breakpoint) and a small phone.
+  for (const [name, w, h, sidebarVisible] of [['tablet-portrait', 820, 1180, true], ['tablet-768', 768, 1024, true], ['tablet-small', 600, 900, false], ['phone-small', 360, 740, false]]) {
+    const c = await browser.newContext({ viewport: { width: w, height: h } });
+    const tp = await c.newPage();
+    for (const path of ['/', '/docs/grid-layout', '/docs/controls']) {
+      await open(tp, path);
+      const ok = await tp.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
+      check(`${name} ${w}px ${path}: no horizontal overflow`, ok, ok ? '' : String(await tp.evaluate(() => document.documentElement.scrollWidth)));
+    }
+    await open(tp, '/docs/grid-layout');
+    check(`${name}: sidebar ${sidebarVisible ? 'visible' : 'hidden until menu'}`, (await tp.locator('[data-testid=sidebar]').isVisible()) === sidebarVisible);
+    await tp.screenshot({ path: `${out}/${name}-docs.png`, fullPage: true });
+    await open(tp, '/');
+    await tp.screenshot({ path: `${out}/${name}-home.png`, fullPage: true });
+    await c.close();
+  }
+}await browser.close();
 const failed = results.filter((r) => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} checks passed`);
 process.exit(failed.length ? 1 : 0);

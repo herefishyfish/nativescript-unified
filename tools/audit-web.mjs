@@ -46,7 +46,7 @@ const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } })
 const page = await ctx.newPage();
 
 // 2. Pages: render, no console errors, screenshot.
-const pages = ['', 'docs/introduction', 'docs/project-structure', 'docs/file-routing', 'docs/stack-layout', 'docs/grid-layout', 'docs/flexbox-layout', 'docs/wrap-layout', 'docs/dock-layout', 'docs/absolute-layout', 'docs/label', 'docs/image', 'docs/scroll-view', 'docs/list-view', 'docs/controls', 'docs/indicators', 'docs/button-and-text-field', 'docs/theming'];
+const pages = ['', 'docs/introduction', 'docs/project-structure', 'docs/file-routing', 'docs/stack-layout', 'docs/grid-layout', 'docs/flexbox-layout', 'docs/wrap-layout', 'docs/dock-layout', 'docs/absolute-layout', 'docs/label', 'docs/image', 'docs/scroll-view', 'docs/list-view', 'docs/controls', 'docs/indicators', 'docs/button-and-text-field', 'docs/theming', 'docs/installation', 'docs/web-vs-native', 'docs/shared-features', 'docs/markdown-on-native', 'docs/polyfill-limitations', 'docs/faq', 'docs/navigation-views', 'docs/split-view'];
 for (const p of pages) {
   const errors = await open(page, '/' + p);
   const h1 = await page.locator('h1').first().innerText();

@@ -11,7 +11,7 @@ Web and native diverge often, so they are two apps at the top of the workspace. 
 
 ## The core of each app
 
-| | Web (`apps/web`) | Native (`apps/native`) |
+| Area | Web (`apps/web`) | Native (`apps/native`) |
 | --- | --- | --- |
 | Entry | `src/main.ts`, `src/app/app.config.ts` | `src/main.ts` |
 | Router | `provideFileRouter` from `@analogjs/router` | `provideFileRouter` from `@nativescript-unified/analog-native` |

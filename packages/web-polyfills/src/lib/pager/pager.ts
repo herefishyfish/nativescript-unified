@@ -13,7 +13,7 @@ import { NsPlatform } from '../platform-variant';
   template: `
     <div class="page"><ng-content /></div>
     <div class="controls">
-      <button type="button" class="nav" part="prev" [disabled]="!hasPrev()" (click)="go(-1)" aria-label="Previous page">Prev</button>
+      <button type="button" class="nav" part="prev" [disabled]="!hasPrev()" (click)="go(-1)" aria-label="Previous page">Previous</button>
       <div class="dots">
         @for (p of pages(); track $index) {
           <button type="button" class="dot" [class.on]="$index === index()" (click)="index.set($index)" [attr.aria-label]="'Page ' + ($index + 1)"></button>

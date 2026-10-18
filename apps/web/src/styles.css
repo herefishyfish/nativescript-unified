@@ -96,3 +96,28 @@
 .home-demo { margin: 0; }
 .home-demo .docs-code-wrap { margin: 0; }
 .home-demo pre.docs-code { border: 0; border-top: 1px solid var(--border); border-radius: 0; }
+/* Themed scrollbars. Thumb/track come from the cream/teal tokens; thumb is >= 3:1 against background, card, sidebar, muted and popover (see tools/contrast.mjs).
+   `scrollbar-color` inherits, so it also reaches scrollers inside the polyfills' shadow roots; their `scrollbar-width` is set in the polyfill styles. */
+:root { --scrollbar-thumb: #7d7157; --scrollbar-thumb-hover: var(--primary); --scrollbar-track: transparent; --scrollbar-size: 0.6rem; }
+.dark { --scrollbar-thumb: var(--input); }
+@layer base {
+  html, .scrollbar-themed, :where(*) { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
+}
+@layer utilities {
+  /* Opt in explicitly (e.g. third-party content) or out with .scrollbar-auto. */
+  .scrollbar-themed { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
+  .scrollbar-auto { scrollbar-width: auto; }
+}
+/* WebKit fallback for engines without the standard properties (Chrome/Edge < 121, older Safari). */
+@supports not (scrollbar-color: auto) {
+  *::-webkit-scrollbar { width: var(--scrollbar-size); height: var(--scrollbar-size); background: var(--scrollbar-track); }
+  *::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+  *::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+  *::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); background-clip: padding-box; }
+  *::-webkit-scrollbar-corner { background: transparent; }
+}
+/* Let the platform draw high-contrast scrollbars. */
+@media (forced-colors: active) {
+  html, .scrollbar-themed, :where(*) { scrollbar-color: auto; scrollbar-width: auto; }
+  *::-webkit-scrollbar, *::-webkit-scrollbar-thumb, *::-webkit-scrollbar-track { all: revert; }
+}

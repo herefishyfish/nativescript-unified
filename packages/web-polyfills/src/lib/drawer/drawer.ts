@@ -26,7 +26,7 @@ import { NsPlatform } from '../platform-variant';
     :host([fill]) .content { min-height: 0; overflow: hidden; }
     .scrim { position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; background: var(--ns-overlay); z-index: 10; }
     .panel { position: absolute; top: 0px; left: 0px; bottom: 0px; z-index: 11; display: flex; flex-direction: column;
-      background: var(--ns-card); color: var(--ns-card-foreground); border-right: 1px solid var(--ns-border); overflow: auto; }
+      background: var(--ns-card); color: var(--ns-card-foreground); border-right: 1px solid var(--ns-border); overflow: auto; scrollbar-width: thin; }
     .panel[hidden] { display: none; }
 
     /* iOS: inset sheet-style side menu with soft shadow */

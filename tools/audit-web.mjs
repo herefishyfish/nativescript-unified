@@ -603,6 +603,37 @@ const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
     check(`axe ${scheme}: popover open has no violations`, v2.length === 0, v2.join(' | '));
   }
 }
+
+// 11b. Themed scrollbars on key containers, light and dark.
+{
+  const expect = { light: 'rgb(125, 113, 87)', dark: 'rgb(122, 117, 99)' };
+  for (const scheme of ['light', 'dark']) {
+    await open(page, '/docs/ui-table', scheme);
+    await page.evaluate((dark) => document.documentElement.classList.toggle('dark', dark), scheme === 'dark');
+    await page.evaluate(() => { const d = document.createElement('div'); d.id = 'sb-probe'; d.style.cssText = 'height:40px;overflow:auto'; d.innerHTML = '<div style="height:200px"></div>'; document.querySelector('main, body').appendChild(d); });
+    const sels = { window: 'html', sidebar: '[data-testid=sidebar]', code: 'pre.docs-code', 'demo preview': '.docs-demo-preview', probe: '#sb-probe' };
+    const bad = [];
+    const vals = [];
+    for (const [name, sel] of Object.entries(sels)) {
+      const loc = page.locator(sel).first();
+      if (!(await loc.count())) { bad.push(`${name}: missing`); continue; }
+      const v = await loc.evaluate((e) => { const s = getComputedStyle(e); return [s.scrollbarWidth, s.scrollbarColor]; });
+      vals.push(`${name}=${v[0]}/${v[1]}`);
+      if (v[0] !== 'thin' || !v[1].startsWith(expect[scheme])) bad.push(`${name}: ${v.join(' ')}`);
+    }
+    check(`scrollbar ${scheme}: thin + themed colour on window, sidebar, code, demo preview, generic div`, bad.length === 0, bad.join(' | '));
+    console.log(`NOTE  scrollbar ${scheme}: ${vals.join('; ')}`);
+  }
+  await open(page, '/docs/scroll-view', 'light');
+  const sv = await page.evaluate(() => { const s = document.querySelector('docs-demo-live scrollview')?.shadowRoot?.querySelector('.scroller') ?? document.querySelector('docs-demo-live scrollview .scroller'); if (!s) return null; const c = getComputedStyle(s); return [c.scrollbarWidth, c.scrollbarColor]; });
+  check('scrollbar: ScrollView polyfill scroller is thin + themed', !!sv && sv[0] === 'thin' && sv[1].startsWith('rgb(125, 113, 87)'), JSON.stringify(sv));
+  const forced = await browser.newContext({ viewport: { width: 1280, height: 900 }, forcedColors: 'active' });
+  const fp = await forced.newPage();
+  await fp.goto(base + '/docs/ui-table');
+  const fv = await fp.locator('html').evaluate((e) => getComputedStyle(e).scrollbarColor);
+  check('scrollbar: forced-colors uses platform colours (auto)', fv === 'auto', fv);
+  await forced.close();
+}
 // 12. axe-core (WCAG 2.0/2.1 A+AA and best practices) on every page, light and dark.
 {
   for (const scheme of ['light', 'dark']) {

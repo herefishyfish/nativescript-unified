@@ -49,7 +49,7 @@ export class NsImage {
   template: `<div class="scroller" tabindex="0"><ng-content /></div>`,
   styles: `
     :host { display: flex; flex-direction: column; min-height: 0px; }
-    .scroller { display: flex; flex-direction: column; flex: 1; overflow-x: hidden; overflow-y: auto; }
+    .scroller { display: flex; flex-direction: column; flex: 1; scrollbar-width: thin; overflow-x: hidden; overflow-y: auto; }
     :host([orientation='horizontal']) .scroller { flex-direction: row; overflow-x: auto; overflow-y: hidden; }
   `,
 })

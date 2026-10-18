@@ -1,6 +1,9 @@
 // You can add your native dependencies here
 dependencies {
 //  implementation 'androidx.multidex:multidex:2.0.1'
+  // Markwon extensions for @nstudio/nativescript-markdown-view (the plugin ships only core and image).
+  implementation 'io.noties.markwon:ext-strikethrough:4.6.2'
+  implementation 'io.noties.markwon:ext-tables:4.6.2'
 }
 
 android {
@@ -23,3 +26,4 @@ android {
     additionalParameters "--no-version-vectors"
   }
 }
+

@@ -187,3 +187,26 @@ Tabs {
   color: var(--foreground);
   background-color: var(--card);
 }
+/* Native Markdown view (@nstudio/nativescript-markdown-view): colours are set natively from the same tokens. */
+.md-view {
+  color: var(--foreground);
+  font-size: 15;
+  background-color: transparent;
+}
+
+.tab-icon {
+  width: 24;
+  height: 24;
+  color: var(--primary);
+  font-size: 22;
+}
+
+.md-pad {
+  padding: 16;
+}
+
+/* MasonKit's default sheet gives <strong> font-weight: bolder, which NativeScript core rejects. */
+strong,
+b {
+  font-weight: bold;
+}

@@ -34,10 +34,20 @@ Variants, such as `variant="outline"`, are inputs on the directive. Colours come
 | [Dialog](/docs/ui-dialog) | `hlm-dialog` and its parts |
 | [Alert](/docs/ui-alert) | `hlmAlert` |
 | [Progress, skeleton, avatar and separator](/docs/ui-feedback) | `hlm-progress`, `hlmSkeleton`, `hlm-avatar`, `hlmSeparator` |
+| [Select](/docs/ui-select) | `hlm-select` and its parts |
+| [Slider](/docs/ui-slider) | `hlm-slider` |
+| [Popover](/docs/ui-popover) | `hlm-popover` and its parts |
+| [Dropdown menu](/docs/ui-dropdown-menu) | `hlmDropdownMenuTrigger`, `hlm-dropdown-menu` and its parts |
+| [Sheet](/docs/ui-sheet) | `hlm-sheet` and its parts |
+| [Drawer](/docs/ui-drawer) | `hlm-drawer` and its parts |
+| [Table](/docs/ui-table) | `hlmTable` and its parts |
+| [Calendar](/docs/ui-calendar) | `hlm-calendar`, `hlm-calendar-multi`, `hlm-calendar-range` |
+| [Tooltip](/docs/ui-tooltip) | `hlmTooltip` |
+| [More components](/docs/ui-more) | toggle, toggle group, collapsible, hover card, kbd, spinner, breadcrumb, native select, alert dialog |
 
 ## More in the workspace
 
-`packages/ui/helm` holds many more components, for example `select`, `slider`, `popover`, `dropdown-menu`, `sheet`, `drawer`, `table`, `calendar` and `tooltip`. They have no page here yet. Pages are added only for components that have been rendered in this workspace.
+`packages/ui/helm` holds further components, for example `carousel`, `chart`, `command`, `combobox`, `context-menu`, `menubar` and `sidebar`. They have no page here yet. Pages are added only for components that have been rendered in this workspace.
 
 ## Native availability
 

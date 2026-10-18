@@ -46,7 +46,7 @@ const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } })
 const page = await ctx.newPage();
 
 // 2. Pages: render, no console errors, screenshot.
-const pages = ['', 'docs/introduction', 'docs/project-structure', 'docs/file-routing', 'docs/stack-layout', 'docs/grid-layout', 'docs/flexbox-layout', 'docs/wrap-layout', 'docs/dock-layout', 'docs/absolute-layout', 'docs/label', 'docs/image', 'docs/scroll-view', 'docs/list-view', 'docs/controls', 'docs/indicators', 'docs/button-and-text-field', 'docs/theming', 'docs/installation', 'docs/web-vs-native', 'docs/shared-features', 'docs/markdown-on-native', 'docs/polyfill-limitations', 'docs/faq', 'docs/navigation-views', 'docs/split-view', 'docs/html-first', 'docs/html-layout', 'docs/legacy-tags', 'docs/components', 'docs/ui-button', 'docs/ui-badge', 'docs/ui-card', 'docs/ui-form-controls', 'docs/ui-tabs', 'docs/ui-accordion', 'docs/ui-dialog', 'docs/ui-alert', 'docs/ui-feedback'];
+const pages = ['', 'docs/introduction', 'docs/project-structure', 'docs/file-routing', 'docs/stack-layout', 'docs/grid-layout', 'docs/flexbox-layout', 'docs/wrap-layout', 'docs/dock-layout', 'docs/absolute-layout', 'docs/label', 'docs/image', 'docs/scroll-view', 'docs/list-view', 'docs/controls', 'docs/indicators', 'docs/button-and-text-field', 'docs/theming', 'docs/installation', 'docs/web-vs-native', 'docs/shared-features', 'docs/markdown-on-native', 'docs/polyfill-limitations', 'docs/faq', 'docs/navigation-views', 'docs/split-view', 'docs/html-first', 'docs/html-layout', 'docs/legacy-tags', 'docs/components', 'docs/ui-button', 'docs/ui-badge', 'docs/ui-card', 'docs/ui-form-controls', 'docs/ui-tabs', 'docs/ui-accordion', 'docs/ui-dialog', 'docs/ui-alert', 'docs/ui-feedback', 'docs/ui-select', 'docs/ui-slider', 'docs/ui-popover', 'docs/ui-dropdown-menu', 'docs/ui-sheet', 'docs/ui-drawer', 'docs/ui-table', 'docs/ui-calendar', 'docs/ui-tooltip', 'docs/ui-more'];
 for (const p of pages) {
   const errors = await open(page, '/' + p);
   const h1 = await page.locator('h1').first().innerText();
@@ -512,6 +512,96 @@ const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
   check('grid-layout migration demo is a CSS grid with 2 columns', (await gridEq.evaluate((e) => getComputedStyle(e).gridTemplateColumns.split(' ').length)) === 2);
   await open(page, '/');
   check('home: no polyfill tags in the hero demo, quick links lead with HTML first, legacy last', (await page.locator('[data-testid=hero] stacklayout').count()) === 0 && (await page.locator('[data-testid=quick-link]').first().getAttribute('href')) === '/docs/introduction' && (await page.locator('[data-testid=quick-link]').last().getAttribute('href')) === '/docs/legacy-tags');
+  // 11c. More helm components: open/interact checks.
+  await open(page, '/docs/ui-select');
+  await page.locator(`${preview} hlm-select-trigger button`).first().click();
+  await page.waitForSelector('hlm-select-content', { timeout: 3000 }).catch(() => {});
+  check('Select page: trigger opens a list with 3 options', (await page.locator('hlm-select-content hlm-select-item').count()) === 3);
+  await page.locator('hlm-select-item', { hasText: 'Banana' }).click();
+  await page.waitForTimeout(300);
+  check('Select page: choosing Banana updates the demo text', (await page.locator('[data-testid=select-picked]').innerText()) === 'banana');
+  await open(page, '/docs/ui-slider');
+  const thumb = page.locator(`${preview} [brnsliderthumb], ${preview} [role=slider]`).first();
+  await thumb.focus();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(200);
+  check('Slider page: ArrowRight moves 40 to 45 (step 5)', (await thumb.getAttribute('aria-valuenow')) === '45' && (await page.locator('[data-testid=slider-value]').innerText()) === '45');
+  await page.keyboard.press('End');
+  await page.waitForTimeout(200);
+  check('Slider page: End goes to the max, 100', (await thumb.getAttribute('aria-valuenow')) === '100');
+  await open(page, '/docs/ui-popover');
+  await page.locator(`${preview} button[hlmpopovertrigger]`).click();
+  await page.waitForSelector('hlm-popover-content', { timeout: 3000 }).catch(() => {});
+  await page.waitForTimeout(400);
+  check('Popover page: trigger opens content with its title', await page.locator('hlm-popover-content').getByText('Dimensions', { exact: true }).isVisible().catch(() => false));
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(400);
+  check('Popover closes on Escape', (await page.locator('hlm-popover-content').count()) === 0);
+  await open(page, '/docs/ui-dropdown-menu');
+  await page.locator(`${preview} button`).first().click();
+  await page.waitForSelector('hlm-dropdown-menu', { timeout: 3000 }).catch(() => {});
+  check('Dropdown page: trigger opens a menu with 3 items', (await page.locator('hlm-dropdown-menu [hlmdropdownmenuitem], hlm-dropdown-menu button[role=menuitem]').count()) === 3);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+  check('Dropdown menu closes on Escape', (await page.locator('hlm-dropdown-menu').count()) === 0);
+  await open(page, '/docs/ui-sheet');
+  await page.locator(`${preview} button[hlmsheettrigger]`).click();
+  await page.waitForSelector('hlm-sheet-content', { timeout: 3000 }).catch(() => {});
+  check('Sheet page: trigger opens a right-side sheet', (await page.locator('hlm-sheet-content').getByText('Edit profile').isVisible().catch(() => false)) && (await page.locator('hlm-sheet-content').getAttribute('data-side').catch(() => '')) === 'right');
+  await page.screenshot({ path: `${out}/ui-sheet-open.png` });
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(500);
+  check('Sheet closes on Escape', (await page.locator('hlm-sheet-content').count()) === 0);
+  await open(page, '/docs/ui-drawer');
+  await page.locator(`${preview} button[hlmdrawertrigger]`).click();
+  await page.waitForSelector('hlm-drawer-content', { timeout: 3000 }).catch(() => {});
+  check('Drawer page: trigger opens a drawer with its title', await page.locator('hlm-drawer-content').getByText('Move goal').isVisible().catch(() => false));
+  await page.locator('hlm-drawer-content button[hlmdrawerclose]').click();
+  await page.waitForTimeout(600);
+  check('Drawer closes from its Cancel button', (await page.locator('hlm-drawer-content').count()) === 0);
+  await open(page, '/docs/ui-table');
+  check('Table page: 1 header row, 3 body rows, 1 footer row and a caption', (await page.locator(`${preview} thead tr`).count()) === 1 && (await page.locator(`${preview} tbody tr`).count()) === 3 && (await page.locator(`${preview} tfoot tr`).count()) === 1 && (await page.locator(`${preview} caption`).count()) === 1);
+  await open(page, '/docs/ui-calendar');
+  check('Calendar page: month grid renders', (await page.locator(`${preview} hlm-calendar button[brncalendarcellbutton]`).count()) >= 28);
+  await page.locator(`${preview} hlm-calendar button[brncalendarcellbutton]`, { hasText: /^\s*15\s*$/ }).first().click();
+  await page.waitForTimeout(300);
+  check('Calendar page: clicking 15 shows that date', /\b15\b/.test(await page.locator('[data-testid=calendar-selected]').innerText()));
+  await open(page, '/docs/ui-tooltip');
+  await page.locator(`${preview} button[hlmtooltip]`).first().hover();
+  await page.waitForSelector('[role=tooltip]', { timeout: 3000 }).catch(() => {});
+  check('Tooltip page: hovering shows "Add to library"', await page.locator('[role=tooltip]', { hasText: 'Add to library' }).first().isVisible().catch(() => false));
+  await open(page, '/docs/ui-more');
+  await page.locator(`${preview} button[hlmtoggle]`).first().click();
+  check('More page: toggle sets aria-pressed', (await page.locator(`${preview} button[hlmtoggle]`).first().getAttribute('aria-pressed')) === 'true');
+  await page.locator(`${preview} button[hlmcollapsibletrigger]`).click();
+  await page.waitForTimeout(300);
+  check('More page: collapsible reveals its content', await page.locator(preview).getByText('Hidden until the trigger is pressed.').isVisible().catch(() => false));
+  await page.locator(`${preview} button[hlmalertdialogtrigger]`).click();
+  await page.waitForSelector('hlm-alert-dialog-content', { timeout: 3000 }).catch(() => {});
+  check('More page: alert dialog opens', await page.locator('hlm-alert-dialog-content').getByText('Are you sure?').isVisible().catch(() => false));
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
+  // axe with overlays open, light and dark.
+  for (const scheme of ['light', 'dark']) {
+    await open(page, '/docs/ui-sheet', scheme);
+    await page.evaluate((dark) => document.documentElement.classList.toggle('dark', dark), scheme === 'dark');
+    await page.locator(`${preview} button[hlmsheettrigger]`).click();
+    await page.waitForSelector('hlm-sheet-content');
+    await page.waitForTimeout(500);
+    const v = await axe(page);
+    check(`axe ${scheme}: sheet open has no violations`, v.length === 0, v.join(' | '));
+    await page.keyboard.press('Escape');
+    await open(page, '/docs/ui-popover', scheme);
+    await page.evaluate((dark) => document.documentElement.classList.toggle('dark', dark), scheme === 'dark');
+    await page.locator(`${preview} button[hlmpopovertrigger]`).click();
+    await page.waitForSelector('hlm-popover-content');
+    await page.waitForTimeout(400);
+    // helm/brain give the popover overlay role=dialog and expose no accessible-name input, so aria-dialog-name is a known library finding, reported separately below.
+    const v2all = await axe(page);
+    const v2 = v2all.filter((x) => !x.startsWith('aria-dialog-name (1: #brn-overlay'));
+    console.log(`NOTE  axe ${scheme} popover: library finding ignored: ${v2all.length - v2.length} aria-dialog-name`);
+    check(`axe ${scheme}: popover open has no violations`, v2.length === 0, v2.join(' | '));
+  }
 }
 // 12. axe-core (WCAG 2.0/2.1 A+AA and best practices) on every page, light and dark.
 {

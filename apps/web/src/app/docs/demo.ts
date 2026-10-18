@@ -17,6 +17,24 @@ import { HlmSkeleton } from '@spartan-ng/helm/skeleton';
 import { HlmSwitchImports } from '@spartan-ng/helm/switch';
 import { HlmTabsImports } from '@spartan-ng/helm/tabs';
 import { HlmTextarea } from '@spartan-ng/helm/textarea';
+import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
+import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
+import { HlmCalendarImports } from '@spartan-ng/helm/calendar';
+import { HlmCollapsibleImports } from '@spartan-ng/helm/collapsible';
+import { HlmDrawerImports } from '@spartan-ng/helm/drawer';
+import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
+import { HlmHoverCardImports } from '@spartan-ng/helm/hover-card';
+import { HlmKbdImports } from '@spartan-ng/helm/kbd';
+import { HlmNativeSelectImports } from '@spartan-ng/helm/native-select';
+import { HlmPopoverImports } from '@spartan-ng/helm/popover';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { HlmSheetImports } from '@spartan-ng/helm/sheet';
+import { HlmSliderImports } from '@spartan-ng/helm/slider';
+import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
+import { HlmTableImports } from '@spartan-ng/helm/table';
+import { HlmToggleImports } from '@spartan-ng/helm/toggle';
+import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
+import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { NS_ELEMENTS } from '@nativescript-unified/web-polyfills';
 
 /** Spartan helm pieces the Components pages demo. Every helm component here already exists in packages/ui/helm. */
@@ -38,6 +56,24 @@ const HELM_IMPORTS = [
   HlmSkeleton,
   ...HlmAvatarImports,
   HlmSeparator,
+  ...HlmAlertDialogImports,
+  ...HlmBreadcrumbImports,
+  ...HlmCalendarImports,
+  ...HlmCollapsibleImports,
+  ...HlmDrawerImports,
+  ...HlmDropdownMenuImports,
+  ...HlmHoverCardImports,
+  ...HlmKbdImports,
+  ...HlmNativeSelectImports,
+  ...HlmPopoverImports,
+  ...HlmSelectImports,
+  ...HlmSheetImports,
+  ...HlmSliderImports,
+  ...HlmSpinnerImports,
+  ...HlmTableImports,
+  ...HlmToggleImports,
+  ...HlmToggleGroupImports,
+  ...HlmTooltipImports,
 ];
 const DEMO_IMPORTS = [...Object.values(NS_ELEMENTS), ...HELM_IMPORTS];
 /**

@@ -1,7 +1,7 @@
 /*
  * Shared colour tokens for web, native and ui.
  * Inspired by New Balance Numeric Jamie Foy 306 "Sea Salt / Vintage Teal".
- * Plain hex only (NativeScript CSS has no oklch). Dark mode flips to deep teal.
+ * Plain hex only (NativeScript CSS has no oklch). Dark mode is the same shoe at night: warm charcoal-green, cream text, softened vintage teal.
  * Web toggles `.dark` on <html>; NativeScript sets `.ns-dark` on the root view.
  */
 :root,
@@ -42,35 +42,35 @@
 
 .dark,
 .ns-dark {
-  --background: #0b2423; /* deep teal */
-  --foreground: #f2ebdd;
-  --card: #113130;
+  --background: #171a18; /* warm green-black */
+  --foreground: #f2ebdd; /* sea salt */
+  --card: #1f2320;
   --card-foreground: #f2ebdd;
-  --popover: #113130;
+  --popover: #1f2320;
   --popover-foreground: #f2ebdd;
-  --primary: #5fb3a8;
-  --primary-foreground: #0b2423;
-  --secondary: #1a403e;
+  --primary: #5ea396; /* softened vintage teal */
+  --primary-foreground: #0f1a18;
+  --secondary: #2b2d27; /* dark sand */
   --secondary-foreground: #f2ebdd;
-  --muted: #1a403e;
-  --muted-foreground: #a9bdb7;
-  --accent: #1f4c49;
+  --muted: #2b2d27;
+  --muted-foreground: #b5ab97; /* dimmed sand */
+  --accent: #27403b;
   --accent-foreground: #f2ebdd;
-  --destructive: #e0715d;
-  --border: #25504d;
-  --input: #4f8580;
-  --ring: #5fb3a8;
-  --chart-1: #5fb3a8;
+  --destructive: #e0806a;
+  --border: #3a3b33;
+  --input: #7a7563;
+  --ring: #5ea396;
+  --chart-1: #5ea396;
   --chart-2: #f2ebdd;
   --chart-3: #c9b88f;
-  --chart-4: #7bb5ab;
-  --chart-5: #8a7a55;
-  --sidebar: #0f2b2a;
+  --chart-4: #8cc0b5;
+  --chart-5: #a8935f;
+  --sidebar: #1c1f1c;
   --sidebar-foreground: #f2ebdd;
-  --sidebar-primary: #5fb3a8;
-  --sidebar-primary-foreground: #0b2423;
-  --sidebar-accent: #1f4c49;
+  --sidebar-primary: #5ea396;
+  --sidebar-primary-foreground: #0f1a18;
+  --sidebar-accent: #27403b;
   --sidebar-accent-foreground: #f2ebdd;
-  --sidebar-border: #25504d;
-  --sidebar-ring: #5fb3a8;
+  --sidebar-border: #3a3b33;
+  --sidebar-ring: #5ea396;
 }

@@ -5,9 +5,11 @@ import { importProvidersFrom, provideZonelessChangeDetection } from '@angular/co
 import { FontIconModule } from 'nativescript-fonticon/angular';
 import lucideCss from 'lucide-static/font/lucide.css?raw';
 import { install as installDrawer } from '@nativescript-community/ui-drawer';
-import { install as installBottomSheet } from '@nativescript-community/ui-material-bottomsheet';
+import { install as installBottomSheet } from '@nativescript-community/ui-bottomsheet';
 import { bootstrapApplication, registerElement, runNativeScriptAngularApp } from '@nativescript/angular';
-import { TabContentItem, Tabs, TabStrip, TabStripItem } from '@nativescript-community/ui-material-tabs';
+import { BottomNavigation } from '@nativescript-community/ui-bottom-navigation';
+import { TabContentItem, TabStrip, TabStripItem } from '@nativescript-community/ui-core-tabs';
+import { Tabs } from '@nativescript-community/ui-tabs';
 import { provideFileRouter, provideMarkdownLiveCode } from '@nativescript-unified/analog-native';
 import { installMasonKit } from '@triniwiz/nativescript-masonkit/angular';
 import { AppComponent } from './app/app.component';
@@ -28,11 +30,11 @@ installMasonKit({
   },
 });
 registerSpartanNativeElements();
-// The plugin's /angular entry registers these as a tree-shaken side effect, so register them explicitly.
-registerElement('MDTabs', () => Tabs);
-registerElement('MDTabStrip', () => TabStrip);
-registerElement('MDTabStripItem', () => TabStripItem);
-registerElement('MDTabContentItem', () => TabContentItem);
+registerElement('BottomNavigation', () => BottomNavigation);
+registerElement('Tabs', () => Tabs);
+registerElement('TabStrip', () => TabStrip);
+registerElement('TabStripItem', () => TabStripItem);
+registerElement('TabContentItem', () => TabContentItem);
 installDrawer();
 installBottomSheet();
 installTouchFeedback();

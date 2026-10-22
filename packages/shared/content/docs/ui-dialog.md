@@ -33,9 +33,14 @@ The dialog is built on the brain dialog and the Angular CDK overlay. It closes w
 
 ## Native
 
-The same markup opens a native modal window. The window holds the helm content, styled by the same classes. `provideSpartanNativeScript()` swaps the CDK dialog for the NativeScript overlay host, so the app needs no other setup.
+The same markup opens a native modal window. `provideSpartanNativeScript()` swaps the CDK dialog for the NativeScript overlay host, so the app needs no other setup.
 
-- The Android back button closes the dialog, unless `disableClose` is set.
-- A tap outside closes it when `closeOnOutsidePointerEvents` is on, which is the default.
-- `closed` and `HlmDialogService.open()` return the result as on the web.
-- The native window dims the page, so helm's overlay element is not drawn.
+These results were checked on the Android emulator (API 36), in light and dark:
+
+- The window is full screen and transparent. The helm card and helm's overlay class are the only chrome, so the dialog looks as it does on the web, without the blur.
+- Close and Cancel return `saved` and `cancelled` through `closed`. `HlmDialogService.open()` returns its result the same way.
+- The Android back button closes the dialog, and the result is `undefined`.
+- A tap outside the card closes the dialog. A tap inside the card does not. The alert dialog ignores a tap outside, and the back button still closes it.
+- The live example on this page opens the native dialog.
+
+iOS uses the `overFullScreen` presentation for the same window. It has not been run on a device.

@@ -10,6 +10,7 @@ export * from './helpers/exposes-state';
 export * from './helpers/inject-content-dimensions';
 export * from './helpers/inject-element-size';
 export * from './helpers/menu-align';
+export * from './helpers/menu-host';
 export * from './helpers/overlay-host';
 export * from './helpers/resolve-value-label';
 export * from './helpers/skip-delay';

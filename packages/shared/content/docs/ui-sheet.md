@@ -31,4 +31,6 @@ description: A panel that slides in from an edge of the screen.
 `hlm-sheet-content` shows a close button unless `showCloseButton` is false. Escape also closes it.
 ## Native
 
-A sheet with `side="bottom"` opens in a native bottom sheet. You can drag it down to close it. Native platforms have no side panel window, so the other sides open in a centered native modal. The Android back button closes the sheet in both cases.
+A sheet with `side="bottom"` opens in a native bottom sheet from `@nativescript-community/ui-bottomsheet`, the same window as the drawer. Native platforms have no side panel window, so the other sides open in the full-screen modal that dialogs use.
+
+On the Android emulator, a right sheet opened as a centered card over helm's backdrop in light and dark. Apply returned `applied`, and the Android back button closed it. The sheet's `fixed`, `inset-y-0` and `h-full` classes do not apply in the modal, so the card is sized by its content and not docked to the right edge.

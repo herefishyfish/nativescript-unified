@@ -12,7 +12,9 @@ import { lucideGlyph } from '../ui/lucide-glyph';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	// Registered as a MasonKit text element (provideSpartanNativeScript), so the glyph lays out as an inline run inside
 	// helm's text elements (a checkbox indicator span) as well as a box inside flex containers.
-	host: { class: 'lucide', '[style.color]': 'color()', '[style.fontSize]': '_fontSize()' },
+	// A style map holding only the keys that are set: per-property bindings left at undefined make the renderer remove
+	// the style, which wipes the CSS color and size an icon created after first render has just been given.
+	host: { class: 'lucide', '[style]': '_style()' },
 	template: `
 		{{ _glyph() }}
 	`,
@@ -27,9 +29,13 @@ export class NgIcon {
 	public readonly color = input<string>();
 
 	protected readonly _glyph = computed(() => lucideGlyph(this.name()));
-	protected readonly _fontSize = computed(() => {
+	protected readonly _style = computed(() => {
+		const style: Record<string, string | number> = {};
+		const color = this.color();
+		if (color) style['color'] = color;
 		const size = this.size();
-		return size && /^\d+(\.\d+)?(px)?$/.test(size) ? parseFloat(size) : undefined;
+		if (size && /^\d+(\.\d+)?(px)?$/.test(size)) style['font-size'] = parseFloat(size);
+		return style;
 	});
 }
 

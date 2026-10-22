@@ -7,7 +7,7 @@ import {
   lucideEye,
   lucideEyeOff,
   lucideFingerprint,
-  lucideGithub,
+  lucideGitBranch,
   lucideLock,
   lucideMail,
   lucideMoon,
@@ -25,7 +25,7 @@ type Provider = { readonly id: string; readonly label: string; readonly icon: st
 
 const PROVIDERS: readonly Provider[] = [
   { id: 'apple', label: 'Apple', icon: 'lucideApple' },
-  { id: 'github', label: 'GitHub', icon: 'lucideGithub' },
+  { id: 'github', label: 'GitHub', icon: 'lucideGitBranch' },
   { id: 'passkey', label: 'Passkey', icon: 'lucideFingerprint' },
 ];
 
@@ -43,7 +43,7 @@ const STRENGTH_LABELS = ['Too short', 'Weak', 'Okay', 'Strong', 'Excellent'] as 
       lucideEye,
       lucideEyeOff,
       lucideFingerprint,
-      lucideGithub,
+      lucideGitBranch,
       lucideLock,
       lucideMail,
       lucideMoon,

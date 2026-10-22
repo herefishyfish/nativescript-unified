@@ -135,6 +135,25 @@ To add the next port:
 3. Make brain depend on the abstract class only, and keep the public API of the brain service unchanged.
 4. Implement the native class in `packages/ui/native` and provide it in `provideSpartanNativeScript()`.
 
+### Module aliases for third-party components
+
+A port works when brain owns the browser call. When the browser dependency is a third-party component that a helm template uses, there is no service to swap, so the seam is a module alias instead. `apps/native/vite.config.mts` points the package at a shim in `packages/ui/native/shims/` that exports the same names, with the same selectors and inputs. Helm and app templates keep importing the real package, so they type-check against its typings, and the web keeps the real component.
+
+- `@ng-icons/core` becomes `shims/ng-icons-core.ts`. `ng-icon` draws a lucide.ttf glyph instead of SVG markup.
+- `@tanstack/angular-charts` becomes `shims/tanstack-angular-charts.ts`. The real `Chart` writes its SVG through `innerHTML` and measures with DOM APIs. The shim renders the same definition with TanStack's DOM-free runtime (`createChartRuntime().render`) and draws the scene into one native view through `ui/chart-paint.ts`. Scene colors such as `var(--chart-1)` resolve against the CSS variables in scope at the chart (`ui/chart-colors.ts`), so each example's palette and the dark set apply. A tap focuses the nearest datum and shows TanStack's tooltip content, placed by its placement helpers.
+
+The chart paints with `@nativescript/canvas` (Skia, a 2D context ported from TanStack's own canvas renderer, with `OffscreenCanvas.measureText` for label metrics). A prototype that fed `renderChartSvg` output to `@nativescript/canvas-svg` lost on the emulator (Android 16, x86_64, debug build):
+
+| | Canvas 2D (kept) | canvas-svg |
+| --- | --- | --- |
+| Matches the web SVG | Yes, including the 11% grid opacity | No: `<line>` children ignore `stroke` and `stroke-opacity` set on their `<g>`, so grid lines draw black |
+| APK content added (arm64 + x86_64) | 52 MB | 17 MB |
+| First chart, scene + paint | 525 ms (first `OffscreenCanvas` measure), then 1 to 8 ms | 34 ms, then 1 to 8 ms, rasterized asynchronously |
+| Text metrics | Same Skia engine on Android and iOS | Android `Paint` only; iOS falls back to TanStack's estimate |
+| Light/dark, rotation, tap tooltip | Work | Work |
+
+To add a shim, export the names the templates import, keep the selector and the inputs, and add the alias next to the others. A shim that registers a native view registers it in `registerSpartanNativeElements()`.
+
 ## Deviations from the first draft
 
 These changed while building the POC, each for a reason observed on device or in a build.

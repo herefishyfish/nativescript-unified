@@ -28,6 +28,10 @@
 
         <item name="colorPrimaryDark">@color/ns_primaryDark</item>
         <item name="colorAccent">@color/ns_accent</item>
+
+        <!-- Day/night window background, so page transitions and modals never flash Material's default surface. -->
+        <item name="android:windowBackground">@color/ns_background</item>
+        <item name="android:colorBackground">@color/ns_background</item>
     </style>
 
     <style name="AppTheme" parent="AppThemeBase">

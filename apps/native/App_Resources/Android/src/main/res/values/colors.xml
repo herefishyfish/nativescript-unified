@@ -7,7 +7,10 @@
     <color name="ns_primaryDark">#757575</color>
 
     <!-- The color of UI controls such as check boxes, radio buttons, and edit text boxes. -->
-	<color name="ns_accent">#65ADF1</color>
+	<color name="ns_accent">#27695f</color>
+
+    <!-- The background token from packages/ui/styles/tokens.css: the window and splash behind every page, so navigation never flashes another color. -->
+    <color name="ns_background">#f2ebdd</color>
 
     <!-- Material 3 roles on the theme tokens (packages/ui/styles/tokens.css): accent and card. -->
     <color name="ns_brand_primary">#27695f</color>

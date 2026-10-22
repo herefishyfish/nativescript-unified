@@ -25,7 +25,14 @@ export default defineConfig(({ mode }): UserConfig =>
       // Shared packages live outside this app; their bare imports must reach this app's (patched) copies.
       dedupe: ['@nativescript/angular', '@nativescript/core', '@triniwiz/nativescript-masonkit'],
       // ng-icon renders a font glyph on device; helm templates type-check against the real @ng-icons/core.
-      alias: [{ find: /^@ng-icons\/core$/, replacement: join(workspaceRoot, 'packages/ui/native/shims/ng-icons-core.ts') }],
+      alias: [
+        { find: /^@ng-icons\/core$/, replacement: join(workspaceRoot, 'packages/ui/native/shims/ng-icons-core.ts') },
+        // The chart paints TanStack's scene into a native view; helm templates type-check against the real package.
+        {
+          find: /^@tanstack\/angular-charts$/,
+          replacement: join(workspaceRoot, 'packages/ui/native/shims/tanstack-angular-charts.ts'),
+        },
+      ],
     },
     // Bundling renames colliding classes (@nativescript/angular's TextNode becomes TextNode$1 next to MasonKit's);
     // NativeScript CSS type selectors and MasonKit's Angular adapter key off class names.

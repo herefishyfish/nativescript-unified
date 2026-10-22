@@ -12,6 +12,7 @@ import { masonMeta } from '@triniwiz/nativescript-masonkit/angular';
 import { Div, Span } from '@triniwiz/nativescript-masonkit/web';
 import { BrnDialogHost } from '@spartan-ng/brain/dialog';
 import { BrnOverlayHost } from '@spartan-ng/brain/overlay';
+import { chartPainter } from './ui/chart-paint';
 import { NativeScriptOverlayHost } from './ui/overlay-host';
 
 /**
@@ -68,4 +69,5 @@ export function registerSpartanNativeElements(): void {
 		registerElement(tag, () => Block, masonMeta);
 	}
 	registerElement('ng-icon', () => Span, masonMeta);
+	chartPainter.register();
 }

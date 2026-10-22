@@ -12,3 +12,6 @@ platforms
 .ns-vite-build
 *.log
 .audit
+
+# Agent git worktrees: full checkouts that Nx would read as duplicate projects.
+/.claude/worktrees

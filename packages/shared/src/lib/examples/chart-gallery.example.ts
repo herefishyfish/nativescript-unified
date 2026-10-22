@@ -82,7 +82,7 @@ const AVERAGE_RATING =Math.round((REVIEWS.reduce((sum, review) => sum + review.r
       <div class="hero flex flex-col gap-1 p-6 rounded-3xl">
         <span class="on-hero-soft text-xs font-semibold">Store performance</span>
         <h1 class="on-hero text-3xl font-extrabold">Chart gallery</h1>
-        <p class="on-hero-soft text-sm">Six TanStack mark types, one palette. Tap any mark for its values.</p>
+        <p class="on-hero-soft text-sm">Seven TanStack marks, one palette. Tap any mark for its values.</p>
       </div>
 
       <div class="flex flex-col gap-3">

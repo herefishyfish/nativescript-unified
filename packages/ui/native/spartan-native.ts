@@ -7,12 +7,12 @@ import {
 	provideEnvironmentInitializer,
 } from '@angular/core';
 import { registerElement } from '@nativescript/angular';
+import { Canvas } from '@nativescript/canvas';
 import { CSSType } from '@nativescript/core';
 import { masonMeta } from '@triniwiz/nativescript-masonkit/angular';
 import { Div, Span } from '@triniwiz/nativescript-masonkit/web';
 import { BrnDialogHost } from '@spartan-ng/brain/dialog';
 import { BrnOverlayHost } from '@spartan-ng/brain/overlay';
-import { chartPainter } from './ui/chart-paint';
 import { NativeScriptOverlayHost } from './ui/overlay-host';
 
 /**
@@ -61,6 +61,7 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
  * caps, labels around a control, the accordion's heading around its trigger), so they are backed by a block element.
  * Each keeps its own tag as its CSS type, so type selectors (`h1`, `.markdown li`, `a`) match as they do on the web.
  * The @ng-icons/core shim draws a glyph, so `ng-icon` is text that can also sit inside helm's text elements.
+ * The @tanstack/angular-charts shim paints into a `Canvas`.
  */
 export function registerSpartanNativeElements(): void {
 	for (const tag of ['button', 'a', 'li', 'kbd', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']) {
@@ -69,5 +70,5 @@ export function registerSpartanNativeElements(): void {
 		registerElement(tag, () => Block, masonMeta);
 	}
 	registerElement('ng-icon', () => Span, masonMeta);
-	chartPainter.register();
+	registerElement('Canvas', () => Canvas);
 }

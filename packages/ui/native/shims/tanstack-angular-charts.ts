@@ -13,6 +13,7 @@ import {
 	signal,
 	viewChild,
 } from '@angular/core';
+import type { Canvas } from '@nativescript/canvas';
 import { Application, type EventData, type TapGestureEventData, type View } from '@nativescript/core';
 import type {
 	ChartDefinition,
@@ -38,7 +39,7 @@ import {
 	resolveChartTooltipPlacement,
 } from '@tanstack/charts/tooltip/model';
 import { createChartPaintResolver } from '../ui/chart-colors';
-import { chartPainter } from '../ui/chart-paint';
+import { measureChartText, paintChartScene } from '../ui/chart-paint';
 
 type ChartOptions = ChartHostOptions & { class?: string; style?: string };
 
@@ -57,9 +58,9 @@ type Tooltip = {
 /**
  * Stands in for `@tanstack/angular-charts` (aliased in vite.config.mts): the real `Chart` renders its SVG through
  * `innerHTML` and measures with DOM APIs. Same selector and inputs, so `<tanstack-chart hlmChart [options]>` in helm
- * and app templates compiles against the real package, while the scene from TanStack's DOM-free runtime is drawn
- * into a native view (`chartPainter`). A tap focuses the nearest datum and, when the definition has a tooltip, shows
- * TanStack's tooltip content placed by its placement helpers.
+ * and app templates compiles against the real package, while the scene from TanStack's DOM-free runtime is painted
+ * into a `Canvas`. A tap focuses the nearest datum and, when the definition has a tooltip, shows TanStack's tooltip
+ * content placed by its placement helpers.
  */
 @Component({
 	selector: 'tanstack-chart',
@@ -67,11 +68,7 @@ type Tooltip = {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<div class="relative">
-			@if (_tag === 'Canvas') {
-				<Canvas #surface (layoutChanged)="_measure()" (tap)="_tap($event)"></Canvas>
-			} @else {
-				<Svg #surface (layoutChanged)="_measure()" (tap)="_tap($event)"></Svg>
-			}
+			<Canvas #surface (layoutChanged)="_measure()" (tap)="_tap($event)"></Canvas>
 			@if (_tooltip(); as tooltip) {
 				<div
 					class="spartan-chart-tooltip absolute flex flex-col gap-1 rounded-md border border-border bg-popover px-2.5 py-1.5 text-xs text-popover-foreground"
@@ -109,9 +106,8 @@ type Tooltip = {
 export class Chart {
 	public readonly options = input.required<ChartOptions>();
 
-	protected readonly _tag = chartPainter.tag;
-	private readonly _surface = viewChild('surface', { read: ElementRef<View> });
-	private readonly _view = computed(() => this._surface()?.nativeElement);
+	private readonly _surface = viewChild.required('surface', { read: ElementRef<Canvas> });
+	private readonly _view = computed(() => this._surface().nativeElement);
 	private readonly _width = signal(0);
 	private readonly _theme = signal(0);
 	private readonly _focus = signal<ChartFocusState | null>(null);
@@ -127,30 +123,26 @@ export class Chart {
 
 	private readonly _font = computed(() => {
 		this._theme();
-		const style = this._view()?.style;
-		return { family: 'sans-serif', size: style?.fontSize || 12, weight: String(style?.fontWeight ?? '400') };
+		const { fontSize, fontWeight } = this._view().style;
+		return { family: 'sans-serif', size: fontSize || 12, weight: String(fontWeight ?? '400') };
 	});
 
 	private readonly _scene = computed((): ChartScene | null => {
 		const size = this._size();
 		if (!size) return null;
-		const started = Date.now();
-		const scene = this._runtime.render(this.options().definition as ChartDefinition, size, {
-			measureText: chartPainter.measureText,
+		return this._runtime.render(this.options().definition as ChartDefinition, size, {
+			measureText: measureChartText,
 			typography: { fontFamily: this._font().family },
 		});
-		console.log(`CHARTPROBE render ${Date.now() - started}ms`);
-		return scene;
 	});
 
 	protected readonly _tooltip = computed((): Tooltip | null => {
 		const scene = this._scene();
 		const focus = this._focus();
 		const options = this.options().definition.tooltip as ChartTooltipOptions | undefined;
-		const view = this._view();
-		if (!scene || !focus || !options || !view) return null;
+		if (!scene || !focus || !options) return null;
 		this._theme();
-		const colors = createChartPaintResolver(view);
+		const colors = createChartPaintResolver(this._view());
 		const paint = (value: string | undefined) => (value ? colors.resolve(value) : null);
 		const points = orderChartTooltipPoints(focus.group, scene, options.sort);
 		const content = createChartTooltipContent(points, scene, focus.pinned, options, focus.primary);
@@ -178,7 +170,7 @@ export class Chart {
 	constructor() {
 		effect(() => {
 			const { width, height, aspectRatio } = this.options();
-			this._view()?.setInlineStyle(
+			this._view().setInlineStyle(
 				[
 					`width: ${width ?? '100%'}`,
 					height !== undefined ? `height: ${height}` : aspectRatio ? `aspect-ratio: ${aspectRatio}` : 'height: 320',
@@ -187,18 +179,14 @@ export class Chart {
 		});
 
 		effect(() => {
-			const started = Date.now();
 			const scene = this._scene();
 			if (!scene) return;
-			const rendered = Date.now();
 			const focus = this._focus();
 			const view = this._view();
-			if (!view) return;
 			const presented = resolveMarkStateScene(scene, focus, null).scene;
 			const { under, over } = resolveFocusPresentation(presented, focus, null);
 			const painted = under.length || over.length ? { ...presented, nodes: [...under, ...presented.nodes, ...over] } : presented;
-			chartPainter.paint(view, painted, createChartPaintResolver(view), this._font(), this.options().ariaLabel ?? '');
-			console.log(`CHARTPROBE ${chartPainter.tag} ${scene.width}x${scene.height} scene=${rendered - started}ms paint=${Date.now() - rendered}ms`);
+			paintChartScene(view, painted, createChartPaintResolver(view), this._font());
 		});
 
 		// A new scene invalidates the focused points and the tooltip's measured size.
@@ -221,7 +209,7 @@ export class Chart {
 	}
 
 	protected _measure(): void {
-		this._width.set(this._view()?.getActualSize().width ?? 0);
+		this._width.set(this._view().getActualSize().width);
 	}
 
 	protected _measureTooltip(event: EventData): void {

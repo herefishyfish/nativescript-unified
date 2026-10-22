@@ -32,7 +32,7 @@ const VISITS_BEFORE = [2.4, 2.6, 2.9, 3.0, 3.3, 3.2, 3.6, 3.9, 3.8, 4.3, 4.6, 4.
         <h1 class="on-hero text-3xl font-extrabold">Revenue is up {{ growth() }}%</h1>
         <div class="range-track flex flex-row gap-1 p-1 rounded-full">
           @for (option of ranges; track option) {
-            <button class="range-option flex-1 py-2 rounded-full text-sm font-semibold" [class.active]="range() === option" (click)="range.set(option)">
+            <button class="range-option flex-1 flex flex-row items-center justify-center py-2 rounded-full text-sm font-semibold" [class.active]="range() === option" (click)="range.set(option)">
               Last {{ option }} months
             </button>
           }

@@ -56,8 +56,8 @@ The native app renders these pages too, and compiles each demo on the device aga
 | Status on Android | Pages |
 | --- | --- |
 | Works | [Button](/docs/ui-button), [Badge](/docs/ui-badge), [Card](/docs/ui-card), [Form controls](/docs/ui-form-controls), [Tabs](/docs/ui-tabs), [Dialog](/docs/ui-dialog), [Alert](/docs/ui-alert), [Popover](/docs/ui-popover), [Dropdown menu](/docs/ui-dropdown-menu), [Drawer](/docs/ui-drawer) |
-| Renders with large gaps | [Table](/docs/ui-table), [Calendar](/docs/ui-calendar), progress and skeleton on [Progress, skeleton, avatar and separator](/docs/ui-feedback) |
-| Broken | [Accordion](/docs/ui-accordion), [Select](/docs/ui-select), [Slider](/docs/ui-slider), [Tooltip](/docs/ui-tooltip), and the hover card and native select on [More components](/docs/ui-more) |
+| Renders with large gaps | [Table](/docs/ui-table), [Calendar](/docs/ui-calendar), [Progress and skeleton](/docs/ui-feedback) |
+| Broken | [Accordion](/docs/ui-accordion), [Select](/docs/ui-select), [Slider](/docs/ui-slider), [Tooltip](/docs/ui-tooltip), [Hover card and native select](/docs/ui-more) |
 
 Pages that work can still have small visual gaps, which their Native notes list. The [Sheet](/docs/ui-sheet) page has its own note. For limits that affect every component, see [Web vs native](/docs/web-vs-native).
 

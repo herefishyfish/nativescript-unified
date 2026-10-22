@@ -86,3 +86,20 @@ index 341c9fe46ad27e1d48567b4a416148f2b5b4e9d8..9076cef62e8efff57f8b70d483081789
          if (typeof fromValue === 'string') {
              let stringValue = fromValue.trim();
              const percentIndex = stringValue.indexOf('%');
+diff --git a/ui/styling/style-scope.js b/ui/styling/style-scope.js
+index ba9e481..c48a7c9 100644
+--- a/ui/styling/style-scope.js
++++ b/ui/styling/style-scope.js
+@@ -778,7 +778,11 @@ export class CssState {
+             valuesToApply[property] = value;
+         }
+         //we need to parse CSS vars first before evaluating css expressions
+-        for (const property in cssExpsProperties) {
++        // A custom property whose value is itself an expression (`--card-spacing: calc(var(--spacing) * 6)`) must be
++        // registered before the declarations that read it, whatever order the rules declared them in.
++        if (cssExpsProperties) {
++            const ordered = {};
++            for (const property in cssExpsProperties) {
+                 if (isCssVariable(property)) ordered[property] = cssExpsProperties[property];
+             }
+             for (const property in cssExpsProperties) {

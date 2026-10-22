@@ -122,7 +122,7 @@ index e5fcd404ba8a8e43c205636a329ba73c9a7c0368..d826082ad0993742e0de5104cc749edc
 -  return input.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 -}
 diff --git a/src/removeUnsupported.js b/src/removeUnsupported.js
-index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..b305b6d552261ea9cad1896b5a5c1f6b0c4fdd8a 100644
+index f4027ee..ed1afe6 100644
 --- a/src/removeUnsupported.js
 +++ b/src/removeUnsupported.js
 @@ -7,7 +7,9 @@ function isSupportedProperty(prop, val = null) {
@@ -251,7 +251,7 @@ index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..b305b6d552261ea9cad1896b5a5c1f6b
        // remove rules with unsupported selectors
        if (!isSupportedSelector(rule.selector)) {
          return rule.remove();
-@@ -138,15 +208,20 @@ module.exports = (options = { debug: false }) => {
+@@ -138,18 +208,29 @@ module.exports = (options = { debug: false }) => {
          // rule.selector.replace('::placeholder', '')
        }
  
@@ -278,7 +278,16 @@ index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..b305b6d552261ea9cad1896b5a5c1f6b
          rule.selectors = rule.selectors.map((selector) => {
            return selector.replace(":not(:last-child)", "* + *");
          });
-@@ -179,6 +254,10 @@ module.exports = (options = { debug: false }) => {
++        // v4 spaces every child but the last on its end edge; `* + *` selects every child but the first,
++        // so the same gap has to move to the start edge.
++        rule.walkDecls((decl) => {
++          const swapped = FLOW_EDGE_SWAP[decl.prop];
++          if (swapped) decl.prop = swapped;
++        });
+       }
+ 
+       // replace space and divide selectors to use a simpler selector that works in ns (older versions)
+@@ -179,6 +260,10 @@ module.exports = (options = { debug: false }) => {
        }
  
  
@@ -289,7 +298,7 @@ index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..b305b6d552261ea9cad1896b5a5c1f6b
        // invalid with core 8.8+ at moment
        // Note: could be supported at somepoint
        if (decl.prop === "placeholder-color" && decl.value?.includes("color-mix")) {
-@@ -187,7 +266,7 @@ module.exports = (options = { debug: false }) => {
+@@ -187,7 +272,7 @@ module.exports = (options = { debug: false }) => {
  
        // invalid with core 8.8+ at moment
        // Note: could be supported at somepoint
@@ -298,7 +307,7 @@ index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..b305b6d552261ea9cad1896b5a5c1f6b
          return decl.remove();
        }
  
-@@ -236,6 +315,57 @@ module.exports = (options = { debug: false }) => {
+@@ -236,6 +321,57 @@ module.exports = (options = { debug: false }) => {
            });
        }
  
@@ -356,7 +365,7 @@ index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..b305b6d552261ea9cad1896b5a5c1f6b
        // remove unsupported properties
        if (
          !decl.prop.startsWith("--") &&
-@@ -339,18 +469,76 @@ const supportedProperties = {
+@@ -339,18 +475,96 @@ const supportedProperties = {
    "tab-text-color": true,
    "tab-text-font-size": true,
    "text-transform": true,
@@ -381,6 +390,26 @@ index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..b305b6d552261ea9cad1896b5a5c1f6b
 +const unsupportedPseudoSelectors = [":focus-within"];
 +
 +// Tailwind v4's ltr: variant condition, e.g. `:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)`
++// Start and end edges of space-* / divide-* declarations, swapped when :not(:last-child) becomes `* + *`.
++const FLOW_EDGE_SWAP = {
++  "margin-top": "margin-bottom",
++  "margin-bottom": "margin-top",
++  "margin-block-start": "margin-block-end",
++  "margin-block-end": "margin-block-start",
++  "margin-left": "margin-right",
++  "margin-right": "margin-left",
++  "margin-inline-start": "margin-inline-end",
++  "margin-inline-end": "margin-inline-start",
++  "border-top-width": "border-bottom-width",
++  "border-bottom-width": "border-top-width",
++  "border-block-start-width": "border-block-end-width",
++  "border-block-end-width": "border-block-start-width",
++  "border-left-width": "border-right-width",
++  "border-right-width": "border-left-width",
++  "border-inline-start-width": "border-inline-end-width",
++  "border-inline-end-width": "border-inline-start-width",
++};
++
 +const ltrConditionRE = /:where\(:dir\(ltr\),\s*\[dir="ltr"\],\s*\[dir="ltr"\] \*\)|:dir\(ltr\)/g;
 +
 +const logicalProperties = {};

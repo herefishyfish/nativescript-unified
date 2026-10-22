@@ -50,7 +50,7 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
 			const document = inject(DOCUMENT) as Partial<Document>;
 			document.querySelector ??= () => null;
 			document.querySelectorAll ??= () => [] as unknown as NodeListOf<Element>;
-			// The drawer's drag handle follows the pointer on the document; the native sheet handles the drag.
+			// The drawer's drag handle removes its document pointer listeners when it is destroyed.
 			document.addEventListener ??= () => undefined;
 			document.removeEventListener ??= () => undefined;
 			// CDK's menu directives set `role` and `type` through the element API. NativeScript's renderer stores

@@ -1,7 +1,8 @@
-import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input, NO_ERRORS_SCHEMA, TemplateRef } from '@angular/core';
+import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, input, NO_ERRORS_SCHEMA, TemplateRef, type Type } from '@angular/core';
 import type { Tokens } from 'marked';
 import { HrefDirective } from './href.directive';
+import { MARKDOWN_LIVE_CODE_COMPONENT, segmentMarkdown } from './live-code';
 import type { ContentFile, MarkdownToken } from './types';
 
 /**
@@ -25,13 +26,24 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
  * `del`, `code`, `a`, `br`. The `renderers` table in the template maps a template key to
  * the `ng-template` that renders it; unknown keys (raw HTML, `space`) render nothing.
  *
- * Plain text renders as `<span>`, never as a bare text node. MasonKit places an Angular
- * text node by assigning its parent's `text`, which lands after the element children, so
- * `a <strong>b</strong> c` inserted through template outlets would read "b a c".
+ * A fenced block tagged `html live` renders the component registered with
+ * `provideMarkdownLiveCode()` (which receives the source as its `code` input), mounted at
+ * the component root through {@link segmentMarkdown}; without a registration it renders
+ * as `pre > code` like any other block.
+ *
+ * Plain text renders as a bare text node, so it joins its parent's text run: it takes the
+ * parent's font (a heading's size), and spaces next to inline elements survive. A `<span>`
+ * per text token would make each text the first and last box of its own container, where
+ * MasonKit collapses leading and trailing whitespace as CSS does.
+ *
+ * A heading's content, and a tight list item's text, sit in one `<p>`, so they flow as a
+ * single text run even when an app backs `h1`-`h6` and `li` with block elements (spartan's
+ * native glue does), where each inline child would otherwise stack as its own block. Not a
+ * `<span>`: a MasonKit span drops the styling and element children of its inline children.
  */
 @Component({
   selector: 'analog-markdown, Markdown',
-  imports: [NgTemplateOutlet, HrefDirective],
+  imports: [NgComponentOutlet, NgTemplateOutlet, HrefDirective],
   schemas: [NO_ERRORS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'markdown' },
@@ -48,12 +60,12 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
       }
     </ng-template>
 
-    <ng-template #h1 let-t><h1><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></h1></ng-template>
-    <ng-template #h2 let-t><h2><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></h2></ng-template>
-    <ng-template #h3 let-t><h3><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></h3></ng-template>
-    <ng-template #h4 let-t><h4><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></h4></ng-template>
-    <ng-template #h5 let-t><h5><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></h5></ng-template>
-    <ng-template #h6 let-t><h6><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></h6></ng-template>
+    <ng-template #h1 let-t><h1><p><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></p></h1></ng-template>
+    <ng-template #h2 let-t><h2><p><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></p></h2></ng-template>
+    <ng-template #h3 let-t><h3><p><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></p></h3></ng-template>
+    <ng-template #h4 let-t><h4><p><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></p></h4></ng-template>
+    <ng-template #h5 let-t><h5><p><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></p></h5></ng-template>
+    <ng-template #h6 let-t><h6><p><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></p></h6></ng-template>
     <ng-template #p let-t><p><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></p></ng-template>
     <ng-template #figure let-t><div class="md-figure"><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></div></ng-template>
     <ng-template #ul let-t>
@@ -71,7 +83,7 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
       </ol>
     </ng-template>
     <ng-template #blockquote let-t><blockquote><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></blockquote></ng-template>
-    <ng-template #code let-t><pre><code>{{ t.text }}</code></pre></ng-template>
+    <ng-template #code let-t><div class="md-code"><pre><code>{{ t.text }}</code></pre></div></ng-template>
     <ng-template #hr><hr /></ng-template>
     <ng-template #table let-t>
       <div class="md-table" [style.grid-template-columns]="'repeat(' + t.header.length + ', auto)'">
@@ -88,10 +100,8 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
 
     <ng-template #text let-t>
       @if (t.tokens) {
-        <ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" />
-      } @else {
-        <span>{{ t.text }}</span>
-      }
+        <p><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></p>
+      } @else {<ng-container>{{ t.text }}</ng-container>}
     </ng-template>
     <ng-template #strong let-t><strong><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></strong></ng-template>
     <ng-template #em let-t><em><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></em></ng-template>
@@ -101,17 +111,28 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
     <ng-template #br><br /></ng-template>
     <ng-template #image let-t><img [src]="t.href" [alt]="t.text" /></ng-template>
 
-    <ng-container *ngTemplateOutlet="render; context: { $implicit: tokens() }" />
+    @for (segment of segments(); track $index) {
+      @if (segment.kind === 'live') {
+        <ng-container *ngComponentOutlet="liveCodeComponent; inputs: { code: segment.code }" />
+      } @else {
+        <ng-container *ngTemplateOutlet="render; context: { $implicit: segment.tokens }" />
+      }
+    }
   `,
 })
 export class MarkdownComponent {
   /** A content file from `injectContent()`, or `marked` tokens. */
   readonly content = input.required<ContentFile<unknown> | MarkdownToken[] | null | undefined>();
 
+  /** Component that renders `html live` blocks (Preview / Code tabs); null shows the source only. */
+  protected readonly liveCodeComponent = inject(MARKDOWN_LIVE_CODE_COMPONENT, { optional: true }) as Type<unknown> | null;
+
   protected readonly tokens = computed(() => {
     const content = this.content();
     return Array.isArray(content) ? content : (content?.tokens ?? []);
   });
+
+  protected readonly segments = computed(() => segmentMarkdown(this.tokens(), this.liveCodeComponent !== null));
 
   protected rendererFor(renderers: Record<string, TemplateRef<unknown>>, token: MarkdownToken): TemplateRef<unknown> | null {
     return renderers[TEMPLATE_KEYS[token.type]?.(token) ?? token.type] ?? null;

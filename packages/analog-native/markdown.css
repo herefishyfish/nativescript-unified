@@ -33,6 +33,10 @@
 .markdown ul,
 .markdown ol { margin: 0; padding-left: 24; }
 
+/* MasonKit's `ul` has no markers under Tailwind's preflight, as on the web; prose wants them. */
+.markdown ul { list-style-type: disc; }
+.markdown ol { list-style-type: decimal; }
+
 .markdown a { color: #0969da; text-decoration: underline; }
 
 .markdown code {
@@ -43,14 +47,22 @@
   padding: 1 4;
 }
 
-.markdown pre {
-  font-family: monospace;
+/* A code block is `div.md-code > pre > code`: the box scrolls sideways and lines keep their breaks, as on the web. */
+.markdown .md-code {
+  overflow-x: auto;
   background-color: #f6f8fa;
   border-radius: 6;
+}
+
+.markdown pre {
+  font-family: monospace;
   padding: 12;
 }
 
-.markdown pre code { background-color: transparent; padding: 0; white-space: pre-wrap; }
+.markdown pre code { background-color: transparent; padding: 0; white-space: pre; }
+
+/* Links read as text in a sentence, even where an app backs `a` with a block element. */
+.markdown a { display: inline-block; }
 
 .markdown blockquote {
   margin: 0;
@@ -89,7 +101,7 @@
 .ns-dark .markdown blockquote { color: #8b949e; }
 .ns-dark .markdown a { color: #4493f8; }
 .ns-dark .markdown code,
-.ns-dark .markdown pre,
+.ns-dark .markdown .md-code,
 .ns-dark .markdown blockquote,
 .ns-dark .markdown .md-th { background-color: #161b22; }
 .ns-dark .markdown pre code { background-color: transparent; }

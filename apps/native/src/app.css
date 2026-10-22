@@ -46,6 +46,30 @@ ActionBar {
   background-color: var(--card);
 }
 
+/* Fill the page. A content-sized tab shell clips the Guide list and nothing can scroll it. */
+.main-tabs,
+.demo-code-tabs {
+  height: 100%;
+}
+
+/*
+ * `<scroll>` content-sizes, so the page or tab clips everything below the fold and nothing scrolls.
+ * Fill the parent. `min-height: 0` lets it shrink below its content when that parent is a column.
+ */
+Scroll {
+  height: 100%;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+guide-list,
+home-tab,
+ui-demo-body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Plain-HTML pages from the analog-native demo, now on theme tokens. */
 .page {
   display: flex;
@@ -116,8 +140,8 @@ a {
   background-color: var(--muted);
 }
 
-.markdown pre,
-.ns-dark .markdown pre {
+.markdown .md-code,
+.ns-dark .markdown .md-code {
   background-color: var(--card);
 }
 
@@ -156,6 +180,56 @@ a {
   border-color: var(--border);
 }
 
+/* Live docs demos (ns-live-demo, apps/native/src/app/markdown/live-demo.ts) on theme tokens.
+   Plain MasonKit elements: the material Tabs ViewPager does not render inside the markdown scroll container. */
+.live-demo {
+  display: flex;
+  flex-direction: column;
+  margin: 12 0;
+  border-width: 1;
+  border-color: var(--border);
+  border-radius: 8;
+  background-color: var(--card);
+}
+
+.live-demo-tabs {
+  display: flex;
+  flex-direction: row;
+  gap: 4;
+  padding: 4 8 0 8;
+  background-color: var(--muted);
+  border-bottom-width: 1;
+  border-bottom-color: var(--border);
+}
+
+.live-demo-tab {
+  padding: 6 12;
+  color: var(--muted-foreground);
+  font-size: 13;
+  font-weight: 600;
+  background-color: transparent;
+}
+
+.live-demo-tab-active {
+  color: var(--foreground);
+  background-color: var(--card);
+  border-radius: 6 6 0 0;
+}
+
+/* The inactive pane stays mounted (the preview keeps its state) but takes no space. */
+.live-demo-pane-hidden {
+  display: none;
+}
+
+.live-demo-preview {
+  padding: 16;
+}
+
+.live-demo-code {
+  margin: 0;
+  padding: 12 16;
+}
+
 
 /* Native Material tabs (@nativescript-community/ui-material-tabs) on theme tokens. */
 TabStrip,
@@ -186,12 +260,6 @@ Tabs {
   padding: 12;
   color: var(--foreground);
   background-color: var(--card);
-}
-/* Native Markdown view (@nstudio/nativescript-markdown-view): colours are set natively from the same tokens. */
-.md-view {
-  color: var(--foreground);
-  font-size: 15;
-  background-color: transparent;
 }
 
 .tab-icon {

@@ -125,7 +125,7 @@ export default class BlogPostPage {
 
 ## Styling
 
-Markdown renders as plain elements inside a host with class `markdown`: `h1`-`h6`, `p`, `ul`, `ol`, `li`, `blockquote`, `pre > code`, `code`, `strong`, `em`, `del`, `a`, `hr`, `img`, and a CSS grid `div.md-table` of `span.md-th` and `span.md-td` cells. `markdown.css` styles them with selectors such as `.markdown h1`. Override any of them in your own CSS after the import. Use unitless lengths: in NativeScript `px` means physical pixels.
+Markdown renders as plain elements inside a host with class `markdown`: `h1`-`h6`, `p`, `ul`, `ol`, `li`, `blockquote`, `div.md-code > pre > code` (the `div` scrolls sideways), `code`, `strong`, `em`, `del`, `a`, `hr`, `img`, and a CSS grid `div.md-table` of `span.md-th` and `span.md-td` cells. `markdown.css` styles them with selectors such as `.markdown h1`. Override any of them in your own CSS after the import. Use unitless lengths: in NativeScript `px` means physical pixels.
 
 ## Limitations
 

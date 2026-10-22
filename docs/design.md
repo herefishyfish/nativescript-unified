@@ -83,15 +83,26 @@ Sort order is static, then `:param`, then `**`. A layout page renders its childr
 | paragraph | `p` (a paragraph holding only images renders the images as blocks) |
 | list, list item | `ul` / `ol`, `li` |
 | blockquote | `blockquote` |
-| code | `pre > code` |
+| code | `div.md-code > pre > code`, the `div` scrolling sideways (a block tagged `html live` renders the live-code component instead, see below) |
 | hr | `hr` |
 | image | `img` |
 | table | `div.md-table` CSS grid of `div.md-th` / `div.md-td` cells |
 | strong, em, del, codespan, link, br | `strong`, `em`, `del`, `code`, `a`, `br` |
 
-Inline tokens render inside their block element as nested text elements, so a paragraph wraps as one run of text. Plain text renders as `<span>`, not as a bare Angular text node: MasonKit places a text node by assigning the parent's `text`, which lands after the element children when nodes arrive through template outlets, so `a <strong>b</strong> c` read as "b a c" on device. Recursion uses `ng-template` outlets inside one component, so no extra component host boxes land inside a text run. Raw HTML tokens are dropped.
+Inline tokens render inside their block element as nested text elements, so a paragraph wraps as one run of text. Plain text renders as a bare Angular text node, so it joins the parent's run: it takes the parent's font, and spaces beside inline elements survive (MasonKit trims whitespace at the start and end of a container, so a `<span>` per text token lost them). A heading's content and a tight list item's text sit in one `<p>`: the native app backs `h1`-`h6`, `li` and `a` with block elements for spartan (`packages/ui/native/spartan-native.ts`), where each inline child would stack as its own block. `markdown.css` makes `.markdown a` `inline-block` for the same reason. Recursion uses `ng-template` outlets inside one component, so no extra component host boxes land inside a text run. Raw HTML tokens are dropped.
 
 The component's host has class `markdown`. `markdown.css` styles the elements with element selectors under `.markdown` (`.markdown h1`, `.markdown pre`), and apps override them with their own rules after importing it.
+
+## Live code blocks (`html live`)
+
+A fenced block whose info string starts with `html live` is a live demo, the same rule the web docs build on (`packages/shared/src/lib/docs/parse.ts`, `/^html\s+live\b/`). `MarkdownComponent` renders it through `NgComponentOutlet` instead of `pre > code`, passing the source to the component's `code` input. Which component that is stays an app decision:
+
+- `MARKDOWN_LIVE_CODE_COMPONENT` is an `InjectionToken<Type<unknown>>`; `provideMarkdownLiveCode(component)` registers it app-level.
+- Without a registration the block falls back to `pre > code`, so the package ships no JIT compiler dependency and apps without demos pay nothing.
+
+`apps/native` registers a frame component with Preview / Code tabs (`apps/native/src/app/markdown/live-demo.ts`): the Preview tab JIT-compiles the block's HTML (`import('@angular/compiler')` on demand, cached per template) against the registered native/MasonKit elements plus the helm imports, mirroring `apps/web/src/app/docs/demo.ts`. The Code tab shows the source.
+
+Live blocks mount at the Markdown component's root, not inside the token-recursion templates: `segmentMarkdown()` splits the top-level token list into runs and live blocks (the same block model the web build's `toBlocks` uses), and each block gets its own `NgComponentOutlet` in flow. Embedded views anchored several template-outlet levels deep lose their place in the MasonKit container. The native frame is plain MasonKit markup rather than the material `MDTabs` (its ViewPager does not render inside the markdown scroll container); both panes stay mounted, so the preview keeps its state across tab switches, and the inactive one gets `display: none`, so the frame fits the active pane.
 
 ## Links
 

@@ -7,6 +7,7 @@ import {
 	provideEnvironmentInitializer,
 } from '@angular/core';
 import { registerElement } from '@nativescript/angular';
+import { CSSType } from '@nativescript/core';
 import { masonMeta } from '@triniwiz/nativescript-masonkit/angular';
 import { Div, Span } from '@triniwiz/nativescript-masonkit/web';
 
@@ -51,12 +52,14 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
  * MasonKit lays out `button`, `a`, `li`, `kbd`, `label` and headings as inline text runs that ignore flex and cannot
  * hold block children, but spartan styles them as flex boxes (buttons and links with icons and gaps, list items, key
  * caps, labels around a control, the accordion's heading around its trigger), so they are backed by a block element.
- * Tailwind's preflight resets heading styles, so headings lose nothing.
+ * Each keeps its own tag as its CSS type, so type selectors (`h1`, `.markdown li`, `a`) match as they do on the web.
  * The @ng-icons/core shim draws a glyph, so `ng-icon` is text that can also sit inside helm's text elements.
  */
 export function registerSpartanNativeElements(): void {
 	for (const tag of ['button', 'a', 'li', 'kbd', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']) {
-		registerElement(tag, () => Div, masonMeta);
+		@CSSType(tag)
+		class Block extends Div {}
+		registerElement(tag, () => Block, masonMeta);
 	}
 	registerElement('ng-icon', () => Span, masonMeta);
 }

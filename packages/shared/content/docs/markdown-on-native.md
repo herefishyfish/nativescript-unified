@@ -54,7 +54,7 @@ A `.md` file inside `pages/` is a route. `apps/native/src/app/pages/docs.md` bec
 | Paragraph | `p` |
 | Lists | `ul` or `ol`, with `li` |
 | Quote | `blockquote` |
-| Code block | `pre > code` |
+| Code block | `pre > code`, in a `div` that scrolls sideways |
 | Rule | `hr` |
 | Image | `img` |
 | Table | A CSS grid of cells. MasonKit has no table elements. |
@@ -74,4 +74,4 @@ Text elements nest, so a paragraph with bold and a link is one native text run. 
 
 ## This site is separate
 
-The pages you are reading are Markdown in `packages/shared/content/docs`. The web app parses them with its own build-time plugin in `apps/web/tools`, and renders `html live` blocks as demos. The native app does not read them yet. Showing this content on native is planned.
+The pages you are reading are Markdown in `packages/shared/content/docs`. The web app parses them with its own build-time plugin in `apps/web/tools`, and renders `html live` blocks as demos. The native app reads the same files: its docs pages render them with `<analog-markdown>`, and every `html live` block becomes Preview / Code tabs where the Preview tab compiles the block's HTML against the registered native elements and helm, the same way the web demos work.

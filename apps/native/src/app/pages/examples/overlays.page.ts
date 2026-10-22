@@ -5,6 +5,7 @@ import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmDialogImports, HlmDialogService } from '@spartan-ng/helm/dialog';
 import { HlmDrawerImports } from '@spartan-ng/helm/drawer';
+import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
 import { HlmPopoverImports } from '@spartan-ng/helm/popover';
 import { HlmSheetImports } from '@spartan-ng/helm/sheet';
 
@@ -28,7 +29,7 @@ class OverlaysGreeting {
   protected readonly context = injectBrnDialogContext<{ name: string; close: (result: string) => void }>();
 }
 
-/** Spartan's dialog, alert dialog, drawer, sheet and popover, each opened in a native window. */
+/** Spartan's dialog, alert dialog, drawer, sheet, popover and dropdown menu, each opened in a native window. */
 @Component({
   selector: 'overlays-page',
   imports: [
@@ -37,6 +38,7 @@ class OverlaysGreeting {
     HlmDialogImports,
     HlmAlertDialogImports,
     HlmDrawerImports,
+    HlmDropdownMenuImports,
     HlmSheetImports,
     HlmPopoverImports,
   ],
@@ -114,6 +116,19 @@ class OverlaysGreeting {
           </hlm-popover-content>
         </hlm-popover>
 
+        <button hlmBtn variant="outline" [hlmDropdownMenuTrigger]="menu">Open menu</button>
+        <ng-template #menu>
+          <hlm-dropdown-menu class="w-56">
+            <button hlmDropdownMenuItem (triggered)="lastResult.set('menu: profile')">Profile</button>
+            <button hlmDropdownMenuCheckbox [checked]="statusBar()" (triggered)="toggleStatusBar()">
+              <hlm-dropdown-menu-checkbox-indicator />
+              Status bar
+            </button>
+            <button hlmDropdownMenuItem disabled>Billing</button>
+            <button hlmDropdownMenuItem variant="destructive" (triggered)="lastResult.set('menu: log out')">Log out</button>
+          </hlm-dropdown-menu>
+        </ng-template>
+
         <button hlmBtn variant="secondary" (click)="openFromService()">Open from service</button>
       </div>
     </scroll>
@@ -122,6 +137,12 @@ class OverlaysGreeting {
 export default class OverlaysPage {
   private readonly _dialogs = inject(HlmDialogService);
   protected readonly lastResult = signal('none');
+  protected readonly statusBar = signal(true);
+
+  protected toggleStatusBar(): void {
+    this.statusBar.update((shown) => !shown);
+    this.lastResult.set('menu: status bar ' + (this.statusBar() ? 'on' : 'off'));
+  }
 
   protected openFromService(): void {
     const ref = this._dialogs.open<string>(OverlaysGreeting, { context: { name: 'Dylan' } });

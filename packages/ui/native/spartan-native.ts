@@ -7,11 +7,13 @@ import {
 	provideEnvironmentInitializer,
 } from '@angular/core';
 import { registerElement } from '@nativescript/angular';
-import { CSSType } from '@nativescript/core';
+import { CSSType, ViewBase } from '@nativescript/core';
 import { masonMeta } from '@triniwiz/nativescript-masonkit/angular';
 import { Div, Span } from '@triniwiz/nativescript-masonkit/web';
+import { BrnMenuHost } from '@spartan-ng/brain/core';
 import { BrnDialogHost } from '@spartan-ng/brain/dialog';
 import { BrnOverlayHost } from '@spartan-ng/brain/overlay';
+import { NativeScriptMenuHost } from './ui/menu-host';
 import { NativeScriptOverlayHost } from './ui/overlay-host';
 
 /**
@@ -41,6 +43,8 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
 		// CDK Dialog and Overlay build their panes under document.body, which NativeScript does not have.
 		{ provide: BrnDialogHost, useExisting: NativeScriptOverlayHost },
 		{ provide: BrnOverlayHost, useExisting: NativeScriptOverlayHost },
+		// CDK's menu trigger opens an overlay pane under document.body too.
+		{ provide: BrnMenuHost, useExisting: NativeScriptMenuHost },
 		provideEnvironmentInitializer(() => {
 			// brain looks labels up with document.querySelector; NativeScript's DOCUMENT has no queries.
 			const document = inject(DOCUMENT) as Partial<Document>;
@@ -49,6 +53,18 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
 			// The drawer's drag handle follows the pointer on the document; the native sheet handles the drag.
 			document.addEventListener ??= () => undefined;
 			document.removeEventListener ??= () => undefined;
+			// CDK's menu directives set `role` and `type` through the element API. NativeScript's renderer stores
+			// attributes as view properties, so these read and write the same place.
+			const element = ViewBase.prototype as unknown as Partial<Element> & Record<string, unknown>;
+			element.setAttribute ??= function (this: Record<string, unknown>, name: string, value: string) {
+				this[name] = value;
+			};
+			element.getAttribute ??= function (this: Record<string, unknown>, name: string) {
+				return (this[name] as string | undefined) ?? null;
+			};
+			element.removeAttribute ??= function (this: Record<string, unknown>, name: string) {
+				this[name] = undefined;
+			};
 		}),
 		// Angular's dev-mode image checks read the DOM document, which NativeScript does not have.
 		{ provide: IMAGE_CONFIG, useValue: { disableImageSizeWarning: true, disableImageLazyLoadWarning: true } },

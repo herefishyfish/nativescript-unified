@@ -68,7 +68,13 @@ type Tooltip = {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<div class="relative">
-			<Canvas #surface (layoutChanged)="_measure()" (tap)="_tap($event)"></Canvas>
+			<Canvas
+				#surface
+				(layoutChanged)="_measure()"
+				(surfaceCreated)="_surfaceChanged()"
+				(surfaceResize)="_surfaceChanged()"
+				(tap)="_tap($event)"
+			></Canvas>
 			@if (_tooltip(); as tooltip) {
 				<div
 					class="spartan-chart-tooltip absolute flex flex-col gap-1 rounded-md border border-border bg-popover px-2.5 py-1.5 text-xs text-popover-foreground"
@@ -110,6 +116,7 @@ export class Chart {
 	private readonly _view = computed(() => this._surface().nativeElement);
 	private readonly _width = signal(0);
 	private readonly _theme = signal(0);
+	private readonly _surfaceTick = signal(0);
 	private readonly _focus = signal<ChartFocusState | null>(null);
 	private readonly _tooltipSize = signal<{ width: number; height: number } | null>(null);
 	private readonly _runtime = createChartRuntime();
@@ -181,6 +188,7 @@ export class Chart {
 		effect(() => {
 			const scene = this._scene();
 			if (!scene) return;
+			this._surfaceTick();
 			const focus = this._focus();
 			const view = this._view();
 			const presented = resolveMarkStateScene(scene, focus, null).scene;
@@ -206,6 +214,14 @@ export class Chart {
 			Application.off(Application.systemAppearanceChangedEvent, repaint);
 			this._runtime.destroy();
 		});
+	}
+
+	/**
+	 * A new or resized surface starts blank and can arrive after the first paint. A chart in a `flex-1 min-w-0` box
+	 * lays out at width 0 first, and without this it stayed blank until the next theme change.
+	 */
+	protected _surfaceChanged(): void {
+		this._surfaceTick.update((tick) => tick + 1);
 	}
 
 	protected _measure(): void {

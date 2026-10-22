@@ -1,0 +1,79 @@
+/*
+ * Charts example, theme "Lagoon". Every rule is scoped under .example-charts.
+ * The charts read --chart-1 ... --chart-5 through Spartan's chart helm, so the palette below recolors them.
+ * Gradients name literal colors first: MasonKit may not resolve var() inside gradient stops, and the second
+ * declaration replaces the first wherever it does.
+ */
+.example-charts {
+  --background: #f2fbfa;
+  --foreground: #0f2f2e;
+  --card: #ffffff;
+  --card-foreground: #0f2f2e;
+  --popover: #ffffff;
+  --popover-foreground: #0f2f2e;
+  --primary: #0f766e;
+  --primary-foreground: #ffffff;
+  --secondary: #e0f4f2;
+  --secondary-foreground: #0f2f2e;
+  --muted: #e0f4f2;
+  --muted-foreground: #4b6b69;
+  --accent: #ccefeb;
+  --accent-foreground: #0f2f2e;
+  --destructive: #c0392b;
+  --border: #d3ece9;
+  --input: #a7d8d2;
+  --ring: #14b8a6;
+  --chart-1: #0d9488;
+  --chart-2: #38bdf8;
+  --chart-3: #f59e0b;
+  --chart-4: #0f766e;
+  --chart-5: #164e63;
+  --hero-from: #0f766e;
+  --hero-to: #0ea5e9;
+  --hero-foreground: #ffffff;
+}
+
+.ns-dark .example-charts,
+.dark .example-charts {
+  --background: #071a19;
+  --foreground: #dcf5f2;
+  --card: #0d2523;
+  --card-foreground: #dcf5f2;
+  --popover: #0d2523;
+  --popover-foreground: #dcf5f2;
+  --primary: #5eead4;
+  --primary-foreground: #071a19;
+  --secondary: #143331;
+  --secondary-foreground: #dcf5f2;
+  --muted: #143331;
+  --muted-foreground: #8fb8b3;
+  --accent: #173b39;
+  --accent-foreground: #dcf5f2;
+  --destructive: #ff8a80;
+  --border: #1d3f3c;
+  --input: #2c5a56;
+  --ring: #5eead4;
+  --chart-1: #2dd4bf;
+  --chart-2: #7dd3fc;
+  --chart-3: #fbbf24;
+  --chart-4: #99f6e4;
+  --chart-5: #e0f2fe;
+  --hero-from: #115e59;
+  --hero-to: #0369a1;
+  --hero-foreground: #ffffff;
+}
+
+.example-charts .hero {
+  background: linear-gradient(135deg, #0f766e, #0ea5e9);
+  background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+}
+.ns-dark .example-charts .hero,
+.dark .example-charts .hero { background: linear-gradient(135deg, #115e59, #0369a1); background: linear-gradient(135deg, var(--hero-from), var(--hero-to)); }
+.example-charts .on-hero { color: #ffffff; color: var(--hero-foreground); }
+.example-charts .on-hero-soft { color: rgba(255, 255, 255, 0.85); }
+.example-charts .range-track { background-color: rgba(4, 47, 46, 0.3); }
+.example-charts .range-option { color: #ffffff; background-color: rgba(255, 255, 255, 0); }
+.example-charts .range-option.active { color: #0f766e; background-color: #ffffff; }
+
+.example-charts .swatch-1 { background-color: var(--chart-1); }
+.example-charts .swatch-2 { background-color: var(--chart-2); }

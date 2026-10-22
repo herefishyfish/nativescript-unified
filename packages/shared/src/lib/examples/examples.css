@@ -20,6 +20,7 @@
 @import './sign-in.example.css';
 @import './music-player.example.css';
 @import './article.example.css';
+@import './charts.example.css';
 
 .example-tile-icon { color: #ffffff; background-color: rgba(255, 255, 255, 0.2); }
 .example-tile-title { color: #ffffff; }
@@ -35,3 +36,4 @@
 .example-tile-sign-in { background: linear-gradient(135deg, #1a1a2e, #4b4b7a); }
 .example-tile-music-player { background: linear-gradient(160deg, #fd9644, #fc5c65 45%, #4b0082); }
 .example-tile-article { background: linear-gradient(135deg, #1f8a83, #4ecdc4); }
+.example-tile-charts { background: linear-gradient(135deg, #0f766e, #0ea5e9); }

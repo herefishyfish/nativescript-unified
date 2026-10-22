@@ -46,6 +46,9 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
 			const document = inject(DOCUMENT) as Partial<Document>;
 			document.querySelector ??= () => null;
 			document.querySelectorAll ??= () => [] as unknown as NodeListOf<Element>;
+			// The drawer's drag handle follows the pointer on the document; the native sheet handles the drag.
+			document.addEventListener ??= () => undefined;
+			document.removeEventListener ??= () => undefined;
 		}),
 		// Angular's dev-mode image checks read the DOM document, which NativeScript does not have.
 		{ provide: IMAGE_CONFIG, useValue: { disableImageSizeWarning: true, disableImageLazyLoadWarning: true } },

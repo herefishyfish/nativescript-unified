@@ -34,4 +34,10 @@ description: A select with a trigger, a portalled list of items, groups and a se
 For a browser-native `<select>` styled with helm, see `hlm-native-select` on [More components](/docs/ui-more).
 ## Native
 
-Nothing on native uses the select yet, so this is planned. `apps/native` imports only `HlmButton`, `HlmBadge` and the card parts.
+The select is broken on native. On the Android emulator (API 36), in light and dark:
+
+- The trigger renders without its placeholder text.
+- A tap opens the list in an anchored popover window, with the group label and the items.
+- A tap on an item does nothing, and the demo still shows `Picked: nothing`. The Android back button closes the list.
+
+The brain trigger measures itself with `getBoundingClientRect()`, which MasonKit elements do not have, so it throws. See [Known native limitations](/docs/web-vs-native). iOS has not been run.

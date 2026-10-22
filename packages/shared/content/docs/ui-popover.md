@@ -32,4 +32,4 @@ The popover overlay gets ole="dialog" from the brain popover, and helm has no i
 
 The popover opens in a native popover window from `@nativescript-community/ui-popover`, anchored to its trigger. `align` and `sideOffset` set where the window sits. Select, combobox, autocomplete and date picker use the same anchored window.
 
-On the Android emulator, the popover opened below its trigger in light and dark, and the Android back button closed it. The helm card draws without its shadow and ring there.
+On the Android emulator (API 36), the popover opened below its trigger in light and dark, with its title, description and input. The Android back button closed it. The helm card draws without its shadow and ring there. iOS has not been run.

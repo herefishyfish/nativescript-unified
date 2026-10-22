@@ -24,4 +24,4 @@ description: The hlmBadge directive for small status labels.
 
 ## Native
 
-`apps/native/src/app/pages/ui.page.ts` renders `span hlmBadge` with the default and secondary variants. That page type-checks and bundles. It has not been confirmed on a device in these docs.
+The badge works on native. On the Android emulator (API 36), all six variants render in light and dark. iOS has not been run.

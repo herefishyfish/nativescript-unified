@@ -28,4 +28,4 @@ description: Collapsible sections with hlmAccordion.
 
 ## Native
 
-Nothing on native uses the accordion yet, so this is planned. The native glue file `packages/ui/native/spartan-native.ts` mentions the accordion's heading element when it maps HTML tags onto MasonKit, which shows it was considered, not that it was run.
+The accordion is broken on native. On the Android emulator (API 36), the demo above renders an empty preview in light and dark. The brain trigger checks `tagName === 'BUTTON'`, MasonKit reports the tag name in lower case, and the check throws. iOS has not been run.

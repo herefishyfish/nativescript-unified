@@ -26,7 +26,7 @@ nativescript-unified is one Nx monorepo for an **HTML-first** NativeScript Angul
 </section>
 ```
 
-Every live demo in these docs is the code shown beside it, compiled in your browser. Nothing is mocked.
+Every live demo in these docs is the code shown beside it, compiled at run time: in your browser on the web, and on the device in the native app. Nothing is mocked.
 
 ## Where to start
 
@@ -57,4 +57,4 @@ NativeScript apps are often written with tags such as `<StackLayout>` and `<Labe
 
 ## Status
 
-This site is the web half of the work. The native app has not been confirmed on a device in these docs. See [Web vs native](/docs/web-vs-native).
+The web app builds and prerenders this site. The native app builds and runs on Android, and it renders these same docs pages with their live demos. That was checked on an Android emulator (API 36). iOS has not been built yet. Each component page ends with a Native note that says what was seen on the emulator. See [Web vs native](/docs/web-vs-native) for the known native limitations.

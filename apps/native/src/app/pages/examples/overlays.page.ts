@@ -92,18 +92,25 @@ class OverlaysGreeting {
           </hlm-drawer-content>
         </hlm-drawer>
 
-        <hlm-sheet side="right" (closed)="lastResult.set('sheet: ' + $event)">
-          <button hlmBtn hlmSheetTrigger variant="outline">Open right sheet</button>
-          <hlm-sheet-content *hlmSheetPortal="let ctx">
-            <div hlmSheetHeader>
-              <h3 hlmSheetTitle>Settings</h3>
-              <p hlmSheetDescription>A right sheet opens as a native modal.</p>
-            </div>
-            <div hlmSheetFooter>
-              <button hlmBtn (click)="ctx.close('applied')">Apply</button>
-            </div>
-          </hlm-sheet-content>
-        </hlm-sheet>
+        @for (sheet of sheets; track sheet.label) {
+          <hlm-sheet
+            [side]="sheet.side"
+            [closeOnOutsidePointerEvents]="sheet.closeOnBackdrop"
+            (closed)="lastResult.set(sheet.result + ': ' + $event)"
+          >
+            <button hlmBtn hlmSheetTrigger variant="outline">{{ sheet.label }}</button>
+            <hlm-sheet-content *hlmSheetPortal="let ctx">
+              <div hlmSheetHeader>
+                <h3 hlmSheetTitle>Settings</h3>
+                <p hlmSheetDescription>{{ sheet.description }}</p>
+              </div>
+              <div hlmSheetFooter>
+                <button hlmBtn (click)="ctx.close('applied')">Apply</button>
+                <button hlmBtn variant="outline" (click)="ctx.close('cancelled')">Cancel</button>
+              </div>
+            </hlm-sheet-content>
+          </hlm-sheet>
+        }
 
         <hlm-popover>
           <button hlmBtn hlmPopoverTrigger variant="outline">Open popover</button>
@@ -136,6 +143,36 @@ class OverlaysGreeting {
 })
 export default class OverlaysPage {
   private readonly _dialogs = inject(HlmDialogService);
+  protected readonly sheets = [
+    {
+      side: 'left',
+      label: 'Open left sheet',
+      result: 'left sheet',
+      closeOnBackdrop: true,
+      description: 'A left sheet docks to the left edge.',
+    },
+    {
+      side: 'right',
+      label: 'Open right sheet',
+      result: 'right sheet',
+      closeOnBackdrop: true,
+      description: 'A right sheet docks to the right edge.',
+    },
+    {
+      side: 'top',
+      label: 'Open top sheet',
+      result: 'top sheet',
+      closeOnBackdrop: true,
+      description: 'A top sheet docks to the top edge.',
+    },
+    {
+      side: 'right',
+      label: 'Open right sheet (backdrop ignored)',
+      result: 'pinned sheet',
+      closeOnBackdrop: false,
+      description: 'A tap on the backdrop leaves this sheet open.',
+    },
+  ] as const;
   protected readonly lastResult = signal('none');
   protected readonly statusBar = signal(true);
 

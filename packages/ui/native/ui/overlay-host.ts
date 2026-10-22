@@ -13,9 +13,22 @@ import {
 	type ViewRef,
 } from '@angular/core';
 import type { ViewWithBottomSheetBase } from '@nativescript-community/ui-bottomsheet';
+import { Drawer, type DrawerEventData } from '@nativescript-community/ui-drawer';
 import { HorizontalPosition, showPopover, VerticalPosition } from '@nativescript-community/ui-popover';
-import { Application, Frame, View } from '@nativescript/core';
-import type { BrnOverlayDismissal, BrnOverlayPlacement, BrnOverlayRequest } from '@spartan-ng/brain/core';
+import {
+	type AndroidActivityBackPressedEventData,
+	Application,
+	type EventData,
+	Frame,
+	Utils,
+	View,
+} from '@nativescript/core';
+import type {
+	BrnOverlayDismissal,
+	BrnOverlayEdge,
+	BrnOverlayPlacement,
+	BrnOverlayRequest,
+} from '@spartan-ng/brain/core';
 import { BrnOverlaySurface } from '@spartan-ng/brain/core';
 import type { BrnDialogHost, BrnDialogRequest } from '@spartan-ng/brain/dialog';
 import type { BrnOverlayHost, BrnOverlayHostRequest } from '@spartan-ng/brain/overlay';
@@ -24,9 +37,10 @@ import { Subject } from 'rxjs';
 type CloseWindow = () => void;
 
 /**
- * Opens spartan's dialogs and overlays in native windows: centered dialogs (and sheets on any side but the bottom) in
- * a modal dialog, bottom drawers and sheets in a material bottom sheet, anchored overlays in a popover. The content
- * is the helm markup, rendered into a MasonKit root that carries the theme scope the page would have given it.
+ * Opens spartan's dialogs and overlays in native windows: centered dialogs in a modal dialog, bottom drawers and
+ * sheets in a material bottom sheet, left, right and top sheets in a side of the app's `Drawer`, anchored overlays
+ * in a popover. The content is the helm markup, rendered into a MasonKit root that carries the theme scope the page
+ * would have given it.
  */
 @Injectable({ providedIn: 'root' })
 export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
@@ -36,11 +50,14 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 	private readonly _renderer: Renderer2 = inject(RendererFactory2).createRenderer(null, null);
 	/** Open modal and bottom sheet roots; a new window is presented from the topmost one. */
 	private readonly _windows: View[] = [];
+	/** The app's drawer shows one side at a time. */
+	private _drawerSurface: NativeScriptSurface | null = null;
 
 	public open(request: BrnDialogRequest | BrnOverlayHostRequest): BrnOverlaySurface {
 		const window = nativeWindow(request.placement);
 		const views = this._createViews(window.kind);
-		const surface = new NativeScriptSurface(views, themeClasses(), request.panelClass, request.backdropClass);
+		const theme = window.kind === 'drawer' ? [...themeClasses(), DRAWER_SLOT_BACKGROUND] : themeClasses();
+		const surface = new NativeScriptSurface(views, theme, request.panelClass, request.backdropClass);
 		const injector = Injector.create({
 			parent: request.viewContainerRef?.injector ?? this._injector,
 			providers: request.providers(surface),
@@ -61,13 +78,17 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 			case 'popover':
 				surface.show(this._showPopover(views.root, request, surface, window.anchor, window.position));
 				break;
+			case 'drawer':
+				surface.show(this._showDrawer(views.pane, surface, window.drawer, window.side));
+				break;
 		}
 		return surface;
 	}
 
 	/**
 	 * A modal fills its window like the web's overlay container: the backdrop covers it and the pane is centered on
-	 * top. Bottom sheets and popovers draw their own window chrome, so the pane is the whole window content.
+	 * top. Bottom sheets, drawer slots and popovers draw their own window chrome, so the pane is the whole window
+	 * content.
 	 */
 	private _createViews(kind: NativeWindow['kind']): SurfaceViews {
 		const pane = this._renderer.createElement('div') as View;
@@ -202,6 +223,58 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 		});
 		return () => popover.close();
 	}
+
+	private _showDrawer(pane: View, surface: NativeScriptSurface, drawer: Drawer, side: DrawerSide): CloseWindow {
+		this._drawerSurface?.windowClosed();
+		this._drawerSurface = surface;
+		const slot = DRAWER_SLOTS[side];
+		if (side !== 'top') {
+			this._renderer.setStyle(pane, 'width', `${sideSheetWidth(drawer)}px`);
+			this._renderer.setStyle(pane, 'height', '100%');
+		}
+		// The drawer spans the screen under the system bars, as a fixed web sheet spans the viewport. The slot draws
+		// the sheet's background under the bars and keeps the sheet itself clear of them.
+		const insets = systemBarInsets(drawer);
+		this._renderer.setStyle(pane, 'paddingTop', `${insets.top}px`);
+		if (side !== 'top') this._renderer.setStyle(pane, 'paddingBottom', `${insets.bottom}px`);
+		pane.ignoreTouchAnimation = true;
+		pane.on('tap', () => undefined);
+		const backdrop = drawer.backDrop;
+		const onBackdropTap = () => surface.dismiss('backdrop');
+		backdrop.on('tap', onBackdropTap);
+		// The drawer is part of the page rather than a window, so the back button reaches the activity.
+		const onBack = (args: AndroidActivityBackPressedEventData) => {
+			args.cancel = true;
+			surface.dismiss('escape');
+		};
+		if (__ANDROID__) Application.android.on(Application.android.activityBackPressedEvent, onBack);
+		const onClose = (args: EventData) => {
+			if ((args as DrawerEventData).side === side) surface.windowClosed();
+		};
+		drawer.on('close', onClose);
+		const onLayout = () => {
+			pane.off(View.layoutChangedEvent, onLayout);
+			// The drawer moves a new slot view off screen in a timer after its first layout; opening sooner races it.
+			setTimeout(() => {
+				if (drawer[slot] !== pane) return;
+				drawer.applyTrData(drawer.computeTranslationData(side, slotSize(pane, side)), side);
+				void drawer.open(side);
+			});
+		};
+		surface.onTeardown(() => {
+			pane.off(View.layoutChangedEvent, onLayout);
+			backdrop.off('tap', onBackdropTap);
+			if (__ANDROID__) Application.android.off(Application.android.activityBackPressedEvent, onBack);
+			drawer.off('close', onClose);
+			if (drawer[slot] === pane) drawer[slot] = undefined;
+			if (this._drawerSurface === surface) this._drawerSurface = null;
+		});
+		drawer[slot] = pane;
+		// After the drawer's own layout listener, which measures the slot.
+		pane.on(View.layoutChangedEvent, onLayout);
+		// close() returns early, without a close event, for a slot that never laid out.
+		return () => void drawer.close(side).then(() => surface.windowClosed());
+	}
 }
 
 class NativeScriptSurface extends BrnOverlaySurface {
@@ -292,15 +365,28 @@ interface SurfaceViews {
 type NativeWindow =
 	| { readonly kind: 'modal' }
 	| { readonly kind: 'bottomSheet' }
-	| { readonly kind: 'popover'; readonly anchor: View; readonly position: ConnectedPosition | undefined };
+	| { readonly kind: 'popover'; readonly anchor: View; readonly position: ConnectedPosition | undefined }
+	| { readonly kind: 'drawer'; readonly drawer: Drawer; readonly side: DrawerSide };
 
-/** Bottom edges open a bottom sheet, anchors that are views a popover; native platforms have no other edge windows. */
+type DrawerSide = Exclude<BrnOverlayEdge, 'bottom'>;
+
+const DRAWER_SLOTS = { left: 'leftDrawer', right: 'rightDrawer', top: 'topDrawer' } as const satisfies Record<
+	DrawerSide,
+	keyof Drawer
+>;
+
+/** helm's `.spartan-sheet-content` background, for the part of a drawer slot under the system bars. */
+const DRAWER_SLOT_BACKGROUND = 'bg-popover';
+
+/** Bottom edges open a bottom sheet, the other edges a side of the app's drawer, anchors that are views a popover. */
 function nativeWindow(placement: BrnOverlayPlacement): NativeWindow {
 	switch (placement.kind) {
 		case 'center':
 			return { kind: 'modal' };
 		case 'edge':
-			return placement.side === 'bottom' ? { kind: 'bottomSheet' } : { kind: 'modal' };
+			return placement.side === 'bottom'
+				? { kind: 'bottomSheet' }
+				: { kind: 'drawer', drawer: appDrawer(), side: placement.side };
 		case 'anchored': {
 			const anchor = anchorView(placement.origin);
 			return anchor ? { kind: 'popover', anchor, position: placement.positions[0] } : { kind: 'modal' };
@@ -326,6 +412,44 @@ function clearWindowBackground(root: View): void {
 		const controller = (root as unknown as { viewController?: UIViewController }).viewController;
 		if (controller) controller.view.backgroundColor = UIColor.clearColor;
 	}
+}
+
+/** The `Drawer` the app wraps its router outlet in, found above the showing frame. */
+function appDrawer(): Drawer {
+	for (let view: View | undefined = Frame.topmost(); view; view = view.parent as View | undefined) {
+		if (view instanceof Drawer) return view;
+	}
+	throw new Error('Left, right and top sheets open in a Drawer around the router outlet, and there is none.');
+}
+
+/**
+ * helm's side sheets are `w-3/4 sm:max-w-sm` against the viewport. In a drawer slot the percentage would resolve
+ * against the pane's own content, so the pane takes the width the viewport would give.
+ */
+function sideSheetWidth(drawer: Drawer): number {
+	const width = drawer.getActualSize().width;
+	return width >= 640 ? Math.min(width * 0.75, 384) : width * 0.75;
+}
+
+function systemBarInsets(view: View): { readonly top: number; readonly bottom: number } {
+	if (__ANDROID__) {
+		const insets = androidx.core.view.ViewCompat.getRootWindowInsets(view.android)?.getInsets(
+			androidx.core.view.WindowInsetsCompat.Type.systemBars(),
+		);
+		return insets
+			? {
+					top: Utils.layout.toDeviceIndependentPixels(insets.top),
+					bottom: Utils.layout.toDeviceIndependentPixels(insets.bottom),
+				}
+			: { top: 0, bottom: 0 };
+	}
+	const insets = Application.ios.window.safeAreaInsets;
+	return { top: insets.top, bottom: insets.bottom };
+}
+
+function slotSize(pane: View, side: DrawerSide): number {
+	const size = pane.getActualSize();
+	return side === 'top' ? size.height : size.width;
 }
 
 /** The NativeScript view an anchored overlay points at, when its origin is one (a point has no view). */

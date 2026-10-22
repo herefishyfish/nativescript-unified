@@ -82,7 +82,7 @@ Sort order is static, then `:param`, then `**`. A layout page renders its childr
 | heading | `h1`-`h6` |
 | paragraph | `p` (a paragraph holding only images renders the images as blocks) |
 | list, list item | `ul` / `ol`, `li` |
-| blockquote | `blockquote` |
+| blockquote | `div.md-blockquote`; a GitHub alert (`> [!NOTE]`, `[!TIP]`, `[!WARNING]`, `[!IMPORTANT]`, `[!CAUTION]`) is `aside.md-callout.md-callout-<kind>` with a title, matching the web callouts. A `div`, not `blockquote`: MasonKit's `blockquote` is a text element, and a paragraph inside it loses inline code and links |
 | code | `div.md-code > pre > code`, the `div` scrolling sideways (a block tagged `html live` renders the live-code component instead, see below) |
 | hr | `hr` |
 | image | `img` |
@@ -112,6 +112,25 @@ Live blocks mount at the Markdown component's root, not inside the token-recursi
 - App paths (`/about`, `../post`) are cleared from the element so MasonKit has nothing to open, and the directive navigates with `RouterExtensions.navigateByUrl`, resolving relative paths against the current URL.
 
 The Markdown renderer uses the same directive, and pages import it to make plain `<a href="/about">` work.
+
+## Platform ports
+
+Spartan's brain talks to the browser in a few places that NativeScript cannot serve. The CDK Dialog and Overlay are the main ones, because they build their panes under `document.body`. Each such place is a port: an abstract class in brain that names what brain needs, with the web implementation as its default.
+
+The overlay ports work like this:
+
+- `@spartan-ng/brain/core` holds the shared shapes. `BrnOverlayPlacement` says where a window sits: `center`, `edge` with a side, or `anchored` to an origin with candidate positions. `BrnOverlaySurface` is one open window. It reports dismissals (backdrop, outside tap, Escape or the Android back button) and detachment, and takes state, classes and disposal. `BrnOverlayRequest` is everything a host needs to open one window.
+- `BrnDialogHost` (in `@spartan-ng/brain/dialog`) opens modal dialogs. `BrnOverlayHost` (in `@spartan-ng/brain/overlay`) opens anchored and non-modal overlays. Each is `providedIn: 'root'` with a CDK implementation (`CdkDialogHost`, `CdkOverlayHost`), so a web app needs no setup.
+- `BrnDialogService` and `BrnOverlayService` keep their public API. They merge options, build the request, and connect the surface's dismissals and detachment to the ref. `BrnDialogRef` and `BrnOverlayRef` only see the surface.
+- Sheet, drawer and popover choose a placement instead of building a CDK position strategy. `positionStrategy` and `scrollStrategy` options still work on the web. Native hosts ignore them.
+- `provideSpartanNativeScript()` in `packages/ui/native/spartan-native.ts` provides `NativeScriptOverlayHost` for both ports. It renders the helm content into a MasonKit `div` that carries the theme classes. The `center` placement opens `View.showModal`, the `edge` bottom placement opens a material bottom sheet, and the `anchored` placement opens `@nativescript-community/ui-popover`. Other edges fall back to the modal.
+
+To add the next port:
+
+1. Find the brain code that reaches for a browser API. Name the smallest set of operations brain needs from it as an abstract class in brain.
+2. Move today's browser code into a web class that implements it, and set that class as the default with `@Injectable({ providedIn: 'root', useExisting: ... })`.
+3. Make brain depend on the abstract class only, and keep the public API of the brain service unchanged.
+4. Implement the native class in `packages/ui/native` and provide it in `provideSpartanNativeScript()`.
 
 ## Deviations from the first draft
 

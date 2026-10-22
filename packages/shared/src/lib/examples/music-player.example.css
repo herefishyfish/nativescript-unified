@@ -1,0 +1,71 @@
+/* Music player example ("Sunset FM": a warm afternoon in light mode, after hours in dark). Every rule is scoped under .example-music-player. */
+.example-music-player {
+  --background: #fff6ef;
+  --foreground: #2a0f3d;
+  --card: #ffffff;
+  --card-foreground: #2a0f3d;
+  --popover: #ffffff;
+  --popover-foreground: #2a0f3d;
+  --primary: #c8283f;
+  --primary-foreground: #ffffff;
+  --secondary: #ffe6d6;
+  --secondary-foreground: #5a1a3a;
+  --muted: #fbe9e0;
+  --muted-foreground: #74435a;
+  --accent: #ffd9c2;
+  --accent-foreground: #2a0f3d;
+  --destructive: #b3261e;
+  --border: #f5d6c8;
+  --input: #d9a48f;
+  --ring: #fc5c65;
+  --chart-1: #fd9644;
+  --chart-2: #fc5c65;
+  --chart-3: #4b0082;
+  --chart-4: #45aaf2;
+  --chart-5: #26de81;
+}
+
+.ns-dark .example-music-player,
+.dark .example-music-player {
+  --background: #0d0b14;
+  --foreground: #fff1e8;
+  --card: #1a1424;
+  --card-foreground: #fff1e8;
+  --popover: #1a1424;
+  --popover-foreground: #fff1e8;
+  --primary: #fd9644;
+  --primary-foreground: #1a0b00;
+  --secondary: #2a1d33;
+  --secondary-foreground: #fff1e8;
+  --muted: #221a2c;
+  --muted-foreground: #b9a8c4;
+  --accent: #3a2245;
+  --accent-foreground: #fff1e8;
+  --destructive: #ff7a85;
+  --border: #2e2438;
+  --input: #4f3d5e;
+  --ring: #fd9644;
+  --chart-1: #fd9644;
+  --chart-2: #fc5c65;
+  --chart-3: #9b59d0;
+  --chart-4: #45aaf2;
+  --chart-5: #26de81;
+}
+
+.example-music-player .page { background: linear-gradient(180deg, #ffe3d1, #fff6ef 45%, #fff6ef); }
+.ns-dark .example-music-player .page,
+.dark .example-music-player .page { background: linear-gradient(180deg, #2a0f3d, #14101f 45%, #0d0b14); }
+
+.example-music-player .art-0 { background: linear-gradient(160deg, #fd9644, #fc5c65 45%, #4b0082); }
+.example-music-player .art-1 { background: linear-gradient(160deg, #45aaf2, #4b7bec 45%, #2d0a5b); }
+.example-music-player .art-2 { background: linear-gradient(160deg, #fed330, #fd9644 45%, #a61e4d); }
+.example-music-player .art-3 { background: linear-gradient(160deg, #26de81, #2bcbba 45%, #0f3057); }
+.example-music-player .art-chip { color: #ffffff; background-color: rgba(0, 0, 0, 0.25); }
+.example-music-player .art-glyph { color: rgba(255, 255, 255, 0.9); }
+.example-music-player .art-title { color: #ffffff; line-height: 1; }
+
+.example-music-player .liked { color: var(--chart-2); }
+.example-music-player .play { background: linear-gradient(135deg, #fd9644, #fc5c65); background: linear-gradient(135deg, var(--chart-1), var(--chart-2)); }
+.example-music-player .play-glyph { color: #ffffff; }
+.example-music-player .track-fill { background: linear-gradient(90deg, #fd9644, #fc5c65); background: linear-gradient(90deg, var(--chart-1), var(--chart-2)); }
+.example-music-player .queue-row { background-color: transparent; }

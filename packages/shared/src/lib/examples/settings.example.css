@@ -1,0 +1,99 @@
+/*
+ * Settings example, theme "Graphite". Every rule is scoped under .example-settings.
+ * Gradients name literal colors first: MasonKit may not resolve var() inside gradient stops, and the second
+ * declaration replaces the first wherever it does.
+ */
+.example-settings {
+  --background: #f2f3f4;
+  --foreground: #1f2526;
+  --card: #ffffff;
+  --card-foreground: #1f2526;
+  --popover: #ffffff;
+  --popover-foreground: #1f2526;
+  --primary: #2d3436;
+  --primary-foreground: #ffffff;
+  --secondary: #e6e9ea;
+  --secondary-foreground: #1f2526;
+  --muted: #e6e9ea;
+  --muted-foreground: #565f63;
+  --accent: #dfe6e9;
+  --accent-foreground: #1f2526;
+  --destructive: #c0392b;
+  --border: #dfe3e5;
+  --input: #b2bec3;
+  --ring: #636e72;
+  --chart-1: #2d3436;
+  --chart-2: #636e72;
+  --chart-3: #00b894;
+  --chart-4: #0984e3;
+  --chart-5: #fdcb6e;
+  --success: #00785f;
+  --danger-soft: #fdecea;
+  --danger-border: #f5b5b5;
+  --hero-from: #2d3436;
+  --hero-to: #636e72;
+  --hero-foreground: #ffffff;
+}
+
+.ns-dark .example-settings,
+.dark .example-settings {
+  --background: #121516;
+  --foreground: #eef1f2;
+  --card: #1c2123;
+  --card-foreground: #eef1f2;
+  --popover: #1c2123;
+  --popover-foreground: #eef1f2;
+  --primary: #dfe6e9;
+  --primary-foreground: #1c2123;
+  --secondary: #2a3032;
+  --secondary-foreground: #eef1f2;
+  --muted: #2a3032;
+  --muted-foreground: #a4b0b5;
+  --accent: #2f3639;
+  --accent-foreground: #eef1f2;
+  --destructive: #ff8a80;
+  --border: #2f3639;
+  --input: #4d575b;
+  --ring: #b2bec3;
+  --chart-1: #dfe6e9;
+  --chart-2: #b2bec3;
+  --chart-3: #55efc4;
+  --chart-4: #74b9ff;
+  --chart-5: #fdcb6e;
+  --success: #55efc4;
+  --danger-soft: #3a1c1a;
+  --danger-border: #6e2a26;
+  --hero-from: #2d3436;
+  --hero-to: #636e72;
+  --hero-foreground: #ffffff;
+}
+
+.example-settings .hero {
+  background: linear-gradient(135deg, #2d3436, #636e72);
+  background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+}
+.example-settings .on-hero { color: #ffffff; color: var(--hero-foreground); }
+.example-settings .on-hero-soft { color: rgba(255, 255, 255, 0.8); }
+.example-settings .avatar-fallback { color: #ffffff; background: linear-gradient(135deg, #55efc4, #00b894 50%, #0984e3); }
+.example-settings .plan { color: #2d3436; background: linear-gradient(90deg, #fdcb6e, #ffeaa7); }
+
+.example-settings .icon-tile { color: #ffffff; }
+.example-settings .tone-indigo { background: linear-gradient(135deg, #4834d4, #6c5ce7); }
+.example-settings .tone-red { background: linear-gradient(135deg, #d63031, #ff7675); }
+.example-settings .tone-teal { background: linear-gradient(135deg, #00a383, #55efc4); }
+.example-settings .tone-amber { background: linear-gradient(135deg, #e17055, #fdcb6e); }
+.example-settings .tone-slate { background: linear-gradient(135deg, #2d3436, #636e72); }
+.example-settings .tone-blue { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+
+.example-settings .danger {
+  background-color: #fdecea;
+  background-color: var(--danger-soft);
+  border-color: #f5b5b5;
+  border-color: var(--danger-border);
+}
+.example-settings .delete { color: #c0392b; color: var(--destructive); background-color: #ffffff; background-color: var(--card); }
+.example-settings .delete[data-armed='true'] { color: #ffffff; background-color: #c0392b; background-color: var(--destructive); }
+.ns-dark .example-settings .delete[data-armed='true'],
+.dark .example-settings .delete[data-armed='true'] { color: #1c2123; }
+
+.example-settings .success { color: #00785f; color: var(--success); }

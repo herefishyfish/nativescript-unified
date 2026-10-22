@@ -1,0 +1,70 @@
+/* Article example ("Lagoon"). Every rule is scoped under .example-article. */
+.example-article {
+  --background: #f6fbfa;
+  --foreground: #0b2523;
+  --card: #ffffff;
+  --card-foreground: #0b2523;
+  --popover: #ffffff;
+  --popover-foreground: #0b2523;
+  --primary: #17736d;
+  --primary-foreground: #ffffff;
+  --secondary: #e0f6f3;
+  --secondary-foreground: #0f4f4a;
+  --muted: #e8f4f2;
+  --muted-foreground: #4b6764;
+  --accent: #ccefea;
+  --accent-foreground: #0b2523;
+  --destructive: #b4432f;
+  --border: #d2ebe7;
+  --input: #93c9c3;
+  --ring: #1f8a83;
+  --chart-1: #1f8a83;
+  --chart-2: #4ecdc4;
+  --chart-3: #0b3d3a;
+  --chart-4: #a8f0ea;
+  --chart-5: #c2185b;
+}
+
+.ns-dark .example-article,
+.dark .example-article {
+  --background: #0b1716;
+  --foreground: #e6f7f5;
+  --card: #12211f;
+  --card-foreground: #e6f7f5;
+  --popover: #12211f;
+  --popover-foreground: #e6f7f5;
+  --primary: #4ecdc4;
+  --primary-foreground: #062320;
+  --secondary: #1b302d;
+  --secondary-foreground: #e6f7f5;
+  --muted: #162826;
+  --muted-foreground: #9cbfbb;
+  --accent: #1f3a37;
+  --accent-foreground: #e6f7f5;
+  --destructive: #ff8a7a;
+  --border: #23403c;
+  --input: #3d6661;
+  --ring: #4ecdc4;
+  --chart-1: #4ecdc4;
+  --chart-2: #1f8a83;
+  --chart-3: #a8f0ea;
+  --chart-4: #0b3d3a;
+  --chart-5: #ff8fb1;
+}
+
+.example-article .hero { background: linear-gradient(135deg, #0b3d3a, #1f8a83 50%, #4ecdc4); background: linear-gradient(135deg, var(--chart-3), var(--chart-1) 50%, var(--chart-2)); }
+.ns-dark .example-article .hero,
+.dark .example-article .hero { background: linear-gradient(135deg, #062320, #145e59 50%, #1f8a83); }
+.example-article .hero-glyph { color: rgba(255, 255, 255, 0.85); }
+.example-article .hero-caption { color: #a8f0ea; }
+.example-article .hero-title { color: #ffffff; }
+
+.example-article .avatar { background: linear-gradient(135deg, #1f8a83, #4ecdc4); color: #ffffff; }
+
+.example-article .lede { line-height: 1.5; font-weight: 500; }
+.example-article .body { line-height: 1.65; }
+.example-article .body strong,
+.example-article .lede strong { color: var(--primary); font-weight: 700; }
+.example-article .body em { color: var(--foreground); font-style: italic; }
+.example-article .code { color: var(--chart-5); background-color: var(--muted); font-family: monospace; }
+.example-article .quote-text { line-height: 1.3; }

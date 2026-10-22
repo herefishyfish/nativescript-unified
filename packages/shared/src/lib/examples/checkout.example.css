@@ -1,0 +1,97 @@
+/*
+ * Checkout example, theme "Mint". Every rule is scoped under .example-checkout.
+ * Gradients name literal colors first: MasonKit may not resolve var() inside gradient stops, and the second
+ * declaration replaces the first wherever it does.
+ */
+.example-checkout {
+  --background: #f1fbf7;
+  --foreground: #0b3d33;
+  --card: #ffffff;
+  --card-foreground: #0b3d33;
+  --popover: #ffffff;
+  --popover-foreground: #0b3d33;
+  --primary: #00785f;
+  --primary-foreground: #ffffff;
+  --secondary: #e0f7ef;
+  --secondary-foreground: #0b3d33;
+  --muted: #e0f7ef;
+  --muted-foreground: #4b6b63;
+  --accent: #d0f5e8;
+  --accent-foreground: #0b3d33;
+  --destructive: #c62828;
+  --border: #cfeee3;
+  --input: #8fcfb8;
+  --ring: #00b894;
+  --chart-1: #00b894;
+  --chart-2: #55efc4;
+  --chart-3: #0984e3;
+  --chart-4: #6c5ce7;
+  --chart-5: #fdcb6e;
+  --success: #00785f;
+  --hero-from: #00b894;
+  --hero-to: #55efc4;
+  --hero-foreground: #0b3d33;
+  --pay-from: #006e57;
+  --pay-to: #00866b;
+}
+
+.ns-dark .example-checkout,
+.dark .example-checkout {
+  --background: #0b1714;
+  --foreground: #e3f9f1;
+  --card: #12221e;
+  --card-foreground: #e3f9f1;
+  --popover: #12221e;
+  --popover-foreground: #e3f9f1;
+  --primary: #55efc4;
+  --primary-foreground: #06261e;
+  --secondary: #183029;
+  --secondary-foreground: #e3f9f1;
+  --muted: #183029;
+  --muted-foreground: #9cc4b8;
+  --accent: #1b3a31;
+  --accent-foreground: #e3f9f1;
+  --destructive: #ff8a80;
+  --border: #1f3a32;
+  --input: #3d6b5d;
+  --ring: #55efc4;
+  --chart-1: #55efc4;
+  --chart-2: #00b894;
+  --chart-3: #74b9ff;
+  --chart-4: #a29bfe;
+  --chart-5: #fdcb6e;
+  --success: #55efc4;
+  --hero-from: #00b894;
+  --hero-to: #55efc4;
+  --hero-foreground: #06261e;
+  --pay-from: #55efc4;
+  --pay-to: #00b894;
+}
+
+.example-checkout .hero {
+  background: linear-gradient(135deg, #00b894, #55efc4);
+  background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+}
+.example-checkout .on-hero { color: #0b3d33; color: var(--hero-foreground); }
+.example-checkout .hero-count { color: #0b3d33; background-color: rgba(255, 255, 255, 0.65); }
+.example-checkout .meter-track { background-color: rgba(4, 70, 58, 0.18); }
+.example-checkout .meter-fill { background-color: #ffffff; }
+
+.example-checkout .tone-violet { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+.example-checkout .tone-mint { background: linear-gradient(135deg, #00b894, #55efc4); }
+.example-checkout .tone-ocean { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+.example-checkout .thumb-glyph { color: #ffffff; }
+
+.example-checkout .success { color: #00785f; color: var(--success); }
+
+.example-checkout .pay {
+  color: #ffffff;
+  background: linear-gradient(90deg, #006e57, #00866b);
+  background: linear-gradient(90deg, var(--pay-from), var(--pay-to));
+}
+.ns-dark .example-checkout .pay,
+.dark .example-checkout .pay {
+  color: #06261e;
+  background: linear-gradient(90deg, #55efc4, #00b894);
+  background: linear-gradient(90deg, var(--pay-from), var(--pay-to));
+}

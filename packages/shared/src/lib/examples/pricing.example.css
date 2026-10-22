@@ -1,0 +1,107 @@
+/*
+ * Pricing example, theme "Ultraviolet". Every rule is scoped under .example-pricing.
+ * Gradients name literal colors first: MasonKit may not resolve var() inside gradient stops, and the second
+ * declaration replaces the first wherever it does.
+ */
+.example-pricing {
+  --background: #f7f6ff;
+  --foreground: #1f1b4d;
+  --card: #ffffff;
+  --card-foreground: #1f1b4d;
+  --popover: #ffffff;
+  --popover-foreground: #1f1b4d;
+  --primary: #5b4bd6;
+  --primary-foreground: #ffffff;
+  --secondary: #eeebff;
+  --secondary-foreground: #2d2a5a;
+  --muted: #eeebff;
+  --muted-foreground: #5f5a85;
+  --accent: #e4dffd;
+  --accent-foreground: #2d2a5a;
+  --destructive: #c62828;
+  --border: #e3dffa;
+  --input: #bdb6ef;
+  --ring: #6c5ce7;
+  --chart-1: #6c5ce7;
+  --chart-2: #a29bfe;
+  --chart-3: #fdcb6e;
+  --chart-4: #4b3cc4;
+  --chart-5: #2d2a5a;
+  --hero-from: #4b3cc4;
+  --hero-to: #6c5ce7;
+  --hero-foreground: #ffffff;
+  --featured-from: #2d2a5a;
+  --featured-to: #6c5ce7;
+  --gold: #fdcb6e;
+}
+
+.ns-dark .example-pricing,
+.dark .example-pricing {
+  --background: #13112a;
+  --foreground: #eeebff;
+  --card: #1d1a3d;
+  --card-foreground: #eeebff;
+  --popover: #1d1a3d;
+  --popover-foreground: #eeebff;
+  --primary: #a29bfe;
+  --primary-foreground: #13112a;
+  --secondary: #2a2655;
+  --secondary-foreground: #eeebff;
+  --muted: #2a2655;
+  --muted-foreground: #b3aee0;
+  --accent: #2f2a63;
+  --accent-foreground: #eeebff;
+  --destructive: #ff8a80;
+  --border: #2f2b5c;
+  --input: #4b4590;
+  --ring: #a29bfe;
+  --chart-1: #a29bfe;
+  --chart-2: #6c5ce7;
+  --chart-3: #fdcb6e;
+  --chart-4: #c7c1ff;
+  --chart-5: #eeebff;
+  --hero-from: #3b2f9e;
+  --hero-to: #6c5ce7;
+  --hero-foreground: #ffffff;
+  --featured-from: #241f52;
+  --featured-to: #4b3cc4;
+  --gold: #fdcb6e;
+}
+
+.example-pricing .hero {
+  background: linear-gradient(135deg, #4b3cc4, #6c5ce7);
+  background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+}
+.ns-dark .example-pricing .hero,
+.dark .example-pricing .hero { background: linear-gradient(135deg, #3b2f9e, #6c5ce7); background: linear-gradient(135deg, var(--hero-from), var(--hero-to)); }
+.example-pricing .on-hero { color: #ffffff; color: var(--hero-foreground); }
+.example-pricing .on-hero-soft { color: rgba(255, 255, 255, 0.88); line-height: 1.4; }
+.example-pricing .hero-pill { background-color: rgba(255, 255, 255, 0.22); }
+.example-pricing .toggle-track { background-color: rgba(20, 12, 70, 0.28); }
+.example-pricing .toggle-option { color: #ffffff; background-color: rgba(255, 255, 255, 0); }
+.example-pricing .toggle-option.active { color: #4b3cc4; background-color: #ffffff; }
+.example-pricing .save-pill { color: #1f1b4d; background-color: #fdcb6e; background-color: var(--gold); }
+
+.example-pricing .tier[data-chosen='true'] { border-color: var(--primary); }
+.example-pricing .tier[data-featured='true'] {
+  border-color: #6c5ce7;
+  background: linear-gradient(160deg, #2d2a5a, #4b3cc4 70%, #6c5ce7);
+  background: linear-gradient(160deg, var(--featured-from), var(--featured-to));
+}
+.ns-dark .example-pricing .tier[data-featured='true'],
+.dark .example-pricing .tier[data-featured='true'] {
+  background: linear-gradient(160deg, #241f52, #4b3cc4);
+  background: linear-gradient(160deg, var(--featured-from), var(--featured-to));
+}
+.example-pricing .tier[data-featured='true'][data-chosen='true'] { border-color: var(--gold); }
+.example-pricing .tier[data-featured='true'] .tier-ink { color: #ffffff; }
+.example-pricing .tier[data-featured='true'] .tier-soft { color: rgba(255, 255, 255, 0.8); }
+.example-pricing .tier[data-featured='true'] .tier-icon,
+.example-pricing .tier[data-featured='true'] .check { color: #fdcb6e; color: var(--gold); background-color: rgba(253, 203, 110, 0.18); }
+.example-pricing .tier[data-featured='true'] .tier-rule { background-color: rgba(255, 255, 255, 0.18); }
+.example-pricing .tier[data-featured='true'] .tier-cta { color: #2d2a5a; background: linear-gradient(90deg, #fdcb6e, #ffeaa7); }
+.example-pricing .tier[data-featured='true'][data-chosen='true'] .tier-cta { color: #2d2a5a; background: #ffffff; }
+.example-pricing .popular { color: #2d2a5a; background-color: #fdcb6e; background-color: var(--gold); }
+
+.example-pricing .tier-soft,
+.example-pricing .soft-copy { line-height: 1.4; }

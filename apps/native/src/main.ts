@@ -13,12 +13,18 @@ import { installMasonKit } from '@triniwiz/nativescript-masonkit/angular';
 import { AppComponent } from './app/app.component';
 import { NsLiveDemo } from './app/markdown/live-demo';
 import { provideSpartanNativeScript, registerSpartanNativeElements } from '../../../packages/ui/native/spartan-native';
+import { registerCoreElementAliases } from '../../../packages/ui/native/core-elements';
+import { installTouchFeedback } from '../../../packages/ui/native/touch-feedback';
+import { View } from '@triniwiz/nativescript-masonkit';
 
+View.preflight = true;
+
+registerCoreElementAliases();
 installMasonKit({
   componentHosts: {
     // Page roots and hosts whose template is a fill-parent `<scroll>` stay transparent, so the
     // scroller is measured by the Page or tab instead of growing with its content.
-    passthrough: [/-page$/, /^(demo-code-tabs|ui-demo|ui-demo-body|guide-list|home-tab)$/],
+    passthrough: [/-page$/, /^(demo-code-tabs|ui-demo|ui-demo-body|guide-list)$/],
   },
 });
 registerSpartanNativeElements();
@@ -29,6 +35,7 @@ registerElement('MDTabStripItem', () => TabStripItem);
 registerElement('MDTabContentItem', () => TabContentItem);
 installDrawer();
 installBottomSheet();
+installTouchFeedback();
 
 runNativeScriptAngularApp({
   appModuleBootstrap: () =>
@@ -38,7 +45,6 @@ runNativeScriptAngularApp({
         provideFileRouter(),
         provideZonelessChangeDetection(),
         provideSpartanNativeScript(),
-        // `html live` blocks in Markdown render as Preview / Code tabs with a JIT-compiled demo.
         provideMarkdownLiveCode(NsLiveDemo),
       ],
     }),

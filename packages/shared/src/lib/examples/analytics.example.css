@@ -1,0 +1,106 @@
+/*
+ * Analytics example, theme "Ember". Every rule is scoped under .example-analytics.
+ * Gradients name literal colors first: MasonKit may not resolve var() inside gradient stops, and the second
+ * declaration replaces the first wherever it does.
+ */
+.example-analytics {
+  --background: #fff6f2;
+  --foreground: #3d1f17;
+  --card: #ffffff;
+  --card-foreground: #3d1f17;
+  --popover: #ffffff;
+  --popover-foreground: #3d1f17;
+  --primary: #b84a30;
+  --primary-foreground: #ffffff;
+  --secondary: #fdeee8;
+  --secondary-foreground: #3d1f17;
+  --muted: #fdeee8;
+  --muted-foreground: #7f5245;
+  --accent: #fde2d8;
+  --accent-foreground: #3d1f17;
+  --destructive: #c0392b;
+  --border: #fbe0d6;
+  --input: #f0b8a5;
+  --ring: #e17055;
+  --chart-1: #e17055;
+  --chart-2: #6c5ce7;
+  --chart-3: #0984e3;
+  --chart-4: #00b894;
+  --chart-5: #fdcb6e;
+  --success: #00785f;
+  --success-soft: #e3f9f1;
+  --danger-soft: #fde8e8;
+  --hero-from: #e17055;
+  --hero-to: #fab1a0;
+  --hero-foreground: #3d1f17;
+  --bar-from: #fab1a0;
+  --bar-to: #fde2d8;
+  --peak-from: #b84a30;
+  --peak-to: #e17055;
+}
+
+.ns-dark .example-analytics,
+.dark .example-analytics {
+  --background: #1a0f0c;
+  --foreground: #fde9e2;
+  --card: #241612;
+  --card-foreground: #fde9e2;
+  --popover: #241612;
+  --popover-foreground: #fde9e2;
+  --primary: #fab1a0;
+  --primary-foreground: #3a160c;
+  --secondary: #33201a;
+  --secondary-foreground: #fde9e2;
+  --muted: #33201a;
+  --muted-foreground: #d0a597;
+  --accent: #3d241c;
+  --accent-foreground: #fde9e2;
+  --destructive: #ff8a80;
+  --border: #3d2720;
+  --input: #6a4034;
+  --ring: #fab1a0;
+  --chart-1: #fab1a0;
+  --chart-2: #a29bfe;
+  --chart-3: #74b9ff;
+  --chart-4: #55efc4;
+  --chart-5: #fdcb6e;
+  --success: #55efc4;
+  --success-soft: #133229;
+  --danger-soft: #3a1a18;
+  --hero-from: #e17055;
+  --hero-to: #fab1a0;
+  --hero-foreground: #3d1f17;
+  --bar-from: #8a3b28;
+  --bar-to: #4d241a;
+  --peak-from: #fab1a0;
+  --peak-to: #e17055;
+}
+
+.example-analytics .hero {
+  background: linear-gradient(135deg, #e17055, #fab1a0);
+  background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+}
+.example-analytics .on-hero { color: #3d1f17; color: var(--hero-foreground); }
+.example-analytics .hero-delta { color: #b84a30; background-color: #ffffff; }
+.example-analytics .live { background-color: rgba(255, 255, 255, 0.45); }
+.example-analytics .live-dot { background-color: #00b894; }
+.example-analytics .live-text { color: #3d1f17; }
+.example-analytics .range-track { background-color: rgba(80, 20, 5, 0.18); }
+.example-analytics .range-option { color: #3d1f17; background-color: rgba(255, 255, 255, 0); }
+.example-analytics .range-option.active { color: #b84a30; background-color: #ffffff; }
+
+.example-analytics .delta { color: #00785f; color: var(--success); background-color: #e3f9f1; background-color: var(--success-soft); }
+.example-analytics .delta.down { color: #c0392b; color: var(--destructive); background-color: #fde8e8; background-color: var(--danger-soft); }
+
+.example-analytics .bar {
+  background: linear-gradient(180deg, #fab1a0, #fde2d8);
+  background: linear-gradient(180deg, var(--bar-from), var(--bar-to));
+}
+.ns-dark .example-analytics .bar,
+.dark .example-analytics .bar { background: linear-gradient(180deg, #8a3b28, #4d241a); }
+.example-analytics .bar.peak {
+  background: linear-gradient(180deg, #b84a30, #e17055);
+  background: linear-gradient(180deg, var(--peak-from), var(--peak-to));
+}
+.ns-dark .example-analytics .bar.peak,
+.dark .example-analytics .bar.peak { background: linear-gradient(180deg, #fab1a0, #e17055); }

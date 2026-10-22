@@ -1,0 +1,72 @@
+/* Sign in example ("Nocturne": a lavender dawn in light mode, the moody night in dark). Every rule is scoped under .example-sign-in. */
+.example-sign-in {
+  --background: #f4f3ff;
+  --foreground: #1a1a2e;
+  --card: #ffffff;
+  --card-foreground: #1a1a2e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a2e;
+  --primary: #4b4b7a;
+  --primary-foreground: #ffffff;
+  --secondary: #e6e5f7;
+  --secondary-foreground: #2c2c4f;
+  --muted: #ecebf8;
+  --muted-foreground: #565679;
+  --accent: #dcdbff;
+  --accent-foreground: #1a1a2e;
+  --destructive: #b8264a;
+  --border: #dcdaf0;
+  --input: #a9a7cf;
+  --ring: #6d6bd9;
+  --chart-1: #8e8cff;
+  --chart-2: #c86dd7;
+  --chart-3: #ff7eb3;
+  --chart-4: #2bb68a;
+  --chart-5: #4b4b7a;
+}
+
+.ns-dark .example-sign-in,
+.dark .example-sign-in {
+  --background: #12121f;
+  --foreground: #ececff;
+  --card: #1d1d33;
+  --card-foreground: #ececff;
+  --popover: #1d1d33;
+  --popover-foreground: #ececff;
+  --primary: #a5a3ff;
+  --primary-foreground: #12121f;
+  --secondary: #2a2a48;
+  --secondary-foreground: #ececff;
+  --muted: #23233d;
+  --muted-foreground: #a9a8d0;
+  --accent: #2f2f55;
+  --accent-foreground: #ececff;
+  --destructive: #ff8fa6;
+  --border: #33335a;
+  --input: #4b4b7a;
+  --ring: #a5a3ff;
+  --chart-1: #a5a3ff;
+  --chart-2: #d68be2;
+  --chart-3: #ff8fbe;
+  --chart-4: #4ee6b0;
+  --chart-5: #ececff;
+}
+
+.example-sign-in .page { background: linear-gradient(180deg, #f4f3ff, #ebe9fb 55%, #dcd9f5); }
+.ns-dark .example-sign-in .page,
+.dark .example-sign-in .page { background: linear-gradient(180deg, #1a1a2e, #24244a 55%, #4b4b7a); }
+
+.example-sign-in .logo { background: linear-gradient(135deg, #8e8cff, #c86dd7 55%, #ff7eb3); background: linear-gradient(135deg, var(--chart-1), var(--chart-2) 55%, var(--chart-3)); }
+.example-sign-in .logo-glyph { color: #ffffff; }
+
+.example-sign-in .cta { background: linear-gradient(90deg, #4b4b7a, #7a4fa8); background: linear-gradient(90deg, var(--chart-5), #7a4fa8); color: #ffffff; }
+.ns-dark .example-sign-in .cta,
+.dark .example-sign-in .cta { background: linear-gradient(90deg, #8e8cff, #c86dd7); color: #12121f; }
+
+.example-sign-in .meter-on-1 { background-color: var(--destructive); }
+.example-sign-in .meter-on-2 { background-color: #f0a04b; }
+.example-sign-in .meter-on-3 { background-color: var(--chart-1); }
+.example-sign-in .meter-on-4 { background-color: var(--chart-4); }
+
+.example-sign-in .success-ring { background: linear-gradient(135deg, #4ee6b0, #2bb6c9); }
+.example-sign-in .success-glyph { color: #ffffff; }

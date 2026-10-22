@@ -1,0 +1,73 @@
+/* Ratings example ("Honey"). Every rule is scoped under .example-ratings. */
+.example-ratings {
+  --background: #fffaf0;
+  --foreground: #2b2210;
+  --card: #ffffff;
+  --card-foreground: #2b2210;
+  --popover: #ffffff;
+  --popover-foreground: #2b2210;
+  --primary: #fdcb6e;
+  --primary-foreground: #3d2c00;
+  --secondary: #fbefd0;
+  --secondary-foreground: #5c4300;
+  --muted: #fbf3df;
+  --muted-foreground: #74602c;
+  --accent: #fde7b0;
+  --accent-foreground: #3d2c00;
+  --destructive: #c0392b;
+  --border: #f1e2bb;
+  --input: #c9ae6a;
+  --ring: #e1a800;
+  --chart-1: #e1a800;
+  --chart-2: #fdcb6e;
+  --chart-3: #e17055;
+  --chart-4: #00b894;
+  --chart-5: #6c5ce7;
+}
+
+.ns-dark .example-ratings,
+.dark .example-ratings {
+  --background: #17130a;
+  --foreground: #fbf1da;
+  --card: #211b0e;
+  --card-foreground: #fbf1da;
+  --popover: #211b0e;
+  --popover-foreground: #fbf1da;
+  --primary: #fdcb6e;
+  --primary-foreground: #2b1f00;
+  --secondary: #2f2612;
+  --secondary-foreground: #fbf1da;
+  --muted: #2a2210;
+  --muted-foreground: #c9b78a;
+  --accent: #3d3015;
+  --accent-foreground: #fbf1da;
+  --destructive: #ff7a6a;
+  --border: #3a2f16;
+  --input: #6b5a2e;
+  --ring: #fdcb6e;
+  --chart-1: #fdcb6e;
+  --chart-2: #e1a800;
+  --chart-3: #fab1a0;
+  --chart-4: #55efc4;
+  --chart-5: #a29bfe;
+}
+
+.example-ratings .hero { background: linear-gradient(135deg, #e1a800, #fdcb6e); background: linear-gradient(135deg, var(--chart-1), var(--chart-2)); }
+.ns-dark .example-ratings .hero,
+.dark .example-ratings .hero { background: linear-gradient(135deg, #e1a800, #fdcb6e); background: linear-gradient(135deg, var(--chart-2), var(--chart-1)); }
+.example-ratings .hero-ink { color: #3d2c00; }
+.example-ratings .hero-soft { color: rgba(61, 44, 0, 0.75); }
+.example-ratings .hero-star-on { color: #ffffff; }
+.example-ratings .hero-star-off { color: rgba(61, 44, 0, 0.25); }
+
+.example-ratings .fill { background: linear-gradient(90deg, #e1a800, #fdcb6e); background: linear-gradient(90deg, var(--chart-1), var(--chart-2)); }
+.ns-dark .example-ratings .fill,
+.dark .example-ratings .fill { background: linear-gradient(90deg, #e1a800, #fdcb6e); background: linear-gradient(90deg, var(--chart-2), var(--chart-1)); }
+
+.example-ratings .star-button { background-color: transparent; }
+.example-ratings .star-on { color: var(--chart-1); }
+.example-ratings .star-off { color: var(--input); }
+
+.example-ratings .avatar-0 { background: linear-gradient(135deg, #e1a800, #fdcb6e); color: #3d2c00; }
+.example-ratings .avatar-1 { background: linear-gradient(135deg, #e17055, #fab1a0); color: #3a1208; }
+.example-ratings .avatar-2 { background: linear-gradient(135deg, #00b894, #55efc4); color: #00352a; }

@@ -1,0 +1,67 @@
+/* Events example ("Flamingo"). Every rule is scoped under .example-events. */
+.example-events {
+  --background: #fff5f9;
+  --foreground: #2d1b26;
+  --card: #ffffff;
+  --card-foreground: #2d1b26;
+  --popover: #ffffff;
+  --popover-foreground: #2d1b26;
+  --primary: #c2185b;
+  --primary-foreground: #ffffff;
+  --secondary: #fde4ef;
+  --secondary-foreground: #6b1d43;
+  --muted: #fbeaf2;
+  --muted-foreground: #85445f;
+  --accent: #ffd6e8;
+  --accent-foreground: #5c1238;
+  --destructive: #c0392b;
+  --border: #f6d3e3;
+  --input: #d99bb8;
+  --ring: #e84393;
+  --chart-1: #e84393;
+  --chart-2: #fd79a8;
+  --chart-3: #a0306e;
+  --chart-4: #ffb8d2;
+  --chart-5: #6c2b52;
+}
+
+.ns-dark .example-events,
+.dark .example-events {
+  --background: #1a0f15;
+  --foreground: #fde9f2;
+  --card: #24151d;
+  --card-foreground: #fde9f2;
+  --popover: #24151d;
+  --popover-foreground: #fde9f2;
+  --primary: #fd79a8;
+  --primary-foreground: #2a0a1a;
+  --secondary: #3a1f2d;
+  --secondary-foreground: #fde9f2;
+  --muted: #2e1a24;
+  --muted-foreground: #d3a5bb;
+  --accent: #4a2236;
+  --accent-foreground: #fde9f2;
+  --destructive: #ff7a7a;
+  --border: #3f2532;
+  --input: #6b4257;
+  --ring: #fd79a8;
+  --chart-1: #fd79a8;
+  --chart-2: #e84393;
+  --chart-3: #ffb8d2;
+  --chart-4: #c2185b;
+  --chart-5: #fde9f2;
+}
+
+.example-events .hero { background: linear-gradient(135deg, #c2185b, #e84393 50%, #fd79a8); }
+.ns-dark .example-events .hero,
+.dark .example-events .hero { background: linear-gradient(135deg, #6c1a43, #b0306e 55%, #e84393); }
+.example-events .hero-ink { color: #ffffff; }
+.example-events .hero-soft { color: rgba(255, 255, 255, 0.85); }
+.example-events .hero-stat { background-color: rgba(255, 255, 255, 0.18); }
+
+.example-events .date-badge { background: linear-gradient(160deg, #fd79a8, #e84393); background: linear-gradient(160deg, var(--chart-2), var(--chart-1)); }
+.ns-dark .example-events .date-badge,
+.dark .example-events .date-badge { background: linear-gradient(160deg, #e84393, #a0306e); background: linear-gradient(160deg, var(--chart-2), var(--chart-4)); }
+.example-events .date-ink { color: #ffffff; line-height: 1; }
+
+.example-events .footer-text strong { color: var(--chart-2); font-weight: 700; }

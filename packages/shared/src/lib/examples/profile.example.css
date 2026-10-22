@@ -1,0 +1,100 @@
+/*
+ * Profile example, theme "Ocean". Every rule is scoped under .example-profile.
+ * Gradients name literal colors first: MasonKit may not resolve var() inside gradient stops, and the second
+ * declaration replaces the first wherever it does.
+ */
+.example-profile {
+  --background: #f3f8fe;
+  --foreground: #0c2a4a;
+  --card: #ffffff;
+  --card-foreground: #0c2a4a;
+  --popover: #ffffff;
+  --popover-foreground: #0c2a4a;
+  --primary: #0a6dc2;
+  --primary-foreground: #ffffff;
+  --secondary: #e3f0fd;
+  --secondary-foreground: #0c2a4a;
+  --muted: #e3f0fd;
+  --muted-foreground: #4e6a88;
+  --accent: #d6e9fc;
+  --accent-foreground: #0c2a4a;
+  --destructive: #c62828;
+  --border: #dbe9f8;
+  --input: #a9c9ec;
+  --ring: #0984e3;
+  --chart-1: #0984e3;
+  --chart-2: #74b9ff;
+  --chart-3: #6c5ce7;
+  --chart-4: #e84393;
+  --chart-5: #00b894;
+  --cover-from: #0652a8;
+  --cover-mid: #0984e3;
+  --cover-to: #74b9ff;
+}
+
+.ns-dark .example-profile,
+.dark .example-profile {
+  --background: #0a1422;
+  --foreground: #e3f0fd;
+  --card: #111f33;
+  --card-foreground: #e3f0fd;
+  --popover: #111f33;
+  --popover-foreground: #e3f0fd;
+  --primary: #74b9ff;
+  --primary-foreground: #06182c;
+  --secondary: #172a44;
+  --secondary-foreground: #e3f0fd;
+  --muted: #172a44;
+  --muted-foreground: #9db6d3;
+  --accent: #1b3352;
+  --accent-foreground: #e3f0fd;
+  --destructive: #ff8a80;
+  --border: #1e3350;
+  --input: #34507a;
+  --ring: #74b9ff;
+  --chart-1: #74b9ff;
+  --chart-2: #0984e3;
+  --chart-3: #a29bfe;
+  --chart-4: #fd79a8;
+  --chart-5: #55efc4;
+  --cover-from: #062a57;
+  --cover-mid: #0652a8;
+  --cover-to: #0984e3;
+}
+
+.example-profile .cover {
+  background: linear-gradient(135deg, #0652a8, #0984e3 45%, #74b9ff);
+  background: linear-gradient(135deg, var(--cover-from), var(--cover-mid) 45%, var(--cover-to));
+}
+.ns-dark .example-profile .cover,
+.dark .example-profile .cover {
+  background: linear-gradient(135deg, #062a57, #0652a8 45%, #0984e3);
+  background: linear-gradient(135deg, var(--cover-from), var(--cover-mid) 45%, var(--cover-to));
+}
+.example-profile .cover-tag { color: #0a6dc2; color: var(--primary); background-color: #ffffff; background-color: var(--card); }
+
+.example-profile .avatar-fallback {
+  color: #ffffff;
+  background: linear-gradient(135deg, #74b9ff, #0984e3 60%, #6c5ce7);
+  background: linear-gradient(135deg, var(--chart-2), var(--chart-1) 60%, var(--chart-3));
+}
+.ns-dark .example-profile .avatar-fallback,
+.dark .example-profile .avatar-fallback {
+  background: linear-gradient(135deg, #0984e3, #0652a8 60%, #6c5ce7);
+}
+
+.example-profile .copy { line-height: 1.45; }
+
+.example-profile .tab { border-color: rgba(9, 132, 227, 0); }
+.example-profile .tab.active { color: #0a6dc2; color: var(--primary); border-color: #0a6dc2; border-color: var(--primary); }
+
+.example-profile .tone-violet { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+.example-profile .tone-ocean { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+.example-profile .tone-night { background: linear-gradient(135deg, #1a1a2e, #4b4b7a); }
+.example-profile .tone-mint { background: linear-gradient(135deg, #00b894, #55efc4); }
+.example-profile .tone-pink { background: linear-gradient(135deg, #e84393, #fd79a8); }
+.example-profile .tone-sun { background: linear-gradient(135deg, #e1a800, #fdcb6e); }
+.example-profile .post-glyph { color: rgba(255, 255, 255, 0.9); }
+.example-profile .post-title { color: #ffffff; }
+.example-profile .like { color: #ffffff; background-color: rgba(0, 0, 0, 0.22); }
+.example-profile .like.liked { color: #e84393; background-color: #ffffff; }

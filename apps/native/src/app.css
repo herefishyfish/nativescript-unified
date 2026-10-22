@@ -5,6 +5,7 @@
 @import '../../../packages/ui/styles/tokens.css';
 @import '../../../packages/ui/native/native-overrides.css';
 @import '@nativescript-unified/analog-native/markdown.css';
+@import '../../../packages/shared/src/lib/examples/examples.css';
 
 /* Tailwind only scans the app by default; the shared HTML and helm variant functions carry classes too. */
 @source '../../../packages/shared/src';
@@ -63,7 +64,6 @@ Scroll {
 }
 
 guide-list,
-home-tab,
 ui-demo-body {
   height: 100%;
   display: flex;
@@ -150,10 +150,24 @@ a {
   background-color: transparent;
 }
 
-.markdown blockquote,
-.ns-dark .markdown blockquote {
+.markdown .md-blockquote,
+.ns-dark .markdown .md-blockquote {
   color: var(--muted-foreground); background-color: var(--card); border-left: 4 solid var(--border);
 }
+
+/* Callouts on the cream/teal theme: note follows --primary, as the web docs' --callout-note does. */
+.markdown .md-callout-note { border-color: #27695f; background-color: rgba(39, 105, 95, 0.1); }
+.markdown .md-callout-note .md-callout-title { color: #27695f; }
+.markdown .md-callout-tip { border-color: #2f8a52; background-color: rgba(47, 138, 82, 0.1); }
+.markdown .md-callout-tip .md-callout-title { color: #2f8a52; }
+.markdown .md-callout-warning { border-color: #a86f0e; background-color: rgba(201, 138, 27, 0.12); }
+.markdown .md-callout-warning .md-callout-title { color: #a86f0e; }
+.ns-dark .markdown .md-callout-note { border-color: #5ea396; background-color: rgba(94, 163, 150, 0.15); }
+.ns-dark .markdown .md-callout-note .md-callout-title { color: #5ea396; }
+.ns-dark .markdown .md-callout-tip { border-color: #5cc184; background-color: rgba(92, 193, 132, 0.15); }
+.ns-dark .markdown .md-callout-tip .md-callout-title { color: #5cc184; }
+.ns-dark .markdown .md-callout-warning { border-color: #e0a640; background-color: rgba(224, 166, 64, 0.15); }
+.ns-dark .markdown .md-callout-warning .md-callout-title { color: #e0a640; }
 
 .markdown hr,
 .ns-dark .markdown hr {
@@ -250,16 +264,22 @@ Tabs {
   background-color: var(--background);
 }
 
-.code-scroll {
-  background-color: var(--background);
+/* Code and Styles tabs (demo-code-tabs): lines keep their breaks and the box scrolls sideways. */
+.source-code {
+  overflow-x: auto;
+  background-color: var(--card);
 }
 
-.code-block {
+.source-code pre {
+  margin: 0;
+  padding: 16;
   font-family: monospace;
   font-size: 12;
-  padding: 12;
   color: var(--foreground);
-  background-color: var(--card);
+}
+
+.source-code code {
+  white-space: pre;
 }
 
 .tab-icon {
@@ -277,4 +297,9 @@ Tabs {
 strong,
 b {
   font-weight: bold;
+}
+
+/* Native-only gallery tile (pages/examples/overlays.page.ts). Shared tiles are styled in packages/shared examples.css. */
+.example-tile-overlays {
+  background: linear-gradient(135deg, #1f6f66, #3fa796);
 }

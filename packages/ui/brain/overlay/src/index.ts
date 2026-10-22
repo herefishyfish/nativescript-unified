@@ -6,6 +6,7 @@ import { BrnOverlayTrigger } from './lib/brn-overlay-trigger';
 export * from './lib/brn-overlay';
 export * from './lib/brn-overlay-close';
 export * from './lib/brn-overlay-content';
+export * from './lib/brn-overlay-host';
 export * from './lib/brn-overlay-options';
 export * from './lib/brn-overlay-ref';
 export * from './lib/brn-overlay-state';

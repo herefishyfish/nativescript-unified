@@ -1,4 +1,5 @@
 import { Directive, forwardRef, input, linkedSignal } from '@angular/core';
+import type { BrnOverlayPlacement } from '@spartan-ng/brain/core';
 import { BrnDialog } from '@spartan-ng/brain/dialog';
 
 @Directive({
@@ -16,16 +17,7 @@ export class BrnSheet extends BrnDialog {
 	public readonly side = input<'top' | 'bottom' | 'left' | 'right'>('top');
 	public readonly sideState = linkedSignal(this.side);
 
-	protected override getPositionStrategy() {
-		switch (this.sideState()) {
-			case 'bottom':
-				return this._positionBuilder.global().bottom();
-			case 'left':
-				return this._positionBuilder.global().left();
-			case 'right':
-				return this._positionBuilder.global().right();
-			case 'top':
-				return this._positionBuilder.global().top();
-		}
+	protected override getPlacement(): BrnOverlayPlacement {
+		return { kind: 'edge', side: this.sideState() };
 	}
 }

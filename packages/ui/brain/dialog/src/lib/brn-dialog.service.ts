@@ -1,15 +1,10 @@
-import { Dialog, DIALOG_DATA } from '@angular/cdk/dialog';
-import {
-	type ComponentType,
-	FlexibleConnectedPositionStrategy,
-	OverlayOutsideClickDispatcher,
-	OverlayPositionBuilder,
-	type OverlayRef,
-	ScrollStrategyOptions,
-} from '@angular/cdk/overlay';
+import { DIALOG_DATA } from '@angular/cdk/dialog';
+import type { ComponentType } from '@angular/cdk/overlay';
 import type { TemplateRef, ViewContainerRef } from '@angular/core';
-import { ElementRef, inject, Injectable, type InjectOptions, Injector, type StaticProvider } from '@angular/core';
-import { filter, takeUntil } from 'rxjs/operators';
+import { inject, Injectable, type InjectOptions, Injector, type StaticProvider } from '@angular/core';
+import { cssClassesToArray, resolveOverlayPlacement } from '@spartan-ng/brain/core';
+import { takeUntil } from 'rxjs/operators';
+import { BrnDialogHost } from './brn-dialog-host';
 import type { BrnDialogOptions } from './brn-dialog-options';
 import { BrnDialogRef } from './brn-dialog-ref';
 import { injectBrnDialogDefaultOptions } from './brn-dialog-token';
@@ -23,12 +18,10 @@ export const injectBrnDialogContext = <DialogContext = unknown>(options: InjectO
 
 @Injectable({ providedIn: 'root' })
 export class BrnDialogService {
-	private readonly _overlayCloseDispatcher = inject(OverlayOutsideClickDispatcher);
-	private readonly _cdkDialog = inject(Dialog);
-	private readonly _positionBuilder = inject(OverlayPositionBuilder);
-	private readonly _scrollStrategies = inject(ScrollStrategyOptions);
+	private readonly _host = inject(BrnDialogHost);
 	private readonly _injector = inject(Injector);
 	private readonly _defaultOptions = injectBrnDialogDefaultOptions();
+	private readonly _openDialogIds = new Set<string>();
 
 	public open<DialogContext, DialogResult = unknown>(
 		content: ComponentType<unknown> | TemplateRef<unknown>,
@@ -43,22 +36,9 @@ export class BrnDialogService {
 			id: options?.id ?? `brn-dialog-${dialogId}`,
 		};
 
-		if (this._cdkDialog.getDialogById(mergedOptions.id)) {
+		if (this._openDialogIds.has(mergedOptions.id)) {
 			throw new Error(`Dialog with ID: ${mergedOptions.id} already exists`);
 		}
-
-		const positionStrategy =
-			mergedOptions.positionStrategy ??
-			(mergedOptions.attachTo && mergedOptions.attachPositions.length
-				? this._positionBuilder.flexibleConnectedTo(mergedOptions.attachTo).withPositions(mergedOptions.attachPositions)
-				: this._positionBuilder.global().centerHorizontally().centerVertically());
-
-		const scrollStrategy =
-			mergedOptions.scrollStrategy === 'close'
-				? this._scrollStrategies.close()
-				: mergedOptions.scrollStrategy === 'reposition'
-					? this._scrollStrategies.reposition()
-					: (mergedOptions.scrollStrategy ?? this._scrollStrategies.block());
 
 		let brnDialogRef!: BrnDialogRef<DialogResult>;
 		const contextOrData: BrnDialogContext<DialogContext> = {
@@ -66,92 +46,56 @@ export class BrnDialogService {
 			close: (result: unknown = undefined) => brnDialogRef.close(result as DialogResult),
 		};
 
-		const cdkDialogRef = this._cdkDialog.open<DialogResult, BrnDialogContext<DialogContext>, unknown>(content, {
+		const surface = this._host.open({
 			id: mergedOptions.id,
-			role: mergedOptions.role,
+			content,
 			viewContainerRef: vcr,
-			templateContext: () => ({ $implicit: contextOrData }),
-			data: contextOrData,
-			direction: mergedOptions.direction,
+			context: contextOrData,
+			providers: (surface) => {
+				brnDialogRef = new BrnDialogRef(surface, this._injector, dialogId, mergedOptions);
+				return this._createProviders(brnDialogRef, contextOrData, mergedOptions);
+			},
+			placement: resolveOverlayPlacement(mergedOptions),
 			hasBackdrop: mergedOptions.hasBackdrop,
-			panelClass: mergedOptions.panelClass,
-			backdropClass: mergedOptions.backdropClass,
-			positionStrategy,
-			scrollStrategy,
-			restoreFocus: mergedOptions.restoreFocus,
-			disableClose: true,
-			autoFocus: mergedOptions.autoFocus,
-			ariaDescribedBy: mergedOptions.ariaDescribedBy,
+			panelClass: cssClassesToArray(mergedOptions.panelClass),
+			backdropClass: cssClassesToArray(mergedOptions.backdropClass),
+			direction: mergedOptions.direction,
+			closeOnOutsidePointerEvents: mergedOptions.closeOnOutsidePointerEvents,
+			disableClose: mergedOptions.disableClose,
+			positionStrategy: mergedOptions.positionStrategy,
+			scrollStrategy: mergedOptions.scrollStrategy,
+			role: mergedOptions.role,
+			ariaLabel: mergedOptions.ariaLabel,
 			ariaLabelledBy:
 				mergedOptions.ariaLabelledBy === undefined ? `brn-dialog-title-${dialogId}` : mergedOptions.ariaLabelledBy,
-			ariaLabel: mergedOptions.ariaLabel,
+			ariaDescribedBy: mergedOptions.ariaDescribedBy,
 			ariaModal: mergedOptions.ariaModal,
-			providers: (dialogRef) => {
-				brnDialogRef = new BrnDialogRef(dialogRef, this._injector, dialogId, mergedOptions);
-				return this._createProviders(brnDialogRef, mergedOptions);
-			},
+			autoFocus: mergedOptions.autoFocus,
+			restoreFocus: mergedOptions.restoreFocus,
 		});
 
-		this._connectDismissalEvents(brnDialogRef, cdkDialogRef.overlayRef);
+		this._openDialogIds.add(mergedOptions.id);
+		const closed$ = brnDialogRef.closed$;
+		closed$.subscribe(() => this._openDialogIds.delete(mergedOptions.id));
+		surface.dismissals.pipe(takeUntil(closed$)).subscribe((dismissal) => {
+			if (brnDialogRef.dismiss(dismissal.reason)) dismissal.accept();
+		});
+		surface.detached.pipe(takeUntil(closed$)).subscribe(() => brnDialogRef.forceClose());
 		return brnDialogRef;
 	}
 
-	private _createProviders<Result>(dialogRef: BrnDialogRef<Result>, options: BrnDialogOptions): StaticProvider[] {
-		const providers: StaticProvider[] = [{ provide: BrnDialogRef, useValue: dialogRef }];
+	private _createProviders<Result, Context>(
+		dialogRef: BrnDialogRef<Result>,
+		context: BrnDialogContext<Context>,
+		options: BrnDialogOptions,
+	): StaticProvider[] {
+		const providers: StaticProvider[] = [
+			{ provide: BrnDialogRef, useValue: dialogRef },
+			{ provide: DIALOG_DATA, useValue: context },
+		];
 		if (options.providers) {
 			providers.push(...(typeof options.providers === 'function' ? options.providers() : options.providers));
 		}
 		return providers;
-	}
-
-	private _connectDismissalEvents<Result>(dialogRef: BrnDialogRef<Result>, overlayRef: OverlayRef): void {
-		const closed$ = dialogRef.closed$;
-
-		overlayRef
-			.outsidePointerEvents()
-			.pipe(takeUntil(closed$))
-			.subscribe(() => {
-				if (this._isTopmostOutsideTarget(overlayRef)) dialogRef.dismiss('outside');
-			});
-
-		overlayRef
-			.backdropClick()
-			.pipe(takeUntil(closed$))
-			.subscribe(() => dialogRef.dismiss('backdrop'));
-
-		overlayRef
-			.keydownEvents()
-			.pipe(
-				filter((event) => event.key === 'Escape'),
-				takeUntil(closed$),
-			)
-			.subscribe((event) => {
-				if (this._overlayCloseDispatcher._attachedOverlays.at(-1) !== overlayRef) return;
-				if (dialogRef.dismiss('escape')) event.preventDefault();
-			});
-	}
-
-	private _isTopmostOutsideTarget(overlayRef: OverlayRef): boolean {
-		const overlays = this._overlayCloseDispatcher._attachedOverlays;
-		const index = overlays.indexOf(overlayRef);
-		return index === overlays.length - 1 || (overlays.length > 1 && !this._isNested(overlayRef, overlays.at(-1)!));
-	}
-
-	private _isNested(parent: OverlayRef, child: OverlayRef): boolean {
-		const childOrigin = (child.getConfig().positionStrategy as FlexibleConnectedPositionStrategy)._origin;
-		if (!childOrigin) return false;
-
-		if ('x' in childOrigin && 'y' in childOrigin) {
-			const rect = parent.hostElement.getBoundingClientRect();
-			return (
-				childOrigin.x >= rect.left &&
-				childOrigin.x <= rect.right &&
-				childOrigin.y >= rect.top &&
-				childOrigin.y <= rect.bottom
-			);
-		}
-
-		const element = childOrigin instanceof ElementRef ? childOrigin.nativeElement : childOrigin;
-		return typeof Node !== 'undefined' && element instanceof Node ? parent.hostElement.contains(element) : false;
 	}
 }

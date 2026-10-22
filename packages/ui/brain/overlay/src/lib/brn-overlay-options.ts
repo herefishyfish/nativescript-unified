@@ -6,6 +6,7 @@ import type {
 	ScrollStrategy,
 } from '@angular/cdk/overlay';
 import type { StaticProvider } from '@angular/core';
+import type { BrnOverlayPlacement } from '@spartan-ng/brain/core';
 
 export type BrnOverlayOptions = {
 	attachPositions: ConnectedPosition[];
@@ -19,8 +20,12 @@ export type BrnOverlayOptions = {
 	hasBackdrop: boolean;
 	id: string;
 	panelClass: string | string[];
+	/** Where the overlay sits. Defaults to anchored at `attachTo` when it has `attachPositions`, else centered. */
+	placement?: BrnOverlayPlacement;
+	/** Web only: replaces the CDK position strategy derived from `placement`. */
 	positionStrategy: PositionStrategy | null | undefined;
 	providers?: StaticProvider[] | (() => StaticProvider[]);
 	role: string | null;
+	/** Web only. */
 	scrollStrategy: ScrollStrategy | 'close' | 'reposition' | null | undefined;
 };

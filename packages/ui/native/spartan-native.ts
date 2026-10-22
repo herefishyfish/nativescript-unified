@@ -10,6 +10,9 @@ import { registerElement } from '@nativescript/angular';
 import { CSSType } from '@nativescript/core';
 import { masonMeta } from '@triniwiz/nativescript-masonkit/angular';
 import { Div, Span } from '@triniwiz/nativescript-masonkit/web';
+import { BrnDialogHost } from '@spartan-ng/brain/dialog';
+import { BrnOverlayHost } from '@spartan-ng/brain/overlay';
+import { NativeScriptOverlayHost } from './ui/overlay-host';
 
 /**
  * CDK reads `isBrowser` from PLATFORM_ID, which NativeScript reports as 'browser', and then reaches for `window`
@@ -35,6 +38,9 @@ function nativePlatform(): Platform {
 export function provideSpartanNativeScript(): EnvironmentProviders {
 	return makeEnvironmentProviders([
 		{ provide: Platform, useFactory: nativePlatform },
+		// CDK Dialog and Overlay build their panes under document.body, which NativeScript does not have.
+		{ provide: BrnDialogHost, useExisting: NativeScriptOverlayHost },
+		{ provide: BrnOverlayHost, useExisting: NativeScriptOverlayHost },
 		provideEnvironmentInitializer(() => {
 			// brain looks labels up with document.querySelector; NativeScript's DOCUMENT has no queries.
 			const document = inject(DOCUMENT) as Partial<Document>;

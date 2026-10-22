@@ -31,4 +31,4 @@ description: A panel that slides in from an edge of the screen.
 `hlm-sheet-content` shows a close button unless `showCloseButton` is false. Escape also closes it.
 ## Native
 
-Nothing on native uses the sheet yet, so this is planned. `apps/native` imports only `HlmButton`, `HlmBadge` and the card parts.
+A sheet with `side="bottom"` opens in a native bottom sheet. You can drag it down to close it. Native platforms have no side panel window, so the other sides open in a centered native modal. The Android back button closes the sheet in both cases.

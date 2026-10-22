@@ -1,6 +1,7 @@
 import { type NumberInput } from '@angular/cdk/coercion';
 import { type ConnectedPosition } from '@angular/cdk/overlay';
 import { Directive, forwardRef, input, numberAttribute } from '@angular/core';
+import type { BrnOverlayPlacement } from '@spartan-ng/brain/core';
 import { BrnOverlay, type BrnOverlayDefaultOptions, provideBrnOverlayDefaultOptions } from '@spartan-ng/brain/overlay';
 import {
 	BRN_POPOVER_OVERLAY_DEFAULT_OPTIONS,
@@ -66,11 +67,11 @@ export class BrnPopover extends BrnOverlay {
 		return opposite ? [...positionsFor(align), ...positionsFor(opposite)] : positionsFor(align);
 	}
 
-	protected override getPositionStrategy() {
-		const attachTo = this.getAttachTo();
-		if (!attachTo) return super.getPositionStrategy();
+	protected override getPlacement(): BrnOverlayPlacement | undefined {
+		const origin = this.getAttachTo();
+		if (!origin) return undefined;
 		// Push stays off, as #955 established: recomputing it on every scroll is what pinned
 		// overlays to the viewport in #943. Falling back to another anchor needs no push.
-		return this._positionBuilder.flexibleConnectedTo(attachTo).withPositions(this.getAttachPositions()).withPush(false);
+		return { kind: 'anchored', origin, positions: this.getAttachPositions(), push: false };
 	}
 }

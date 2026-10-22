@@ -1,6 +1,5 @@
 import { Directionality } from '@angular/cdk/bidi';
 import type { BooleanInput } from '@angular/cdk/coercion';
-import { OverlayPositionBuilder, type ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import {
 	afterNextRender,
 	booleanAttribute,
@@ -19,6 +18,7 @@ import {
 	ViewContainerRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import type { BrnOverlayPlacement } from '@spartan-ng/brain/core';
 import type { BrnDialogOptions } from './brn-dialog-options';
 import type { BrnDialogRef } from './brn-dialog-ref';
 import type { BrnDialogState } from './brn-dialog-state';
@@ -42,8 +42,6 @@ export class BrnDialog<TResult = unknown, TContext extends Record<string, unknow
 	private readonly _dialogService = inject(BrnDialogService);
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _vcr = inject(ViewContainerRef);
-	protected readonly _positionBuilder = inject(OverlayPositionBuilder);
-	private readonly _scrollStrategies = inject(ScrollStrategyOptions);
 	private readonly _injector = inject(Injector);
 	private readonly _directionality = inject(Directionality);
 	protected readonly _defaultOptions = injectBrnDialogDefaultOptions();
@@ -107,8 +105,9 @@ export class BrnDialog<TResult = unknown, TContext extends Record<string, unknow
 		role: this.role(),
 		direction: this._directionality.valueSignal(),
 		hasBackdrop: this.hasBackdrop(),
-		positionStrategy: this.getPositionStrategy(),
-		scrollStrategy: this.getScrollStrategy(),
+		positionStrategy: this.positionStrategy(),
+		placement: this.getPlacement(),
+		scrollStrategy: this.scrollStrategy(),
 		restoreFocus: this.restoreFocus(),
 		closeOnOutsidePointerEvents: this.closeOnOutsidePointerEvents(),
 		attachTo: this.getAttachTo(),
@@ -208,15 +207,9 @@ export class BrnDialog<TResult = unknown, TContext extends Record<string, unknow
 		return this.attachTo() ?? this._origin();
 	}
 
-	protected getPositionStrategy(): BrnDialogOptions['positionStrategy'] {
-		return this.positionStrategy();
-	}
-
-	private getScrollStrategy(): ScrollStrategy | null | undefined {
-		const strategy = this.scrollStrategy();
-		if (strategy === 'close') return this._scrollStrategies.close();
-		if (strategy === 'reposition') return this._scrollStrategies.reposition();
-		return strategy;
+	/** Where the dialog sits; `undefined` derives it from `attachTo`. */
+	protected getPlacement(): BrnOverlayPlacement | undefined {
+		return undefined;
 	}
 
 	private _syncPanelClass(): void {

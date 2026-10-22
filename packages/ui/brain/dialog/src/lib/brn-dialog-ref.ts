@@ -1,6 +1,5 @@
-import type { DialogRef } from '@angular/cdk/dialog';
 import { afterNextRender, computed, type Injector, signal } from '@angular/core';
-import { getActiveElementAnimations, waitForAnimations } from '@spartan-ng/brain/core';
+import type { BrnOverlaySurface } from '@spartan-ng/brain/core';
 import { type Observable, ReplaySubject, Subject } from 'rxjs';
 import type { BrnDialogOptions } from './brn-dialog-options';
 import type { BrnDialogDismissReason, BrnDialogPhase, BrnDialogState } from './brn-dialog-state';
@@ -21,8 +20,6 @@ export class BrnDialogRef<DialogResult = unknown> {
 	public readonly state = computed<BrnDialogState>(() => (this._phase() === 'open' ? 'open' : 'closed'));
 
 	private _closeGeneration = 0;
-	private _panelClasses: string[];
-	private _backdropClasses: string[];
 	private readonly _descriptionIds = new Set<string>();
 
 	public get open(): boolean {
@@ -34,39 +31,29 @@ export class BrnDialogRef<DialogResult = unknown> {
 	}
 
 	constructor(
-		private readonly _cdkDialogRef: DialogRef<DialogResult>,
+		private readonly _surface: BrnOverlaySurface,
 		private readonly _injector: Injector,
 		public readonly dialogId: number,
 		private readonly initialOptions: BrnDialogOptions,
 	) {
-		this._panelClasses = cssClassesToArray(initialOptions.panelClass);
-		this._backdropClasses = cssClassesToArray(initialOptions.backdropClass);
-		this._setDataState('open');
+		this._surface.setState('open');
 		this._stateChanged.next('open');
-
-		this._cdkDialogRef.closed.subscribe((result) => {
-			this._phase.set('closed');
-			this._closed.next(result);
-			this._closed.complete();
-			this._closing.complete();
-			this._stateChanged.complete();
-		});
 	}
 
 	public close(result?: DialogResult): void {
 		if (!this.open) return;
 
 		const generation = ++this._closeGeneration;
-		const animationsBeforeClose = new Set(this._getActiveAnimations());
+		const finishExit = this._surface.prepareExit();
 
 		this._phase.set('closing');
-		this._setDataState('closed');
+		this._surface.setState('closed');
 		this._closing.next();
 		this._stateChanged.next('closed');
 
 		afterNextRender(
 			() => {
-				void this._finishClose(generation, animationsBeforeClose, result);
+				void this._finishClose(generation, finishExit, result);
 			},
 			{ injector: this._injector },
 		);
@@ -88,7 +75,7 @@ export class BrnDialogRef<DialogResult = unknown> {
 
 		this._closeGeneration++;
 		this._phase.set('open');
-		this._setDataState('open');
+		this._surface.setState('open');
 		this._stateChanged.next('open');
 	}
 
@@ -96,27 +83,19 @@ export class BrnDialogRef<DialogResult = unknown> {
 		if (this._phase() === 'closed') return;
 
 		this._closeGeneration++;
-		this._phase.set('closed');
-		this._cdkDialogRef.close(result);
+		this._dispose(result);
 	}
 
 	public setPanelClass(panelClass: string | string[] | null | undefined): void {
-		if (this._panelClasses.length) this._cdkDialogRef.removePanelClass(this._panelClasses);
-		this._panelClasses = cssClassesToArray(panelClass);
-		if (this._panelClasses.length) this._cdkDialogRef.addPanelClass(this._panelClasses);
+		this._surface.setPanelClass(cssClassesToArray(panelClass));
 	}
 
 	public setOverlayClass(overlayClass: string | string[] | null | undefined): void {
-		const backdrop = this._cdkDialogRef.overlayRef.backdropElement;
-		if (!backdrop) return;
-
-		backdrop.classList.remove(...this._backdropClasses);
-		this._backdropClasses = cssClassesToArray(overlayClass);
-		backdrop.classList.add(...this._backdropClasses);
+		this._surface.setBackdropClass(cssClassesToArray(overlayClass));
 	}
 
 	public updatePosition(): void {
-		this._cdkDialogRef.updatePosition();
+		this._surface.updatePosition();
 	}
 
 	public registerDescription(id: string): void {
@@ -131,45 +110,29 @@ export class BrnDialogRef<DialogResult = unknown> {
 
 	private _syncAriaDescribedBy(): void {
 		if (this.initialOptions.ariaDescribedBy !== undefined) return;
-
-		const id = this._descriptionIds.size ? [...this._descriptionIds].join(' ') : undefined;
-		this._cdkDialogRef.config.ariaDescribedBy = id;
-		const container = this._cdkDialogRef.overlayRef.overlayElement.querySelector('cdk-dialog-container');
-		if (id) container?.setAttribute('aria-describedby', id);
-		else container?.removeAttribute('aria-describedby');
+		this._surface.setAriaDescribedBy(this._descriptionIds.size ? [...this._descriptionIds].join(' ') : undefined);
 	}
 
 	private async _finishClose(
 		generation: number,
-		animationsBeforeClose: ReadonlySet<Animation>,
+		finishExit: () => Promise<void>,
 		result?: DialogResult,
 	): Promise<void> {
 		if (generation !== this._closeGeneration || this._phase() !== 'closing') return;
 
-		const exitAnimations = this._getActiveAnimations().filter((animation) => !animationsBeforeClose.has(animation));
-		// Pin each exit animation to its final frame. tw-animate-css uses `animation-fill-mode: none`,
-		// so a finished exit reverts the element to its visible state in the gap before we dispose it -
-		// that one-frame snap-back is the flicker. updateTiming pins only the animations we await.
-		for (const animation of exitAnimations) {
-			animation.effect?.updateTiming({ fill: 'forwards' });
-		}
-		await waitForAnimations(exitAnimations);
+		await finishExit();
 
 		if (generation === this._closeGeneration && this._phase() === 'closing') {
-			this._phase.set('closed');
-			this._cdkDialogRef.close(result);
+			this._dispose(result);
 		}
 	}
 
-	private _getActiveAnimations(): Animation[] {
-		return getActiveElementAnimations([
-			this._cdkDialogRef.overlayRef.overlayElement,
-			this._cdkDialogRef.overlayRef.backdropElement,
-		]);
-	}
-
-	private _setDataState(state: BrnDialogState): void {
-		this._cdkDialogRef.overlayRef.overlayElement.setAttribute('data-state', state);
-		this._cdkDialogRef.overlayRef.backdropElement?.setAttribute('data-state', state);
+	private _dispose(result?: DialogResult): void {
+		this._phase.set('closed');
+		this._surface.dispose(result);
+		this._closed.next(result);
+		this._closed.complete();
+		this._closing.complete();
+		this._stateChanged.complete();
 	}
 }

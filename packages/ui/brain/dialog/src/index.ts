@@ -10,6 +10,7 @@ export * from './lib/brn-dialog';
 export * from './lib/brn-dialog-close';
 export * from './lib/brn-dialog-content';
 export * from './lib/brn-dialog-description';
+export * from './lib/brn-dialog-host';
 export * from './lib/brn-dialog-options';
 export * from './lib/brn-dialog-overlay';
 export * from './lib/brn-dialog-ref';

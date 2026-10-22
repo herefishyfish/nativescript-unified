@@ -30,4 +30,4 @@ The popover overlay gets ole="dialog" from the brain popover, and helm has no i
 
 ## Native
 
-Nothing on native uses the popover yet, so this is planned. `apps/native` imports only `HlmButton`, `HlmBadge` and the card parts.
+The popover opens in a native popover window from `@nativescript-community/ui-popover`, anchored to its trigger. `align` and `sideOffset` set where the window sits. A tap outside or the Android back button closes it. Select, combobox, autocomplete and date picker use the same anchored window.

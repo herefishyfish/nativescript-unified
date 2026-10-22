@@ -1,3 +1,4 @@
+export * from './helpers/cdk-overlay-strategies';
 export * from './helpers/computed-previous';
 export * from './helpers/create-hover-observable';
 export * from './helpers/css-classes-to-array';
@@ -9,6 +10,7 @@ export * from './helpers/exposes-state';
 export * from './helpers/inject-content-dimensions';
 export * from './helpers/inject-element-size';
 export * from './helpers/menu-align';
+export * from './helpers/overlay-host';
 export * from './helpers/resolve-value-label';
 export * from './helpers/skip-delay';
 export * from './helpers/table-classes-settable';

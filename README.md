@@ -44,7 +44,7 @@ Hex values are estimates, not sampled from the shoe.
 - `web-polyfills`: `angular-docs` `origin/main` `packages/libraries/ui` only (layouts, views, text runs, Placeholder,
   ActionBar/Tabs/Pager/Drawer). Dropped: docs content, PLAN/RESEARCH/CONTENT-GAPS, playground, showcase catalog, brand, WebGPU hero, theme service.
 - `ui`: `spartan` working tree on `feat/nativescript` (libs/brain, libs/helm, registry `style-vega.css`).
-  `packages/ui/native/` holds Spartan's native-demo glue (shims, icon, overlays, overrides) as **reference only**, not compiled or wired in.
+  `packages/ui/native/` is the NativeScript side of spartan, wired into `apps/native` through `provideSpartanNativeScript()`. It holds the CDK shims, element registrations, the native overlay host behind brain's dialog and overlay ports, icons and CSS overrides.
 
 ## Known gaps / decisions
 

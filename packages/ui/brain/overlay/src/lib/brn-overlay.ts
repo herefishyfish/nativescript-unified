@@ -1,7 +1,5 @@
 import { Directionality } from '@angular/cdk/bidi';
 import type { BooleanInput } from '@angular/cdk/coercion';
-import { OverlayPositionBuilder, type ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
-import { DOCUMENT } from '@angular/common';
 import {
 	afterNextRender,
 	booleanAttribute,
@@ -20,7 +18,7 @@ import {
 	ViewContainerRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { cssClassesToArray } from '@spartan-ng/brain/core';
+import { type BrnOverlayPlacement, cssClassesToArray } from '@spartan-ng/brain/core';
 import type { BrnOverlayOptions } from './brn-overlay-options';
 import type { BrnOverlayRef } from './brn-overlay-ref';
 import type { BrnOverlayState } from './brn-overlay-state';
@@ -44,11 +42,8 @@ export class BrnOverlay<TResult = unknown, TContext extends Record<string, unkno
 	private readonly _overlayService = inject(BrnOverlayService);
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _vcr = inject(ViewContainerRef);
-	protected readonly _positionBuilder = inject(OverlayPositionBuilder);
-	private readonly _scrollStrategies = inject(ScrollStrategyOptions);
 	private readonly _injector = inject(Injector);
 	private readonly _directionality = inject(Directionality);
-	private readonly _document = inject(DOCUMENT);
 	protected readonly _defaultOptions = this.getDefaultOptions();
 
 	private readonly _overlayRef = signal<BrnOverlayRef<TResult> | undefined>(undefined);
@@ -97,8 +92,9 @@ export class BrnOverlay<TResult = unknown, TContext extends Record<string, unkno
 		role: this.role(),
 		direction: this._directionality.valueSignal(),
 		hasBackdrop: this.hasBackdrop(),
-		positionStrategy: this.getPositionStrategy(),
-		scrollStrategy: this.getScrollStrategy(),
+		positionStrategy: this.positionStrategy(),
+		placement: this.getPlacement(),
+		scrollStrategy: this.scrollStrategy(),
 		closeOnOutsidePointerEvents: this.closeOnOutsidePointerEvents(),
 		attachTo: this.getAttachTo(),
 		attachPositions: this.getAttachPositions(),
@@ -141,7 +137,6 @@ export class BrnOverlay<TResult = unknown, TContext extends Record<string, unkno
 			return;
 		}
 
-		const elementToRestoreFocusTo = this._document.activeElement;
 		const overlayRef = this._overlayService.open<TContext, TResult>(
 			this._content.template,
 			this._vcr,
@@ -156,7 +151,6 @@ export class BrnOverlay<TResult = unknown, TContext extends Record<string, unkno
 
 		overlayRef.closed$.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((result) => {
 			if (this._overlayRef() === overlayRef) this._overlayRef.set(undefined);
-			this._restoreFocus(elementToRestoreFocusTo);
 			if (!this._destroyed) this.closed.emit(result as TResult);
 		});
 	}
@@ -203,32 +197,9 @@ export class BrnOverlay<TResult = unknown, TContext extends Record<string, unkno
 		return this.attachPositions();
 	}
 
-	protected getPositionStrategy(): BrnOverlayOptions['positionStrategy'] {
-		return this.positionStrategy();
-	}
-
-	private getScrollStrategy(): ScrollStrategy | null | undefined {
-		const strategy = this.scrollStrategy();
-		if (strategy === 'close') return this._scrollStrategies.close();
-		if (strategy === 'reposition') return this._scrollStrategies.reposition();
-		return strategy;
-	}
-
-	private _restoreFocus(element: Element | null): void {
-		const HTMLElementCtor = this._document.defaultView?.HTMLElement;
-		if (
-			!HTMLElementCtor ||
-			!(element instanceof HTMLElementCtor) ||
-			element === this._document.body ||
-			!element.isConnected
-		) {
-			return;
-		}
-
-		const activeElement = this._document.activeElement;
-		const shouldRestoreFocus = activeElement === this._document.body || !activeElement || !activeElement.isConnected;
-
-		if (shouldRestoreFocus) element.focus({ preventScroll: true });
+	/** Where the overlay sits; `undefined` derives it from `attachTo` and `attachPositions`. */
+	protected getPlacement(): BrnOverlayPlacement | undefined {
+		return undefined;
 	}
 
 	private _syncPanelClass(): void {

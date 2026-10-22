@@ -100,4 +100,4 @@ Smaller helm components that render on the web in this workspace.
 ```
 ## Native
 
-Nothing on native uses these components yet, so this is planned. `apps/native` imports only `HlmButton`, `HlmBadge` and the card parts.
+The alert dialog opens in a native modal window, like the [Dialog](/docs/ui-dialog). A tap outside does not close it. The Android back button does. The other components on this page render inline, so they need no native window.

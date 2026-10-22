@@ -30,6 +30,24 @@ export async function waitForAnimations(animations: readonly Animation[]): Promi
 }
 
 /**
+ * Snapshots the animations running on `elements` now. The returned function waits for the ones started since,
+ * pinned to their final frame: tw-animate-css uses `animation-fill-mode: none`, so a finished exit would revert the
+ * element to its visible state in the gap before it is disposed (a one-frame flicker).
+ */
+export function captureExitAnimations(
+	elements: () => readonly (HTMLElement | null | undefined)[],
+): () => Promise<void> {
+	const before = new Set(getActiveElementAnimations(elements()));
+	return async () => {
+		const exitAnimations = getActiveElementAnimations(elements()).filter((animation) => !before.has(animation));
+		for (const animation of exitAnimations) {
+			animation.effect?.updateTiming({ fill: 'forwards' });
+		}
+		await waitForAnimations(exitAnimations);
+	};
+}
+
+/**
  * Waits for active animations, including subtree animations, within the given element to finish.
  */
 export async function waitForElementAnimations(element: HTMLElement): Promise<void> {

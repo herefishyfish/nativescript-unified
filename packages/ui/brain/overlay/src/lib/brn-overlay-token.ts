@@ -1,7 +1,7 @@
 import { inject, InjectionToken, type ValueProvider } from '@angular/core';
 import type { BrnOverlayOptions } from './brn-overlay-options';
 
-export type BrnOverlayDefaultOptions = Omit<BrnOverlayOptions, 'direction' | 'id' | 'providers'>;
+export type BrnOverlayDefaultOptions = Omit<BrnOverlayOptions, 'direction' | 'id' | 'placement' | 'providers'>;
 
 const createDefaultOptions = (): BrnOverlayDefaultOptions => ({
 	attachPositions: [],

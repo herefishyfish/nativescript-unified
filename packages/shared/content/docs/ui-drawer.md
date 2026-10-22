@@ -28,4 +28,4 @@ description: A drawer that opens from the bottom edge by default, with a handle.
 Use the [Sheet](/docs/ui-sheet) for a side panel with a close button, and the drawer for a bottom panel with a drag handle.
 ## Native
 
-Nothing on native uses the drawer yet, so this is planned. `apps/native` imports only `HlmButton`, `HlmBadge` and the card parts.
+The default bottom drawer opens in a native bottom sheet from `@nativescript-community/ui-material-bottomsheet`. You can drag it down, tap the dimmed page or press the Android back button to close it. Drawers in other directions open in a centered native modal.

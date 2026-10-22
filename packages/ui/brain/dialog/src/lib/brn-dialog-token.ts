@@ -1,7 +1,7 @@
 import { inject, InjectionToken, type ValueProvider } from '@angular/core';
 import type { BrnDialogOptions } from './brn-dialog-options';
 
-export type BrnDialogDefaultOptions = Omit<BrnDialogOptions, 'direction' | 'id' | 'providers'>;
+export type BrnDialogDefaultOptions = Omit<BrnDialogOptions, 'direction' | 'id' | 'placement' | 'providers'>;
 
 export const defaultOptions: BrnDialogDefaultOptions = {
 	ariaDescribedBy: undefined,

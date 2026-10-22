@@ -33,4 +33,9 @@ The dialog is built on the brain dialog and the Angular CDK overlay. It closes w
 
 ## Native
 
-Nothing on native uses the dialog yet, so this is planned. `packages/ui/native/ui/overlays.ts` contains native modal and sheet glue for overlays, but no native page exercises helm's dialog.
+The same markup opens a native modal window. The window holds the helm content, styled by the same classes. `provideSpartanNativeScript()` swaps the CDK dialog for the NativeScript overlay host, so the app needs no other setup.
+
+- The Android back button closes the dialog, unless `disableClose` is set.
+- A tap outside closes it when `closeOnOutsidePointerEvents` is on, which is the default.
+- `closed` and `HlmDialogService.open()` return the result as on the web.
+- The native window dims the page, so helm's overlay element is not drawn.

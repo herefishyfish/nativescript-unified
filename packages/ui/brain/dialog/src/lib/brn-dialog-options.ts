@@ -7,6 +7,7 @@ import type {
 	ScrollStrategy,
 } from '@angular/cdk/overlay';
 import type { StaticProvider } from '@angular/core';
+import type { BrnOverlayPlacement } from '@spartan-ng/brain/core';
 
 export type BrnDialogOptions = {
 	ariaDescribedBy: string | null | undefined;
@@ -23,9 +24,13 @@ export type BrnDialogOptions = {
 	hasBackdrop: boolean;
 	id: string;
 	panelClass: string | string[];
+	/** Where the overlay sits. Defaults to anchored at `attachTo` when it has `attachPositions`, else centered. */
+	placement?: BrnOverlayPlacement;
+	/** Web only: replaces the CDK position strategy derived from `placement`. */
 	positionStrategy: PositionStrategy | null | undefined;
 	providers?: StaticProvider[] | (() => StaticProvider[]);
 	restoreFocus: RestoreFocusValue;
 	role: 'dialog' | 'alertdialog';
+	/** Web only. */
 	scrollStrategy: ScrollStrategy | 'close' | 'reposition' | null | undefined;
 };

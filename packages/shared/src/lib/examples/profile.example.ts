@@ -13,7 +13,6 @@ import {
   lucideUser,
   lucideUserPlus,
 } from '@ng-icons/lucide';
-import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -65,7 +64,7 @@ const POST_COUNT = 248;
 /** A social profile: cover, avatar, follow button, stats and a tabbed grid of posts that can be liked. */
 @Component({
   selector: 'example-profile',
-  imports: [NgIcon, HlmAvatarImports, HlmBadge, HlmButton, HlmCardImports, HlmSeparator],
+  imports: [NgIcon, HlmBadge, HlmButton, HlmCardImports, HlmSeparator],
   providers: [
     provideIcons({
       lucideBadgeCheck,
@@ -91,11 +90,9 @@ const POST_COUNT = 248;
 
       <div class="flex flex-col gap-4 px-4">
         <div class="flex flex-row items-end justify-between -mt-12">
-          <hlm-avatar size="lg" class="w-28 h-28 rounded-full">
-            <div hlmAvatarFallback class="avatar-fallback w-28 h-28 rounded-full border-4 border-background">
-              <span class="text-4xl font-extrabold">AR</span>
-            </div>
-          </hlm-avatar>
+          <div class="avatar-fallback flex shrink-0 items-center justify-center w-28 h-28 rounded-full border-4 border-background">
+            <span class="text-4xl font-extrabold">AR</span>
+          </div>
           <div class="flex flex-row gap-2 pb-2">
             <button hlmBtn variant="outline" size="icon-lg" class="w-11 h-11 rounded-full" aria-label="Message">
               <ng-icon name="lucideMessageCircle" size="18" />

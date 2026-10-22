@@ -13,7 +13,6 @@ import {
   lucideTrash2,
   lucideTriangleAlert,
 } from '@ng-icons/lucide';
-import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
 import { HlmBadge } from '@spartan-ng/helm/badge';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -57,7 +56,7 @@ const VISIBILITY: readonly { readonly id: Visibility; readonly label: string }[]
 /** Grouped settings with text fields, switches and a segmented control. Edits stay a draft until saved. */
 @Component({
   selector: 'example-settings',
-  imports: [NgIcon, HlmAvatarImports, HlmBadge, HlmButton, HlmCardImports, HlmInput, HlmSeparator, HlmSwitchImports],
+  imports: [NgIcon, HlmBadge, HlmButton, HlmCardImports, HlmInput, HlmSeparator, HlmSwitchImports],
   providers: [
     provideIcons({
       lucideBell,
@@ -78,11 +77,9 @@ const VISIBILITY: readonly { readonly id: Visibility; readonly label: string }[]
   template: `
     <div class="example-settings flex flex-col gap-6 p-4 pb-10 bg-background text-foreground">
       <div class="hero flex flex-row items-center gap-4 p-5 rounded-3xl">
-        <hlm-avatar size="lg" class="w-16 h-16 rounded-2xl">
-          <div hlmAvatarFallback class="avatar-fallback w-16 h-16 rounded-2xl">
-            <span class="text-2xl font-extrabold">{{ initials() }}</span>
-          </div>
-        </hlm-avatar>
+        <div class="avatar-fallback flex shrink-0 items-center justify-center w-16 h-16 rounded-2xl">
+          <span class="text-2xl font-extrabold">{{ initials() }}</span>
+        </div>
         <div class="flex flex-col flex-1 gap-1">
           <span class="on-hero text-xl font-extrabold">{{ draft().name || 'Your name' }}</span>
           <span class="on-hero-soft text-sm">{{ draft().email }}</span>
@@ -106,7 +103,7 @@ const VISIBILITY: readonly { readonly id: Visibility; readonly label: string }[]
 
       <div class="flex flex-col gap-2">
         <span class="text-xs font-bold uppercase px-1 text-muted-foreground">Preferences</span>
-        <div hlmCard class="flex flex-col gap-0 py-0 rounded-2xl border border-border ring-0">
+        <div class="flex flex-col rounded-2xl border border-border bg-card text-card-foreground">
           @for (pref of prefs; track pref.key; let first = $first) {
             @if (!first) {
               <div hlmSeparator class="h-px w-full"></div>
@@ -149,7 +146,7 @@ const VISIBILITY: readonly { readonly id: Visibility; readonly label: string }[]
 
       <div class="flex flex-col gap-2">
         <span class="text-xs font-bold uppercase px-1 text-muted-foreground">About</span>
-        <div hlmCard class="flex flex-col gap-0 py-0 rounded-2xl border border-border ring-0">
+        <div class="flex flex-col rounded-2xl border border-border bg-card text-card-foreground">
           <div class="flex flex-row items-center gap-3 p-4">
             <div class="icon-tile tone-blue flex items-center justify-center w-9 h-9 rounded-xl">
               <ng-icon name="lucideGlobe" size="18" />

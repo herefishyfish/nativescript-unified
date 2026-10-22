@@ -10,6 +10,7 @@ import { SignInExample } from './sign-in.example';
 import { MusicPlayerExample } from './music-player.example';
 import { ArticleExample } from './article.example';
 import { ChartsExample } from './charts.example';
+import { ChartGalleryExample } from './chart-gallery.example';
 import pricingCode from './pricing.example.ts?raw';
 import pricingStyles from './pricing.example.css?raw';
 import checkoutCode from './checkout.example.ts?raw';
@@ -32,6 +33,8 @@ import articleCode from './article.example.ts?raw';
 import articleStyles from './article.example.css?raw';
 import chartsCode from './charts.example.ts?raw';
 import chartsStyles from './charts.example.css?raw';
+import chartGalleryCode from './chart-gallery.example.ts?raw';
+import chartGalleryStyles from './chart-gallery.example.css?raw';
 
 /**
  * One example screen. HTML, Tailwind and helm only, so web and native both render it.
@@ -60,6 +63,7 @@ export const EXAMPLES: readonly Example[] = [
   { slug: 'music-player', title: 'Music player', blurb: 'Album art, a progress bar and transport controls.', icon: 'music', component: MusicPlayerExample, source: { code: musicPlayerCode, styles: musicPlayerStyles } },
   { slug: 'article', title: 'Article', blurb: 'A reader page with byline, hero and pull quote.', icon: 'newspaper', component: ArticleExample, source: { code: articleCode, styles: articleStyles } },
   { slug: 'charts', title: 'Charts', blurb: 'TanStack bar and line charts with tooltips and a range toggle.', icon: 'chart-line', component: ChartsExample, source: { code: chartsCode, styles: chartsStyles } },
+  { slug: 'chart-gallery', title: 'Chart gallery', blurb: 'Sparklines, stacked area, grouped bars, ranked bars and a scatter plot.', icon: 'chart-scatter', component: ChartGalleryExample, source: { code: chartGalleryCode, styles: chartGalleryStyles } },
 ];
 
 export function findExample(slug: string): Example | undefined {

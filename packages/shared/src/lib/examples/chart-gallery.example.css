@@ -1,0 +1,80 @@
+/*
+ * Chart gallery example, theme "Orchid". Every rule is scoped under .example-chart-gallery.
+ * The charts read --chart-1 ... --chart-5 through Spartan's chart helm, so the palette below recolors every mark,
+ * the legends and the tooltips. Gradients name literal colors first: MasonKit may not resolve var() inside gradient
+ * stops, and the second declaration replaces the first wherever it does.
+ */
+.example-chart-gallery {
+  --background: #faf7ff;
+  --foreground: #241339;
+  --card: #ffffff;
+  --card-foreground: #241339;
+  --popover: #ffffff;
+  --popover-foreground: #241339;
+  --primary: #6d28d9;
+  --primary-foreground: #ffffff;
+  --secondary: #f1eafd;
+  --secondary-foreground: #241339;
+  --muted: #f1eafd;
+  --muted-foreground: #6b5b80;
+  --accent: #ebe1fc;
+  --accent-foreground: #241339;
+  --destructive: #be123c;
+  --border: #e6dcf7;
+  --input: #cfbdf0;
+  --ring: #8b5cf6;
+  --chart-1: #7c3aed;
+  --chart-2: #db2777;
+  --chart-3: #f59e0b;
+  --chart-4: #0ea5e9;
+  --chart-5: #10b981;
+  --hero-from: #6d28d9;
+  --hero-to: #db2777;
+  --hero-foreground: #ffffff;
+  --positive: #047857;
+}
+
+.ns-dark .example-chart-gallery,
+.dark .example-chart-gallery {
+  --background: #120a1f;
+  --foreground: #efe7fc;
+  --card: #1c122d;
+  --card-foreground: #efe7fc;
+  --popover: #1c122d;
+  --popover-foreground: #efe7fc;
+  --primary: #c4b5fd;
+  --primary-foreground: #120a1f;
+  --secondary: #2a1d42;
+  --secondary-foreground: #efe7fc;
+  --muted: #2a1d42;
+  --muted-foreground: #a898c2;
+  --accent: #33244f;
+  --accent-foreground: #efe7fc;
+  --destructive: #fb7185;
+  --border: #33244f;
+  --input: #4a3870;
+  --ring: #c4b5fd;
+  --chart-1: #a78bfa;
+  --chart-2: #f472b6;
+  --chart-3: #fbbf24;
+  --chart-4: #38bdf8;
+  --chart-5: #34d399;
+  --hero-from: #4c1d95;
+  --hero-to: #9d174d;
+  --hero-foreground: #ffffff;
+  --positive: #6ee7b7;
+}
+
+.example-chart-gallery .hero {
+  background: linear-gradient(135deg, #6d28d9, #db2777);
+  background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+}
+.ns-dark .example-chart-gallery .hero,
+.dark .example-chart-gallery .hero { background: linear-gradient(135deg, #4c1d95, #9d174d); background: linear-gradient(135deg, var(--hero-from), var(--hero-to)); }
+.example-chart-gallery .on-hero { color: #ffffff; color: var(--hero-foreground); }
+.example-chart-gallery .on-hero-soft { color: rgba(255, 255, 255, 0.85); }
+.example-chart-gallery .delta { color: var(--positive); }
+
+.example-chart-gallery .layout-track { background-color: var(--muted); }
+.example-chart-gallery .layout-option { color: var(--muted-foreground); background-color: rgba(255, 255, 255, 0); }
+.example-chart-gallery .layout-option.active { color: var(--primary-foreground); background-color: var(--primary); }

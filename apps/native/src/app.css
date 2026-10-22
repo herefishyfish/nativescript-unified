@@ -239,9 +239,50 @@ a {
   padding: 16;
 }
 
-.live-demo-code {
+.live-demo pre {
   margin: 0;
   padding: 12 16;
+}
+
+/*
+ * Code token colors on theme tokens, the web docs' mapping (apps/web/src/styles.css). Runs are flat
+ * spans carrying their outer types too (`token tag attr-value punctuation`), so punctuation and
+ * comments come last to win as the web's innermost span does.
+ */
+.md-code .token.tag,
+.md-code .token.keyword,
+.ns-dark .md-code .token.tag,
+.ns-dark .md-code .token.keyword {
+  color: var(--primary);
+}
+
+.md-code .token.attr-name {
+  color: var(--chart-5);
+}
+
+.md-code .token.attr-value,
+.md-code .token.string {
+  color: var(--chart-2);
+}
+
+.ns-dark .md-code .token.attr-name {
+  color: var(--chart-3);
+}
+
+.ns-dark .md-code .token.attr-value,
+.ns-dark .md-code .token.string {
+  color: var(--chart-4);
+}
+
+.md-code .token.comment,
+.md-code .token.punctuation,
+.ns-dark .md-code .token.comment,
+.ns-dark .md-code .token.punctuation {
+  color: var(--muted-foreground);
+}
+
+.md-code .token.comment {
+  font-style: italic;
 }
 
 

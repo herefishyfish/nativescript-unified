@@ -138,3 +138,27 @@
 .ns-dark .markdown .md-table,
 .ns-dark .markdown .md-th,
 .ns-dark .markdown .md-td { border-color: #30363d; }
+
+/*
+ * Syntax highlighting (<analog-code>, also outside .markdown): Prism's token classes, as the web
+ * docs use them. Every run is its own span, and MasonKit collapses a text container's leading and
+ * trailing spaces unless the span itself keeps them.
+ */
+.md-code code,
+.md-code code span { white-space: pre; }
+
+.md-code .token.tag { color: #116329; }
+.md-code .token.keyword { color: #cf222e; }
+.md-code .token.attr-name { color: #0550ae; }
+.md-code .token.attr-value,
+.md-code .token.string { color: #0a3069; }
+.md-code .token.comment { color: #59636e; font-style: italic; }
+.md-code .token.punctuation { color: #59636e; }
+
+.ns-dark .md-code .token.tag { color: #7ee787; }
+.ns-dark .md-code .token.keyword { color: #ff7b72; }
+.ns-dark .md-code .token.attr-name { color: #79c0ff; }
+.ns-dark .md-code .token.attr-value,
+.ns-dark .md-code .token.string { color: #a5d6ff; }
+.ns-dark .md-code .token.comment,
+.ns-dark .md-code .token.punctuation { color: #8b949e; }

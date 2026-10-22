@@ -2,7 +2,7 @@
 title: Installation
 section: Getting started
 order: 2
-description: Install the workspace, run the web docs, and what is known about running native.
+description: Install the workspace, run the web docs, and run the native app on Android.
 ---
 
 # Installation
@@ -49,7 +49,11 @@ npx nx run native:android
 
 This runs `ns run android --no-hmr` with the `arm64-v8a` and `x86_64` ABIs. The other native targets are `debug-android`, `build-android` and `clean`.
 
-The native app has only been type-checked in this workspace. It has not been built or run on a device or emulator, so treat the command above as unverified. There is no `native:ios` target in `apps/native/project.json` yet, even though the root `package.json` has an `ios` script that names one. iOS is planned.
+This command builds the app and runs it on an Android emulator. It was checked on an emulator with API 36 (x86_64).
+
+If you call `ns` yourself from PowerShell, quote the Gradle argument: `ns build android '--gradleArgs=-Pabis=arm64-v8a,x86_64'`. Without the quotes, PowerShell splits the value at the comma, and the APK ships without its native libraries. On Windows, a `before-prepare` hook (`apps/native/tools/gradle-env.mjs`) clears `NoDefaultCurrentDirectoryInExePath` so the CLI can run `gradlew.bat`.
+
+There is no `native:ios` target in `apps/native/project.json` yet, even though the root `package.json` has an `ios` script that names one. iOS has not been built in this workspace.
 
 ## What you should see
 

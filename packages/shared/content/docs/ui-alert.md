@@ -26,4 +26,4 @@ There is also an `hlmAlertAction` part for a trailing action.
 
 ## Native
 
-Nothing on native uses the alert yet, so this is planned.
+The alert works on native. On the Android emulator (API 36), both variants render with their title, description and border, in light and dark. iOS has not been run.

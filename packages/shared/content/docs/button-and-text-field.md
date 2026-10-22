@@ -25,7 +25,7 @@ In an HTML-first app you use the HTML elements for those two. On the web this si
 </StackLayout>
 ```
 
-Whether MasonKit on a device renders `<button>` and `<input>` has not been checked in this workspace yet, so treat native form controls as open work.
+On a device, MasonKit renders `<button>` and `<input>` as native views. On an Android emulator (API 36), `button hlmBtn` and `input hlmInput` render, taps fire `(click)`, and the input takes typed text. See [Button](/docs/ui-button) and [Form controls](/docs/ui-form-controls) for the gaps that remain. iOS has not been run.
 
 ## HtmlView and ContentView
 

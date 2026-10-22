@@ -9,7 +9,7 @@ description: Short answers, each checked against the workspace.
 
 ## Does the native app run on a device?
 
-It has been type-checked with `tsc` only. It has not been built or run on a device or emulator in this workspace. See [Installation](/docs/installation).
+It runs on Android. The app was built and run on an Android emulator (API 36), and it renders these docs pages with their live demos. iOS has not been built yet. See [Installation](/docs/installation) and [Web vs native](/docs/web-vs-native).
 
 ## Why are web and native separate apps?
 

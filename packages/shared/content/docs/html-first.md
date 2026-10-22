@@ -56,4 +56,4 @@ If you are coming from NativeScript tags, this is the HTML-first replacement for
 Pages that use only plain elements and token classes can live in `packages/shared` and render in both apps. See [Writing shared HTML features](/docs/shared-features). Anything that needs a platform API stays in `apps/web` or `apps/native`. See [Web vs native](/docs/web-vs-native).
 
 > [!NOTE]
-> The Tailwind classes and helm components on this site are verified on the web. `apps/native` has `@nativescript/tailwind` and imports the same tokens, and its `/ui` page renders a helm card, buttons and badges. That page has been type-checked and bundled, and has not been confirmed on a device in these docs.
+> The Tailwind classes and helm components on this site are verified on the web. `apps/native` uses `@nativescript/tailwind` and the same tokens. On an Android emulator (API 36), the native app renders these docs pages and their live demos. Each component page ends with a Native note that says what works there. iOS has not been run. See [Web vs native](/docs/web-vs-native) for the known native limitations.

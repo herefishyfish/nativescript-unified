@@ -56,4 +56,4 @@ On web, import the component in a page and use its selector. On native, do the s
 
 ## Tailwind on native
 
-`apps/native` lists `@nativescript/tailwind` and `tailwindcss`, and its `app.css` imports Tailwind and the shared tokens, so the same classes are meant to style native. That has been bundled, not confirmed on a device in these docs.
+`apps/native` lists `@nativescript/tailwind` and `tailwindcss`, and its `app.css` imports Tailwind and the shared tokens, so the same classes style native. This was checked on an Android emulator (API 36). Two gaps remain. Opacity-modified token colours such as `bg-destructive/10` keep the plain light token colour, and helm's own rules can override a utility you put on a helm host. See [Web vs native](/docs/web-vs-native).

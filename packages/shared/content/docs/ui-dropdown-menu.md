@@ -33,7 +33,7 @@ The same markup opens the platform menu: a Material 3 popup menu on Android and 
 These results were checked on the Android emulator, in light and dark:
 
 - The menu opens below its trigger with the theme's card surface.
-- Profile, the Status bar checkbox and Log out reach the page. The checkbox shows its checked state, the disabled item is grey and ignores taps, and the destructive item is red.
+- In the overlays example, Profile, the Status bar checkbox and Log out reach the page. The checkbox shows its checked state, the disabled item is grey and ignores taps, and the destructive item is red.
 - The Android back button closes the menu.
 
-The native menu does not show submenus, labels, separators or shortcuts yet. Items with a submenu are left out. iOS has not been run on a device.
+The native menu does not show submenus, labels or separators yet. Items with a submenu are left out. A shortcut's text is joined to its item's label, so the demo above shows `Profile Ctrl P`. iOS has not been run on a device.

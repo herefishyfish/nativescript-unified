@@ -25,7 +25,7 @@ An AnalogJS app. File routes live in `src/app/pages`. The web core is `src/app/a
 
 ## apps/native
 
-A NativeScript Angular app built with `@nativescript/vite`. File routes live in `src/app/pages`, provided by `analog-native`. It has its own bootstrap in `src/main.ts`, which calls `installMasonKit()` and `provideFileRouter()`. Today it is verified with `tsc` only. See [Web vs native](/docs/web-vs-native).
+A NativeScript Angular app built with `@nativescript/vite`. File routes live in `src/app/pages`, provided by `analog-native`. It has its own bootstrap in `src/main.ts`, which calls `installMasonKit()` and `provideFileRouter()`. It builds and runs on an Android emulator (API 36). iOS has not been built. See [Web vs native](/docs/web-vs-native).
 
 ## packages/shared
 

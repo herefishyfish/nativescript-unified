@@ -29,4 +29,6 @@ The parts are `hlmCard`, `hlmCardHeader`, `hlmCardTitle`, `hlmCardDescription`, 
 
 ## Native
 
-`apps/native/src/app/pages/ui.page.ts` uses `hlmCard`, `hlmCardHeader`, `hlmCardTitle`, `hlmCardDescription` and `hlmCardContent`. That page type-checks and bundles. It has not been confirmed on a device in these docs.
+The card works on native. On the Android emulator (API 36), the header, title, description, content and footer render with their padding in light and dark, and the footer buttons respond to taps. iOS has not been run.
+
+The card has no visible edge, because its ring and shadow are not drawn. It blends into a background of the same colour. Utilities such as `gap-*` or `p-*` on `hlmCard` have no effect, because helm's own rules win. See [Known native limitations](/docs/web-vs-native).

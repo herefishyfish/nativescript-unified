@@ -2,14 +2,14 @@
 title: Components overview
 section: Components
 order: 20
-description: Spartan helm components with live examples, on the web today and on native as it lands.
+description: Spartan helm components with live examples, and how each one runs on native.
 ---
 
 # Components
 
 These pages show the Spartan **helm** components that live in `packages/ui/helm`. They are the forward way to build UI in this project: plain HTML elements and attributes, styled with Tailwind classes and the shared theme tokens.
 
-Every example is a real Angular template. The code in the Code tab is the code that renders in the Preview tab, compiled in your browser against the helm components from this workspace.
+Every example is a real Angular template. The code in the Code tab is the code that renders in the Preview tab, compiled at run time against the helm components from this workspace. That happens in your browser on the web, and on the device in the native app.
 
 ## How helm works
 
@@ -51,11 +51,19 @@ Variants, such as `variant="outline"`, are inputs on the directive. Colours come
 
 ## Native availability
 
-Each page ends with a Native note. It says what the code shows today. The short version: the native app (`apps/native`) imports `HlmButton`, `HlmBadge` and the card parts on its `/ui` page, and `packages/ui/native` carries the glue helm needs on NativeScript. That page has been type-checked and bundled. It has not been confirmed on a device in these docs, and everything else is marked planned.
+The native app renders these pages too, and compiles each demo on the device against the same helm components. Each page ends with a Native note that says what was seen on an Android emulator (API 36), in light and dark. iOS has not been run.
+
+| Status on Android | Pages |
+| --- | --- |
+| Works | [Button](/docs/ui-button), [Badge](/docs/ui-badge), [Card](/docs/ui-card), [Form controls](/docs/ui-form-controls), [Tabs](/docs/ui-tabs), [Dialog](/docs/ui-dialog), [Alert](/docs/ui-alert), [Popover](/docs/ui-popover), [Dropdown menu](/docs/ui-dropdown-menu), [Drawer](/docs/ui-drawer) |
+| Renders with large gaps | [Table](/docs/ui-table), [Calendar](/docs/ui-calendar), progress and skeleton on [Progress, skeleton, avatar and separator](/docs/ui-feedback) |
+| Broken | [Accordion](/docs/ui-accordion), [Select](/docs/ui-select), [Slider](/docs/ui-slider), [Tooltip](/docs/ui-tooltip), and the hover card and native select on [More components](/docs/ui-more) |
+
+Pages that work can still have small visual gaps, which their Native notes list. The [Sheet](/docs/ui-sheet) page has its own note. For limits that affect every component, see [Web vs native](/docs/web-vs-native).
 
 ## Imports in your own code
 
-In an app, import from the helm entry point for each component. This is the import used by `apps/native/src/app/pages/ui.page.ts`:
+In an app, import from the helm entry point for each component:
 
 ```ts
 import { HlmButton } from '@spartan-ng/helm/button';

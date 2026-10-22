@@ -62,4 +62,10 @@ description: Input, label, textarea, checkbox, switch and radio group.
 
 ## Native
 
-Nothing on native uses these yet, so treat them as planned. The text-input elements need MasonKit support that has not been checked in this workspace. See [Polyfill limitations](/docs/polyfill-limitations) and [Web vs native](/docs/web-vs-native).
+These controls work on native. On the Android emulator (API 36), in light and dark:
+
+- The input and the textarea take typed text and show their placeholders. The textarea has no inner padding, so its text touches the border.
+- The checkbox and the switch toggle, and the demo text follows `checked()`.
+- The radio group selects an item when you tap its circle. A tap on the item's text does not select it.
+
+iOS has not been run.

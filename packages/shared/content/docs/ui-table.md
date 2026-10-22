@@ -33,4 +33,4 @@ The table parts are attributes on the real table elements: `hlmTable`, `hlmTHead
 ```
 ## Native
 
-Nothing on native uses the table yet, so this is planned. `apps/native` imports only `HlmButton`, `HlmBadge` and the card parts.
+The table renders on native, but not as a table. On the Android emulator (API 36), in light and dark, the caption and every cell appear, and the row borders draw. The cells of each row stack vertically instead of sitting side by side. MasonKit has no table layout. iOS has not been run.

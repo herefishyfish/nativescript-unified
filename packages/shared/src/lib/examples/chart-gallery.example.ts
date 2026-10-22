@@ -62,7 +62,10 @@ const REVIEWS: readonly Review[] = [
   { name: 'Kids watch', category: 'Wearables', price: 59, rating: 3.8, sold: 330 },
 ];
 
-const AVERAGE_RATING = Math.round((REVIEWS.reduce((sum, review) => sum + review.rating, 0) / REVIEWS.length) * 10) / 10;
+// toLocaleString('en-US') prints 1240, not 1,240, in the Android app, so group the digits by hand.
+const formatThousands = (value: number) => String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+const AVERAGE_RATING =Math.round((REVIEWS.reduce((sum, review) => sum + review.rating, 0) / REVIEWS.length) * 10) / 10;
 
 /**
  * A store dashboard built from TanStack marks: area and line sparklines with a gradient fill, a stacked area with a
@@ -90,7 +93,7 @@ const AVERAGE_RATING = Math.round((REVIEWS.reduce((sum, review) => sum + review.
               <span class="text-2xl font-extrabold">{{ kpi.value }}</span>
               <span class="delta text-xs font-bold">{{ kpi.delta }} vs last quarter</span>
             </div>
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
               <tanstack-chart hlmChart [options]="sparklines[$index]" />
             </div>
           </div>
@@ -216,7 +219,7 @@ export class ChartGalleryExample {
       {
         marks: [
           barX(PRODUCTS, { x: 'units', y: 'name', fill: 'var(--chart-1)', radius: 4 }),
-          decorative(text(PRODUCTS, { x: 'units', y: 'name', text: (product) => product.units.toLocaleString('en-US'), anchor: 'start', dx: 6, fontSize: 11, fontWeight: 600 })),
+          decorative(text(PRODUCTS, { x: 'units', y: 'name', text: (product) => formatThousands(product.units), anchor: 'start', dx: 6, fontSize: 11, fontWeight: 600 })),
         ],
         scales: {
           x: { scale: scaleLinear().domain([0, 1500]), grid: true },
@@ -224,7 +227,14 @@ export class ChartGalleryExample {
         },
         theme: HLM_CHART_THEME,
       },
-      { tooltip: hlmChartTooltip<Product, number, string>() },
+      {
+        tooltip: hlmChartTooltip<Product, number, string>({
+          items: [
+            { channel: 'y', label: 'Product' },
+            { channel: 'x', label: 'Units', text: (point) => formatThousands(point.xValue) },
+          ],
+        }),
+      },
     ),
     ariaLabel: 'Units sold per product',
     aspectRatio: 1.4,

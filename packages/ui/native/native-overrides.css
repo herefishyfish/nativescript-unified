@@ -22,7 +22,8 @@
 
 /* .spartan-dialog-content, .spartan-alert-dialog-content, .spartan-sheet-content, .spartan-drawer-content: on the web
    they sit in a CDK pane (fixed, edge-pinned, w-3/4 or h-full sheets) and slide or zoom in. On native they render
-   inside a native modal, bottom sheet or popover that places and animates them, so they fill that window instead. */
+   inside a native modal, bottom sheet, drawer slot or popover that places and animates them, so they fill that
+   window instead. */
 .style-vega .spartan-dialog-content,
 .style-vega .spartan-alert-dialog-content,
 .style-vega .spartan-sheet-content,
@@ -34,6 +35,15 @@
 	height: auto;
 	max-width: none;
 	max-height: none;
+}
+
+/* .spartan-sheet-content data-[side=left|right]:w-3/4 h-full: the drawer slot takes the sheet's width from the
+   screen, and the sheet fills the slot. */
+.style-vega .spartan-sheet-content[data-side='left'],
+.style-vega .spartan-sheet-content[data-side='right'] {
+	width: 100%;
+	max-width: none;
+	height: 100%;
 }
 
 .style-vega .spartan-popover-content {

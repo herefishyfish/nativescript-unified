@@ -1,6 +1,7 @@
 import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, NO_ERRORS_SCHEMA, TemplateRef, type Type } from '@angular/core';
 import type { Tokens } from 'marked';
+import { CodeBlockComponent } from './code-block.component';
 import { HrefDirective } from './href.directive';
 import { calloutOf } from './callout';
 import { MARKDOWN_LIVE_CODE_COMPONENT, segmentMarkdown } from './live-code';
@@ -50,7 +51,7 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
  */
 @Component({
   selector: 'analog-markdown, Markdown',
-  imports: [NgComponentOutlet, NgTemplateOutlet, HrefDirective],
+  imports: [NgComponentOutlet, NgTemplateOutlet, HrefDirective, CodeBlockComponent],
   schemas: [NO_ERRORS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'markdown' },
@@ -97,7 +98,7 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
         <ng-container *ngTemplateOutlet="render; context: { $implicit: c.tokens }" />
       </aside>
     </ng-template>
-    <ng-template #code let-t><div class="md-code"><pre><code>{{ t.text }}</code></pre></div></ng-template>
+    <ng-template #code let-t><analog-code [code]="t.text" [lang]="t.lang" /></ng-template>
     <ng-template #hr><hr /></ng-template>
     <ng-template #table let-t>
       <div class="md-table" [style.grid-template-columns]="'repeat(' + t.header.length + ', auto)'">

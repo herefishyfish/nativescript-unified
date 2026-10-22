@@ -103,6 +103,7 @@ Routed pages that show an `<ActionBar>` must import `ActionBarComponent` from `@
 | `injectContentFiles(filter?)` | `@nativescript-unified/analog-native` | `{ filename, slug, attributes }[]` for every file under `src/content`. |
 | `injectContent(options?)` | `@nativescript-unified/analog-native` | `Observable<ContentFile>`. Defaults to the `slug` param; `{ param, subdirectory }` or `{ customFilename }`. |
 | `MarkdownComponent` | `@nativescript-unified/analog-native` | `<analog-markdown [content]="file" />` renders a `ContentFile` or token array. |
+| `CodeBlockComponent` | `@nativescript-unified/analog-native` | `<analog-code [code]="source" lang="ts" />` renders highlighted code as `div.md-code > pre > code > span.token`. Markdown code blocks use it. |
 | `HrefDirective` | `@nativescript-unified/analog-native` | Import it where you write `<a href>`. App paths navigate with the router, URLs open the browser. |
 
 ```ts
@@ -125,6 +126,8 @@ export default class BlogPostPage {
 
 ## Styling
 
+
+Code blocks are syntax highlighted with Prism's tokenizer (html with Angular template syntax, ts, js, css, scss, json, bash, md; other languages render plain). Each token run is a flat `span` whose classes list its token types outermost first, such as `token tag attr-value punctuation`, the classes the web docs use. `markdown.css` colors `.md-code .token.tag`, `.keyword`, `.attr-name`, `.attr-value`, `.string`, `.comment` and `.punctuation`; keep punctuation and comment rules last when you override them, so they win over the outer types as a nested span would.
 Markdown renders as plain elements inside a host with class `markdown`: `h1`-`h6`, `p`, `ul`, `ol`, `li`, `div.md-blockquote` (and `aside.md-callout` for `> [!NOTE]` alerts), `div.md-code > pre > code` (the `div` scrolls sideways), `code`, `strong`, `em`, `del`, `a`, `hr`, `img`, and a CSS grid `div.md-table` of `span.md-th` and `span.md-td` cells. `markdown.css` styles them with selectors such as `.markdown h1`. Override any of them in your own CSS after the import. Use unitless lengths: in NativeScript `px` means physical pixels.
 
 ## Limitations

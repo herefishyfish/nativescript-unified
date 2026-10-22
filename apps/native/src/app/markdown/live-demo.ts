@@ -1,4 +1,5 @@
 import { NgComponentOutlet } from '@angular/common';
+import { CodeBlockComponent } from '@nativescript-unified/analog-native';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -133,7 +134,7 @@ function demoComponent(template: string): Type<unknown> {
  */
 @Component({
   selector: 'ns-live-demo',
-  imports: [NgComponentOutlet],
+  imports: [NgComponentOutlet, CodeBlockComponent],
   schemas: [NO_ERRORS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -148,7 +149,7 @@ function demoComponent(template: string): Type<unknown> {
         </div>
       </div>
       <div class="live-demo-pane" [class.live-demo-pane-hidden]="tab() !== 'code'">
-        <div class="md-code"><pre class="live-demo-code"><code>{{ code() }}</code></pre></div>
+        <analog-code [code]="code()" lang="html" />
       </div>
     </div>
   `,

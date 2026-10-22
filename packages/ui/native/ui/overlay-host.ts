@@ -12,7 +12,7 @@ import {
 	TemplateRef,
 	type ViewRef,
 } from '@angular/core';
-import type { ViewWithBottomSheetBase } from '@nativescript-community/ui-material-bottomsheet';
+import type { ViewWithBottomSheetBase } from '@nativescript-community/ui-bottomsheet';
 import { HorizontalPosition, showPopover, VerticalPosition } from '@nativescript-community/ui-popover';
 import { Application, Frame, View } from '@nativescript/core';
 import type { BrnOverlayDismissal, BrnOverlayPlacement, BrnOverlayRequest } from '@spartan-ng/brain/core';
@@ -168,8 +168,10 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 			dismissOnBackgroundTap: request.closeOnOutsidePointerEvents && !request.disableClose,
 			dismissOnDraggingDownSheet: !request.disableClose,
 			dismissOnBackButton: !request.disableClose,
-			skipCollapsedState: true,
+			// helm's drawer and sheet draw their own card and handle.
+			detents: ['content'],
 			transparent: true,
+			grabber: false,
 		});
 		return () => (root as ViewWithBottomSheetBase).closeBottomSheet();
 	}

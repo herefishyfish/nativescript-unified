@@ -245,10 +245,8 @@ a {
 }
 
 
-/* Native Material tabs (@nativescript-community/ui-material-tabs) on theme tokens. */
-TabStrip,
-.main-strip,
-.demo-code-strip {
+/* Native tabs (@nativescript-community/ui-bottom-navigation, ui-tabs) on theme tokens. */
+TabStrip {
   background-color: var(--card);
   selected-item-color: var(--primary);
   un-selected-item-color: var(--muted-foreground);
@@ -260,7 +258,8 @@ TabStripItem Label {
   font-weight: 600;
 }
 
-Tabs {
+Tabs,
+BottomNavigation {
   background-color: var(--background);
 }
 

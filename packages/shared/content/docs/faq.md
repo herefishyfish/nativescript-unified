@@ -29,7 +29,7 @@ A custom element name needs a hyphen, and `StackLayout` has none.
 
 ## Can I use `<Button>` or `<TextField>`?
 
-Not through the polyfills. Use HTML elements or Spartan. See [Button](/docs/ui-button), [Form controls](/docs/ui-form-controls) and [Button and TextField](/docs/button-and-text-field).
+Not through the polyfills. Use HTML elements or Spartan. On a device `<Button>` is MasonKit's button. NativeScript's core Button stays available as `<NButton>`. See [Button](/docs/ui-button), [Form controls](/docs/ui-form-controls) and [Button and TextField](/docs/button-and-text-field).
 
 ## Can a demo react to input?
 

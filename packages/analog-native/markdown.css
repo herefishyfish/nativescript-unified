@@ -64,13 +64,35 @@
 /* Links read as text in a sentence, even where an app backs `a` with a block element. */
 .markdown a { display: inline-block; }
 
-.markdown blockquote {
-  margin: 0;
+/* Quotes and callouts are block containers (div, aside), so their paragraphs keep inline code and links. */
+.markdown .md-blockquote {
+  display: flex;
+  flex-direction: column;
+  gap: 8;
   padding: 4 12;
   color: #59636e;
   border-left: 4 solid #d1d9e0;
   background-color: #f6f8fa;
 }
+
+/* GitHub-style alerts (> [!NOTE], [!TIP], [!WARNING]), styled like the web docs' callouts. */
+.markdown .md-callout {
+  display: flex;
+  flex-direction: column;
+  gap: 6;
+  padding: 12 16;
+  border-width: 1;
+  border-left-width: 4;
+  border-radius: 6;
+}
+
+.markdown .md-callout-title { font-size: 12; font-weight: bold; text-transform: uppercase; letter-spacing: 0.06; }
+.markdown .md-callout-note { border-color: #0969da; background-color: rgba(9, 105, 218, 0.08); }
+.markdown .md-callout-note .md-callout-title { color: #0969da; }
+.markdown .md-callout-tip { border-color: #1a7f37; background-color: rgba(26, 127, 55, 0.08); }
+.markdown .md-callout-tip .md-callout-title { color: #1a7f37; }
+.markdown .md-callout-warning { border-color: #9a6700; background-color: rgba(154, 103, 0, 0.1); }
+.markdown .md-callout-warning .md-callout-title { color: #9a6700; }
 
 .markdown hr { margin: 8 0; height: 1; border-width: 0; background-color: #d1d9e0; }
 
@@ -98,14 +120,20 @@
 .ns-dark .markdown { color: #e6edf3; }
 .ns-dark .markdown h2 { border-bottom-color: #30363d; }
 .ns-dark .markdown h6,
-.ns-dark .markdown blockquote { color: #8b949e; }
+.ns-dark .markdown .md-blockquote { color: #8b949e; }
 .ns-dark .markdown a { color: #4493f8; }
 .ns-dark .markdown code,
 .ns-dark .markdown .md-code,
-.ns-dark .markdown blockquote,
+.ns-dark .markdown .md-blockquote,
 .ns-dark .markdown .md-th { background-color: #161b22; }
 .ns-dark .markdown pre code { background-color: transparent; }
-.ns-dark .markdown blockquote { border-left: 4 solid #30363d; }
+.ns-dark .markdown .md-blockquote { border-left: 4 solid #30363d; }
+.ns-dark .markdown .md-callout-note { border-color: #4493f8; background-color: rgba(68, 147, 248, 0.15); }
+.ns-dark .markdown .md-callout-note .md-callout-title { color: #4493f8; }
+.ns-dark .markdown .md-callout-tip { border-color: #3fb950; background-color: rgba(63, 185, 80, 0.15); }
+.ns-dark .markdown .md-callout-tip .md-callout-title { color: #3fb950; }
+.ns-dark .markdown .md-callout-warning { border-color: #d29922; background-color: rgba(210, 153, 34, 0.15); }
+.ns-dark .markdown .md-callout-warning .md-callout-title { color: #d29922; }
 .ns-dark .markdown hr { background-color: #30363d; }
 .ns-dark .markdown .md-table,
 .ns-dark .markdown .md-th,

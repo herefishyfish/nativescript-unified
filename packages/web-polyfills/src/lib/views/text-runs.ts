@@ -9,9 +9,12 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 })
 export class NsFormattedString {}
 
-/** Web fallback for Span. Property `text`; style with `font-weight` and `color`. On device use Span or nSpan. */
+/**
+ * Web fallback for Span. Property `text`; style with `font-weight` and `color`. Also selected as `NSpan`, the tag
+ * core's Span keeps on device, where MasonKit owns `Span`.
+ */
 @Component({
-  selector: 'Span',
+  selector: 'Span, NSpan',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[style.font-weight]': 'fontWeight() || null',

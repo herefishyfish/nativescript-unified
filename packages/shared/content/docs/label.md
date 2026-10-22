@@ -20,14 +20,16 @@ description: Label, FormattedString and Span.
 
 ## FormattedString and Span
 
-`<FormattedString>` holds `<Span>` children, each with its own `text`. A span can set `font-weight` and `color`.
+`<FormattedString>` holds `<NSpan>` children, each with its own `text`. A span can set `font-weight` and `color`.
+
+On a device MasonKit owns the `span` and `Span` tags, so NativeScript's own Span is `<NSpan>` (and its Button is `<NButton>`). The web polyfill answers to both `Span` and `NSpan`.
 
 ```html live
 <Label>
   <FormattedString>
-    <Span text="Bold " font-weight="700"></Span>
-    <Span text="and teal " color="var(--primary)"></Span>
-    <Span text="and plain."></Span>
+    <NSpan text="Bold " font-weight="700"></NSpan>
+    <NSpan text="and teal " color="var(--primary)"></NSpan>
+    <NSpan text="and plain."></NSpan>
   </FormattedString>
 </Label>
 ```
@@ -36,7 +38,7 @@ In the HTML-first design you can also write ordinary text elements (`<p>`, `<str
 
 ## HTML-first equivalent
 
-Write ordinary text elements. `<Label text="...">` is a `<p>` or `<span>`, and `<FormattedString>` with `<Span>` children is inline markup:
+Write ordinary text elements. `<Label text="...">` is a `<p>` or `<span>`, and `<FormattedString>` with `<NSpan>` children is inline markup:
 
 ```html live
 <p>

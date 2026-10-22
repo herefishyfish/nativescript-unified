@@ -53,7 +53,7 @@ A `.md` file inside `pages/` is a route. `apps/native/src/app/pages/docs.md` bec
 | Headings | `h1` to `h6` |
 | Paragraph | `p` |
 | Lists | `ul` or `ol`, with `li` |
-| Quote | `blockquote` |
+| Quote | A `div`. A quote starting with `[!NOTE]`, `[!TIP]` or `[!WARNING]` becomes a titled callout, as on the web |
 | Code block | `pre > code`, in a `div` that scrolls sideways |
 | Rule | `hr` |
 | Image | `img` |

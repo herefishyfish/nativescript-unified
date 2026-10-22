@@ -40,6 +40,7 @@ export const NS_ELEMENTS = {
   'Label': NsLabel,
   'FormattedString': NsFormattedString,
   'Span': NsSpan,
+  'NSpan': NsSpan,
   'Placeholder': NsPlaceholder,
   'Image': NsImage,
   'DatePicker': NsDatePicker,

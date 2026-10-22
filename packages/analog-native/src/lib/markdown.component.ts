@@ -2,6 +2,7 @@ import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, NO_ERRORS_SCHEMA, TemplateRef, type Type } from '@angular/core';
 import type { Tokens } from 'marked';
 import { HrefDirective } from './href.directive';
+import { calloutOf } from './callout';
 import { MARKDOWN_LIVE_CODE_COMPONENT, segmentMarkdown } from './live-code';
 import type { ContentFile, MarkdownToken } from './types';
 
@@ -13,6 +14,7 @@ const TEMPLATE_KEYS: Partial<Record<string, (token: MarkdownToken) => string>> =
   heading: (token) => `h${(token as Tokens.Heading).depth}`,
   list: (token) => ((token as Tokens.List).ordered ? 'ol' : 'ul'),
   paragraph: (token) => (isImageParagraph(token as Tokens.Paragraph) ? 'figure' : 'p'),
+  blockquote: (token) => (calloutOf(token as Tokens.Blockquote) ? 'callout' : 'blockquote'),
 };
 
 function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
@@ -22,9 +24,14 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
 
 /**
  * Renders Markdown tokens as native MasonKit elements: `h1`-`h6`, `p`, `ul`/`ol`/`li`,
- * `blockquote`, `pre > code`, `hr`, `img`, a CSS-grid table, and inline `strong`, `em`,
- * `del`, `code`, `a`, `br`. The `renderers` table in the template maps a template key to
- * the `ng-template` that renders it; unknown keys (raw HTML, `space`) render nothing.
+ * `div.md-blockquote`, `div.md-code > pre > code`, `hr`, `img`, a CSS-grid table, and inline
+ * `strong`, `em`, `del`, `code`, `a`, `br`. The `renderers` table in the template maps a template
+ * key to the `ng-template` that renders it; unknown keys (raw HTML, `space`) render nothing.
+ *
+ * A quote is a block `div`, not MasonKit's `blockquote`: that is a text element, and a `<p>` inside
+ * one loses its inline code and links. A quote starting with `[!NOTE]`, `[!TIP]`, `[!WARNING]`,
+ * `[!IMPORTANT]` or `[!CAUTION]` renders as `aside.md-callout.md-callout-<kind>` with a title, as
+ * the web docs' callouts do.
  *
  * A fenced block tagged `html live` renders the component registered with
  * `provideMarkdownLiveCode()` (which receives the source as its `code` input), mounted at
@@ -50,7 +57,7 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
   template: `
     @let renderers = {
       h1: h1, h2: h2, h3: h3, h4: h4, h5: h5, h6: h6,
-      p: p, figure: figure, ul: ul, ol: ol, blockquote: blockquote, code: code, hr: hr, table: table,
+      p: p, figure: figure, ul: ul, ol: ol, blockquote: blockquote, callout: callout, code: code, hr: hr, table: table,
       text: text, escape: text, strong: strong, em: em, del: del, codespan: codespan, link: link, br: br, image: image
     };
 
@@ -82,7 +89,14 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
         }
       </ol>
     </ng-template>
-    <ng-template #blockquote let-t><blockquote><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></blockquote></ng-template>
+    <ng-template #blockquote let-t><div class="md-blockquote"><ng-container *ngTemplateOutlet="render; context: { $implicit: t.tokens }" /></div></ng-template>
+    <ng-template #callout let-t>
+      @let c = asCallout(t)!;
+      <aside class="md-callout" [class]="'md-callout-' + c.kind">
+        <p class="md-callout-title">{{ c.title }}</p>
+        <ng-container *ngTemplateOutlet="render; context: { $implicit: c.tokens }" />
+      </aside>
+    </ng-template>
     <ng-template #code let-t><div class="md-code"><pre><code>{{ t.text }}</code></pre></div></ng-template>
     <ng-template #hr><hr /></ng-template>
     <ng-template #table let-t>
@@ -133,6 +147,8 @@ export class MarkdownComponent {
   });
 
   protected readonly segments = computed(() => segmentMarkdown(this.tokens(), this.liveCodeComponent !== null));
+
+  protected readonly asCallout = calloutOf;
 
   protected rendererFor(renderers: Record<string, TemplateRef<unknown>>, token: MarkdownToken): TemplateRef<unknown> | null {
     return renderers[TEMPLATE_KEYS[token.type]?.(token) ?? token.type] ?? null;

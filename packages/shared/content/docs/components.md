@@ -54,7 +54,7 @@ Variants, such as `variant="outline"`, are inputs on the directive. Colours come
 
 ## Native status
 
-The native app renders these pages too, and compiles each demo on the device against the same helm components. Each page ends with a Native note that says what was seen on an Android emulator (API 36), in light and dark. This table sums them up. These results have not been checked on iOS yet.
+The native app renders these pages too, and compiles each demo on the device against the same helm components. This table records what each demo did on an Android emulator (API 36), in light and dark. These results have not been checked on iOS yet.
 
 | Component | Android | Notes |
 | --- | --- | --- |
@@ -66,7 +66,7 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Dialog](/docs/ui-dialog) | Works | Opens in a native modal window. |
 | [Alert](/docs/ui-alert) | Works | |
 | [Popover](/docs/ui-popover) | Works | Opens in a native popover window. |
-| [Dropdown menu](/docs/ui-dropdown-menu) | Works | Opens the platform menu. No submenus, labels or separators yet. |
+| [Dropdown menu](/docs/ui-dropdown-menu) | Works | Opens the platform menu. No submenus, labels or separators yet. A shortcut's text is joined to its item's label. |
 | [Sheet](/docs/ui-sheet) | Works | Bottom sheets open in a native bottom sheet, other sides in a side drawer. |
 | [Drawer](/docs/ui-drawer) | Works | Opens in a native bottom sheet. |
 | [Toggle, toggle group, collapsible, breadcrumb, alert dialog](/docs/ui-more) | Works | |
@@ -75,7 +75,7 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Avatar](/docs/ui-feedback) | Partial | Initials sit in the top left. |
 | [Progress and skeleton](/docs/ui-feedback) | Partial | The progress indicator and the skeleton blocks are not drawn. |
 | [Table](/docs/ui-table) | Partial | The cells of each row stack vertically. |
-| [Calendar](/docs/ui-calendar) | Partial | Only the first day of each week shows. |
+| [Calendar](/docs/ui-calendar) | Partial | Only the first day of each week shows. A tap on a day selects it. |
 | [Accordion](/docs/ui-accordion) | Broken | Renders an empty preview. |
 | [Select](/docs/ui-select) | Broken | The list opens, but a tap on an item does nothing. |
 | [Slider](/docs/ui-slider) | Broken | No thumbs, and the value does not change. |

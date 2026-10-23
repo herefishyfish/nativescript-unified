@@ -9,7 +9,7 @@ description: Short answers, each checked against the workspace.
 
 ## Which platforms does it run on?
 
-The web, iOS and Android are the main targets. The same NativeScript app also runs on macOS and Windows, which are not the main focus. The native app renders these docs pages with their live demos on the device. The component notes in these docs were recorded on an Android emulator (API 36). See [Installation](/docs/installation) and [Web vs native](/docs/web-vs-native).
+The web, iOS and Android are the main targets. The same NativeScript app also runs on macOS and Windows, which are not the main focus. The native app renders these docs pages with their live demos on the device. The component results in [Native status](/docs/components#native-status) were recorded on an Android emulator (API 36). See [Installation](/docs/installation) and [Web vs native](/docs/web-vs-native).
 
 ## Why are web and native separate apps?
 

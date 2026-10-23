@@ -21,7 +21,3 @@ description: The hlmBadge directive for small status labels.
 ```
 
 `variant` is one of `default`, `secondary`, `destructive`, `outline`, `ghost` or `link`. The selector is `[hlmBadge],hlm-badge`, so both the attribute and the element form work.
-
-## Native
-
-The badge works on native. On the Android emulator (API 36), all six variants render in light and dark. These results have not been checked on iOS yet.

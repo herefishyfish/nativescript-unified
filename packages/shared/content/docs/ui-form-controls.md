@@ -59,13 +59,3 @@ description: Input, label, textarea, checkbox, switch and radio group.
 ```
 
 `hlm-checkbox` and `hlm-switch` implement Angular's `ControlValueAccessor`, so they also work with `ngModel` and reactive forms in an app.
-
-## Native
-
-These controls work on native. On the Android emulator (API 36), in light and dark:
-
-- The input and the textarea take typed text and show their placeholders. The textarea has no inner padding, so its text touches the border.
-- The checkbox and the switch toggle, and the demo text follows `checked()`.
-- The radio group selects an item when you tap its circle. A tap on the item's text does not select it.
-
-These results have not been checked on iOS yet.

@@ -56,6 +56,6 @@ Hex values are estimates, not sampled from the shoe.
 - Verify the built site: `npm run preview:web` then `npm run audit:web` (headless Edge via playwright-core; screenshots in `.audit/screenshots`).
 - Spartan brain/helm are consumed from source via tsconfig paths (`@spartan-ng/brain/*`, `@spartan-ng/helm/*`), not built packages. Their specs were copied but have no test target yet.
 - `embla-carousel-angular@21` and `ngx-scrollbar@19` have Angular 21-era peers; they installed but are unproven on 22.
-- Native uses Spartan helm and Tailwind. The per-component results in the docs (`## Native` on each component page, summed up on `/docs/components#native-status`) were recorded on an Android emulator (API 36) and have not been re-checked on iOS.
+- Native uses Spartan helm and Tailwind. The per-component results in the docs (the table at `/docs/components#native-status`) were recorded on an Android emulator (API 36) and have not been re-checked on iOS.
 - Angular 22.2 supports Node `^22.22.3`, `^24.15.0` or `>=26`; older versions install with engine warnings.
 

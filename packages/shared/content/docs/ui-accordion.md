@@ -25,7 +25,3 @@ description: Collapsible sections with hlmAccordion.
 ```
 
 `hlm-accordion` takes `type` and `orientation`. `hlm-accordion-item` takes `isOpened` and `disabled`, and emits `openedChange`.
-
-## Native
-
-The accordion is broken on native. On the Android emulator (API 36), the demo above renders an empty preview in light and dark. The brain trigger checks `tagName === 'BUTTON'`, MasonKit reports the tag name in lower case, and the check throws. These results have not been checked on iOS yet.

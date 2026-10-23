@@ -70,17 +70,24 @@ That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders
 
 ## Spartan on native
 
-`packages/ui/native` holds the glue helm needs on NativeScript, and `provideSpartanNativeScript()` installs it. The native app renders these docs pages, and each `html live` demo is compiled on the device against the same helm components the web uses. Dialogs, sheets, drawers, popovers and menus open in native windows instead of a CDK overlay.
+`packages/ui/native` holds the glue helm needs on NativeScript, and `provideSpartanNativeScript()` installs it. The native app renders these docs pages, and each `html live` demo is compiled on the device against the same helm components the web uses. Overlays open in native windows instead of a CDK overlay:
 
-Each component page ends with a Native note that says what was seen on an Android emulator (API 36, x86_64), in light and dark. [Native status](/docs/components#native-status) sums them up in one table. These results have not been checked on iOS yet.
+- A dialog or alert dialog opens in a full-screen, transparent modal window. On iOS it uses the `overFullScreen` presentation.
+- A sheet or drawer on the bottom edge opens in a native bottom sheet from `@nativescript-community/ui-bottomsheet`, sized to its content.
+- A sheet or drawer on the left, right or top edge docks to that edge in the app's `Drawer` from `@nativescript-community/ui-drawer`.
+- A popover opens in an anchored window from `@nativescript-community/ui-popover`. Select, combobox, autocomplete and date picker use the same window.
+- A dropdown menu opens the platform menu from `@nativescript-community/ui-menu`. That is a Material 3 popup menu on Android and a `UIMenu` on iOS.
+
+[Native status](/docs/components#native-status) records what each component's demo did on an Android emulator (API 36, x86_64), in light and dark. These results have not been checked on iOS yet.
 
 ## Known native limitations
 
-These apply across components. A component's Native note links here when one of them shows up in its demo.
+These apply across components.
 
 - **Helm rules beat utilities on helm hosts.** helm's `.style-vega .spartan-*` rules have a specificity of 0,2,0 and sit outside any layer, so they override a Tailwind utility you put on the same element. For example, `h-12` or `rounded-full` on `hlmBtn`, or `gap-*` and `p-*` on `hlmCard`, have no effect. This happens on the web too. A fix is planned.
 - **Opacity-modified token colours.** Classes such as `bg-input/80`, `bg-destructive/10` and `dark:bg-input/30` keep the plain light token colour on native, in every theme.
 - **Text layout in MasonKit.** A button does not center its text. A text element with `display: flex` does not center its text, so avatar initials sit in the top left. A text element nested inside another text element drops the styling of its inline children. Text ignores `white-space: pre`, so code blocks render as plain text.
-- **Browser APIs in brain components.** Some brain components call browser APIs that do not exist on NativeScript, and throw. MasonKit elements have no `getBoundingClientRect()`, which breaks the select and the slider. There is no `document.defaultView`, which breaks the tooltip. The NativeScript document has no `createElement()`, so a CDK overlay cannot be created, which breaks the hover card.
+- **Browser APIs in brain components.** Some brain components call browser APIs that do not exist on NativeScript, and throw. MasonKit elements have no `getBoundingClientRect()`, which breaks the select and the slider. There is no `document.defaultView`, which breaks the tooltip. The NativeScript document has no `createElement()`, so a CDK overlay cannot be created, which breaks the hover card. MasonKit reports tag names in lower case, so the accordion trigger's `tagName === 'BUTTON'` check throws.
+- **Media queries.** NativeScript drops media queries. `apps/native/src/app.css` overrides the `motion-safe` variant so that the spinner and skeleton animations run.
 - **Links between docs pages.** The native app serves these pages at `/guide/:slug`, but the Markdown links point at `/docs/:slug`. On native, a tap on a link to another docs page opens the Not found page. An `<a href>` with an app path inside a live demo does nothing when tapped.
 - **Hover.** A touch screen has no hover, and the tooltip and the hover card open on hover.

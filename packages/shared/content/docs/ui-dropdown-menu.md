@@ -26,15 +26,3 @@ The trigger is any element with `[hlmDropdownMenuTrigger]` set to a template ref
 ```
 
 Items take `variant="destructive"`, `disabled` and `inset`. The trigger takes `side` and `align`. Checkbox, radio and sub-menu parts also exist in `packages/ui/helm/dropdown-menu`.
-
-## Native
-
-The same markup opens the platform menu: a Material 3 popup menu on Android and a `UIMenu` on iOS, from `@nativescript-community/ui-menu`. `provideSpartanNativeScript()` provides the menu host. The trigger renders the menu template off screen and passes each item's text, disabled state, `variant="destructive"` and checked state to the platform menu. When you choose an item, `(triggered)` fires and checkboxes and radios toggle as they do on the web.
-
-These results were checked on the Android emulator (API 36), in light and dark:
-
-- The menu opens below its trigger with the theme's card surface.
-- In the overlays example, Profile, the Status bar checkbox and Log out reach the page. The checkbox shows its checked state, the disabled item is grey and ignores taps, and the destructive item is red.
-- The Android back button closes the menu.
-
-The native menu does not show submenus, labels or separators yet. Items with a submenu are left out. A shortcut's text is joined to its item's label, so the demo above shows `Profile Ctrl P`. These results have not been checked on iOS yet.

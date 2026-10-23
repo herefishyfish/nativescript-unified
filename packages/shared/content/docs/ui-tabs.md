@@ -37,8 +37,4 @@ description: Tabs built from hlmTabs, a list of triggers and matching content pa
 
 `hlmTabs` also takes `orientation` and `activationMode`, and emits `tabActivated`.
 
-## Native
-
-Helm tabs work on native. On the Android emulator (API 36), in light and dark, both demos switch panels when you tap a trigger. The `line` variant does not draw the underline under the active trigger. These results have not been checked on iOS yet.
-
 For app-level navigation, see [Web vs native](/docs/web-vs-native).

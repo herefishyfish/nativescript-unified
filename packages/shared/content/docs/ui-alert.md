@@ -23,7 +23,3 @@ description: The hlmAlert directive with title and description parts.
 ```
 
 There is also an `hlmAlertAction` part for a trailing action.
-
-## Native
-
-The alert works on native. On the Android emulator (API 36), both variants render with their title, description and border, in light and dark. These results have not been checked on iOS yet.

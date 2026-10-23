@@ -98,15 +98,3 @@ Smaller helm components that render on the web in this workspace.
   </hlm-alert-dialog-content>
 </hlm-alert-dialog>
 ```
-
-## Native
-
-Results on the Android emulator (API 36), in light and dark. These results have not been checked on iOS yet.
-
-- **Toggle and toggle group:** work. A tap sets the pressed state.
-- **Collapsible:** works. The trigger shows and hides the content.
-- **Hover card:** broken. The trigger renders. When the page loads, the hover card content service creates a CDK overlay, which needs a DOM document, so it throws. A touch screen also has no hover.
-- **Kbd and spinner:** render. The keys sit slightly above the text baseline.
-- **Breadcrumb:** works.
-- **Native select:** broken. The options render as stacked text that overflows the box, and a tap opens nothing. MasonKit rejects the `Canvas` and `CanvasText` system colours.
-- **Alert dialog:** works. It opens in a native modal window, like the [Dialog](/docs/ui-dialog). A tap outside does not close it. Cancel, Continue and the Android back button do.

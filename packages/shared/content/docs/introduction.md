@@ -59,4 +59,4 @@ NativeScript apps are often written with tags such as `<StackLayout>` and `<Labe
 
 The main targets are the **web**, **iOS** and **Android**. The same NativeScript app also runs on macOS and Windows, which are not the main focus.
 
-The web app builds and prerenders this site. The native app renders these same docs pages with their live demos on the device. Each component page ends with a Native note that records what was seen on an Android emulator (API 36), and [Native status](/docs/components#native-status) sums them up in one table. Those notes have not been re-checked on iOS yet. Limits that apply to every component are in [Known native limitations](/docs/web-vs-native#known-native-limitations).
+The web app builds and prerenders this site. The native app renders these same docs pages with their live demos on the device. [Native status](/docs/components#native-status) records how each component did on an Android emulator (API 36). Those results have not been checked on iOS yet. Limits that apply to every component are in [Known native limitations](/docs/web-vs-native#known-native-limitations).

@@ -17,13 +17,3 @@ description: A month calendar with single, multiple and range selection.
 ```
 
 `hlm-calendar-multi` selects several dates and `hlm-calendar-range` selects a range. All three take `captionLayout` (`label`, `dropdown`, `dropdown-months` or `dropdown-years`). `hlm-month-year-calendar` is a month and year picker.
-
-## Native
-
-The calendar renders on native, but its layout is broken. On the Android emulator (API 36), in light and dark:
-
-- The heading shows a full date, such as `Thu Oct 01 2026`, instead of the month and year.
-- The grid shows only the first day of each week, and each week row is very tall.
-- A tap on a visible day selects it. `dateChange` fires and the demo shows `Selected: Sun Oct 11 2026`.
-
-These results have not been checked on iOS yet.

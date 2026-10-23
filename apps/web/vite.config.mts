@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { docsPlugin } from './tools/docs-plugin.ts';
+import { docsPlugin, highlightPlugin } from './tools/docs-plugin.ts';
 
 const docsDir = resolve(import.meta.dirname, '../../packages/shared/content/docs');
 
@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => ({
   resolve: { mainFields: ['module'] },
   plugins: [
     docsPlugin(docsDir),
+    highlightPlugin(),
     analog({
       ssr: true,
       static: true,

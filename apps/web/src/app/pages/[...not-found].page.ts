@@ -2,18 +2,19 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { Seo } from '../core/seo';
+import { SiteLogo } from '../layout/site-logo';
 import { ThemeToggle } from '../layout/theme-toggle';
 
 /** Catch-all route. Prerendered at /404 and copied to 404.html so static hosts serve it for unknown URLs. */
 @Component({
   selector: 'web-not-found-page',
-  imports: [HlmButton, RouterLink, ThemeToggle],
+  imports: [HlmButton, RouterLink, SiteLogo, ThemeToggle],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto flex min-h-screen max-w-xl flex-col px-4 py-6">
       <header class="flex items-center justify-between">
         <a routerLink="/" class="flex items-center gap-2 font-semibold">
-          <span class="inline-block size-5 rounded-md bg-primary" aria-hidden="true"></span>
+          <web-site-logo class="size-6" />
           NativeScript Unified
         </a>
         <web-theme-toggle />

@@ -1,9 +1,29 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { extname, resolve } from 'node:path';
 import type { Token } from 'marked';
 import type { Plugin } from 'vite';
 import { parseDoc, toBlocks } from '../../../packages/shared/src/lib/docs/parse.ts';
-import { codeBlock, renderTokens, slugify } from './markdown.ts';
+import { codeBlock, highlight, renderTokens, slugify } from './markdown.ts';
+
+const HIGHLIGHT = '?highlight';
+
+/**
+ * `import snippet from './card.html?highlight'` gives `{ code, html }`: the file's text and its Prism markup, built at build time.
+ * A component can use the same file as its templateUrl, so the code shown beside a preview is the code that renders it.
+ */
+export function highlightPlugin(): Plugin {
+  return {
+    name: 'highlight-source',
+    enforce: 'pre',
+    load(id) {
+      if (!id.endsWith(HIGHLIGHT)) return undefined;
+      const file = id.slice(0, -HIGHLIGHT.length);
+      this.addWatchFile(file);
+      const code = readFileSync(file, 'utf8').replace(/\n$/, '');
+      return `export default ${JSON.stringify({ code, html: highlight(code, extname(file).slice(1)) })};`;
+    },
+  };
+}
 
 const VIRTUAL = '~docs';
 const RESOLVED = '\0' + VIRTUAL;

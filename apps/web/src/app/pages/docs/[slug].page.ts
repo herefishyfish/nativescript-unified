@@ -23,14 +23,20 @@ import { DocsToc } from '../../layout/docs-toc';
             <div [innerHTML]="block.html"></div>
           }
         }
-        <nav aria-label="Pagination" class="mt-12 flex justify-between gap-4 border-t pt-6 text-sm">
+        <nav aria-label="Pagination" class="mt-12 grid gap-4 border-t pt-6 text-sm sm:grid-cols-2">
           @if (around().prev; as p) {
-            <a [routerLink]="['/docs', p.slug]" class="rounded-lg border bg-card px-4 py-2.5 transition-colors hover:bg-accent">&larr; {{ p.title }}</a>
+            <a [routerLink]="['/docs', p.slug]" class="docs-pager" rel="prev">
+              <span class="text-xs text-muted-foreground">&larr; Previous</span>
+              <span class="font-medium">{{ p.title }}</span>
+            </a>
           } @else {
-            <span></span>
+            <span class="hidden sm:block"></span>
           }
           @if (around().next; as n) {
-            <a [routerLink]="['/docs', n.slug]" class="rounded-lg border bg-card px-4 py-2.5 transition-colors hover:bg-accent">{{ n.title }} &rarr;</a>
+            <a [routerLink]="['/docs', n.slug]" class="docs-pager items-end text-right" rel="next">
+              <span class="text-xs text-muted-foreground">Next &rarr;</span>
+              <span class="font-medium">{{ n.title }}</span>
+            </a>
           }
         </nav>
       </article>

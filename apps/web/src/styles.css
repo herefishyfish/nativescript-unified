@@ -1,4 +1,6 @@
 @import '../../../packages/ui/styles/index.css';
+/* The shared example screens on the home page. Every rule is scoped under .example-<slug> or .example-tile-*. */
+@import '../../../packages/shared/src/lib/examples/examples.css';
 @source '../../../packages/shared/src';
 @source '../../../packages/web-polyfills/src';
 @source '.';
@@ -44,6 +46,8 @@
 .docs-prose :not(pre) > code { background: var(--muted); border: 1px solid color-mix(in oklab, var(--border) 60%, transparent); border-radius: 0.35rem; padding: 0.1rem 0.35rem; font-size: 0.875em; }
 .docs-eyebrow { margin: 0 0 0.6rem; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); }
 .docs-prose :is(h2, h3) { scroll-margin-top: 5rem; }
+.docs-prose a.docs-pager { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); color: var(--foreground); text-decoration: none; transition: border-color 0.15s, background-color 0.15s; }
+.docs-prose a.docs-pager:hover { border-color: color-mix(in oklab, var(--primary) 60%, var(--border)); background: var(--accent); }
 
 .docs-prose .docs-table { overflow-x: auto; margin: 1.25rem 0; border: 1px solid var(--border); border-radius: var(--radius); }
 .docs-prose table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
@@ -53,7 +57,7 @@
 
 /* Code blocks with a copy button. */
 .docs-code-wrap { position: relative; margin: 1.1rem 0; }
-.docs-prose pre.docs-code, .home-demo pre.docs-code { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.6; margin: 0; tab-size: 2; }
+pre.docs-code { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.6; margin: 0; tab-size: 2; }
 .docs-copy { position: absolute; top: 0.5rem; right: 0.5rem; z-index: 1; border: 1px solid var(--border); border-radius: 0.4rem; background: var(--background); color: var(--muted-foreground); font-size: 0.72rem; line-height: 1; padding: 0.35rem 0.55rem; opacity: 0; transition: opacity 0.15s, color 0.15s; cursor: pointer; }
 .docs-code-wrap:hover .docs-copy, .docs-copy:focus-visible, .docs-copy[data-copied] { opacity: 1; }
 .docs-copy:hover { color: var(--foreground); }
@@ -88,14 +92,60 @@
 .dark .docs-code .token.attr-value, .dark .docs-code .token.string { color: var(--chart-4); }
 
 /* Home page. */
-.home-hero { background: radial-gradient(60rem 28rem at 15% -10%, color-mix(in oklab, var(--primary) 16%, transparent), transparent), var(--background); border-bottom: 1px solid var(--border); }
-.home-h2 { margin-bottom: 1.25rem; font-size: 1.6rem; font-weight: 650; letter-spacing: -0.015em; }
-.home-card { display: block; padding: 1.25rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); }
-.home-link { transition: border-color 0.15s, transform 0.15s; }
-.home-link:hover { border-color: var(--primary); transform: translateY(-2px); }
-.home-demo { margin: 0; }
-.home-demo .docs-code-wrap { margin: 0; }
-.home-demo pre.docs-code { border: 0; border-top: 1px solid var(--border); border-radius: 0; }
+.home-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--border); background: radial-gradient(48rem 26rem at 10% -10%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 70%), radial-gradient(40rem 24rem at 100% 0%, color-mix(in oklab, var(--accent) 70%, transparent), transparent 70%), var(--background); }
+.home-hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(to right, color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px); background-size: 44px 44px; mask-image: radial-gradient(ellipse 75% 65% at 25% 0%, #000 25%, transparent 75%); }
+.home-hero > * { position: relative; }
+.home-title { margin-top: 1.5rem; font-size: clamp(2.5rem, 5.6vw, 4.25rem); line-height: 1.04; font-weight: 750; letter-spacing: -0.035em; text-wrap: balance; }
+.home-pill { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.75rem 0.3rem 0.65rem; border: 1px solid var(--border); border-radius: 999px; background: color-mix(in oklab, var(--card) 85%, transparent); font-size: 0.8rem; font-weight: 500; transition: border-color 0.15s; }
+.home-pill:hover { border-color: var(--primary); }
+.home-pill-dot { width: 0.5rem; height: 0.5rem; flex: none; border-radius: 999px; background: var(--callout-tip); box-shadow: 0 0 0 3px color-mix(in oklab, var(--callout-tip) 25%, transparent); }
+.home-h2 { font-size: clamp(1.75rem, 3.2vw, 2.4rem); line-height: 1.15; font-weight: 700; letter-spacing: -0.025em; text-wrap: balance; }
+.home-lead { margin-top: 1rem; max-width: 44rem; font-size: 1.075rem; line-height: 1.7; color: var(--muted-foreground); text-wrap: pretty; }
+.home-code { padding: 0.08rem 0.35rem; border: 1px solid color-mix(in oklab, var(--border) 60%, transparent); border-radius: 0.3rem; background: var(--muted); color: var(--foreground); font-family: var(--font-mono, ui-monospace, monospace); font-size: 0.85em; }
+.home-band { border-block: 1px solid var(--border); background: color-mix(in oklab, var(--muted) 45%, var(--background)); }
+.home-card { display: block; padding: 1.5rem; border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px); background: var(--card); color: var(--card-foreground); }
+.home-link { transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s; }
+.home-link:hover { border-color: color-mix(in oklab, var(--primary) 60%, var(--border)); transform: translateY(-2px); box-shadow: 0 14px 30px -20px color-mix(in oklab, var(--foreground) 50%, transparent); }
+.home-arrow-link { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 500; color: var(--primary); }
+.home-arrow-link ng-icon { transition: transform 0.15s; }
+.home-arrow-link:hover ng-icon, .group:hover .home-arrow-link ng-icon { transform: translateX(3px); }
+
+/* Hero sample: a window with the live card above its source. */
+.home-window { margin: 0; overflow: hidden; border: 1px solid var(--border); border-radius: calc(var(--radius) + 8px); background: var(--card); box-shadow: 0 1px 2px color-mix(in oklab, var(--foreground) 6%, transparent), 0 30px 60px -30px color-mix(in oklab, var(--foreground) 40%, transparent); }
+.home-window-bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border); background: var(--muted); }
+.home-window-dots { display: inline-flex; gap: 0.35rem; }
+.home-window-dots span { width: 0.65rem; height: 0.65rem; border-radius: 999px; background: color-mix(in oklab, var(--foreground) 18%, transparent); }
+.home-live { margin-left: auto; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; color: var(--primary); }
+.home-window-preview { padding: 2rem 1.25rem; background-color: var(--background); background-image: radial-gradient(color-mix(in oklab, var(--foreground) 12%, transparent) 1px, transparent 1px); background-size: 16px 16px; }
+.home-window pre.docs-code { max-height: 24rem; font-size: 0.8rem; border: 0; border-top: 1px solid var(--border); border-radius: 0; }
+
+/* How it works: one template forks into two targets. */
+.home-flow-source { display: flex; align-items: flex-start; gap: 1rem; max-width: 34rem; margin: 0 auto 1rem; padding: 1.25rem 1.5rem; border: 1px solid color-mix(in oklab, var(--primary) 45%, var(--border)); border-radius: calc(var(--radius) + 4px); background: var(--card); box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 8%, transparent); }
+.home-flow-fork { display: none; width: 100%; height: 3.5rem; fill: none; stroke: color-mix(in oklab, var(--primary) 55%, var(--border)); stroke-width: 1.5; stroke-dasharray: 5 5; }
+@media (min-width: 40rem) { .home-flow-source { margin-bottom: 0; } .home-flow-fork { display: block; } }
+.home-flow-icon { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: color-mix(in oklab, var(--primary) 12%, var(--card)); color: var(--primary); }
+.home-tag { padding: 0.15rem 0.55rem; border: 1px solid var(--border); border-radius: 999px; font-size: 0.72rem; font-weight: 500; color: var(--muted-foreground); }
+
+/* Examples showcase. */
+.home-showcase-tabs { display: flex; gap: 0.5rem; margin-inline: -0.25rem; padding: 0.25rem 0.25rem 0.75rem; overflow-x: auto; }
+.home-showcase-tab { display: inline-flex; flex: none; align-items: center; gap: 0.45rem; padding: 0.45rem 0.9rem; border: 1px solid var(--border); border-radius: 999px; background: var(--card); color: var(--muted-foreground); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: color 0.15s, border-color 0.15s, background-color 0.15s; }
+.home-showcase-tab:hover { border-color: color-mix(in oklab, var(--primary) 50%, var(--border)); color: var(--foreground); }
+.home-showcase-tab[aria-selected='true'] { border-color: var(--primary); background: var(--primary); color: var(--primary-foreground); }
+.home-showcase-icon { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; color: #ffffff; }
+.home-segmented { display: inline-flex; gap: 0.25rem; padding: 0.25rem; border: 1px solid var(--border); border-radius: 0.65rem; background: var(--muted); }
+.home-segmented button { padding: 0.35rem 0.9rem; border-radius: 0.45rem; color: var(--muted-foreground); font-size: 0.82rem; font-weight: 500; cursor: pointer; }
+.home-segmented button:hover { color: var(--foreground); }
+.home-segmented button[aria-pressed='true'] { background: var(--card); color: var(--foreground); box-shadow: 0 1px 2px color-mix(in oklab, var(--foreground) 14%, transparent); }
+.home-phone { width: min(100%, 24rem); height: 46rem; padding: 0.6rem; border-radius: 3rem; background: #111a19; box-shadow: 0 0 0 1px color-mix(in oklab, var(--border) 80%, transparent), 0 40px 80px -32px color-mix(in oklab, var(--foreground) 50%, transparent); }
+.home-phone-screen { height: 100%; overflow-y: auto; border-radius: 2.45rem; scrollbar-width: none; }
+.home-phone-screen::-webkit-scrollbar { display: none; }
+pre.home-showcase-code { width: 100%; max-width: 48rem; height: 46rem; overflow: auto; font-size: 0.8rem; }
+.home-showcase-placeholder { display: flex; justify-content: center; }
+.home-showcase-placeholder .home-phone { background: var(--muted); box-shadow: 0 0 0 1px var(--border); }
+
+/* Platform status. */
+.home-status { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 2rem; height: 2rem; border: 1px dashed var(--border); border-radius: 999px; color: var(--muted-foreground); }
+.home-status-done { border: 0; background: color-mix(in oklab, var(--primary) 14%, var(--card)); color: var(--primary); }
 /* Themed scrollbars. Thumb/track come from the cream/teal tokens; thumb is >= 3:1 against background, card, sidebar, muted and popover (see tools/contrast.mjs).
    `scrollbar-color` inherits, so it also reaches scrollers inside the polyfills' shadow roots; their `scrollbar-width` is set in the polyfill styles. */
 :root { --scrollbar-thumb: #7d7157; --scrollbar-thumb-hover: var(--primary); --scrollbar-track: transparent; --scrollbar-size: 0.6rem; }

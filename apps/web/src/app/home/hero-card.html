@@ -1,0 +1,16 @@
+<section hlmCard class="w-full max-w-sm">
+  <div hlmCardHeader>
+    <div hlmCardTitle>Weekly report</div>
+    <p hlmCardDescription>Revenue is up 12% this week.</p>
+  </div>
+  <div hlmCardContent class="flex items-center gap-3">
+    <hlm-switch #alerts aria-label="Alerts" />
+    <span class="text-sm">
+      Alerts {{ alerts.checked() ? 'on' : 'off' }}
+    </span>
+  </div>
+  <div hlmCardFooter class="flex gap-2">
+    <button hlmBtn>Open report</button>
+    <button hlmBtn variant="outline">Share</button>
+  </div>
+</section>

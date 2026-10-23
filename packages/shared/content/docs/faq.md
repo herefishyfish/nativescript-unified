@@ -13,7 +13,7 @@ The web, iOS and Android are the main targets. The same NativeScript app also ru
 
 ## Why are web and native separate apps?
 
-They diverge often, so each owns its pages and core, and shared HTML sits underneath. See [Web vs native](/docs/web-vs-native).
+Web and native run on different form factors and handle flows and interactions differently. Each app designs its pages and flows for its own platform, and shared HTML sits underneath both. See [Why they diverge](/docs/web-vs-native#why-they-diverge).
 
 ## Why not use the AnalogJS packages on native?
 

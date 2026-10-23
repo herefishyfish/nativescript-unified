@@ -117,6 +117,7 @@ await page.locator('[data-testid=sidebar] a', { hasText: 'GridLayout' }).click()
 await page.waitForURL('**/docs/grid-layout');
 check('sidebar nav is client-side (no reload)', (await page.evaluate(() => window.__marker)) === 1);
 await page.locator('article a', { hasText: 'Label and text runs' }).first().click().catch(() => {});
+check('header links to the GitHub repository', (await page.locator('header [data-testid=github-link]').getAttribute('href')) === 'https://github.com/herefishyfish/nativescript-unified');
 const lightBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 await page.locator('[data-testid=theme-toggle]').click();
 const darkBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);

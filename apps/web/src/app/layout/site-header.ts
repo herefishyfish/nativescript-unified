@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, booleanAttribute, input, output, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideMenu, lucideX } from '@ng-icons/lucide';
+import { lucideGithub, lucideMenu, lucideX } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { DocsSearch } from './docs-search';
 import { SiteLogo } from './site-logo';
@@ -11,7 +11,7 @@ import { ThemeToggle } from './theme-toggle';
 @Component({
   selector: 'web-site-header',
   imports: [RouterLink, HlmButton, NgIcon, ThemeToggle, DocsSearch, SiteLogo],
-  providers: [provideIcons({ lucideMenu, lucideX })],
+  providers: [provideIcons({ lucideGithub, lucideMenu, lucideX })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'sticky top-0 z-30 block' },
   template: `
@@ -37,6 +37,9 @@ import { ThemeToggle } from './theme-toggle';
       </nav>
       <div class="ml-auto flex items-center gap-1">
         <web-docs-search />
+        <a hlmBtn variant="ghost" size="icon" href="https://github.com/herefishyfish/nativescript-unified" target="_blank" rel="noopener" aria-label="GitHub repository" data-testid="github-link">
+          <ng-icon name="lucideGithub" size="18" aria-hidden="true" />
+        </a>
         <web-theme-toggle />
       </div>
     </header>

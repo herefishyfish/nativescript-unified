@@ -9,6 +9,12 @@ description: What each app owns, what they share, and how to decide where code g
 
 Web and native diverge often, so they are two apps at the top of the workspace. Each has its own pages and its own core. Shared HTML and features sit underneath both. The approach on both is [HTML first](/docs/html-first).
 
+## Why they diverge
+
+Web and native run on different form factors, and they handle flows and interactions in different ways. Neither platform has one right way to build a UI, and a layout or flow that suits one is often not the best choice on the other.
+
+Keeping them as separate apps is a strength. Each app can design its pages and flows for its own platform, instead of settling for one UI that is only passable on both. The parts that are the same everywhere, such as content, HTML features and design tokens, are written once in `packages/shared`. The parts that differ live in the app that owns them. Shared code then needs no platform checks, which is why `packages/shared` has no platform imports.
+
 ## The core of each app
 
 | Area | Web (`apps/web`) | Native (`apps/native`) |

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "preview", "--outDir", "../../dist/apps/web/analog/public", "--port", "4300", "--strictPort"],
+      "cwd": "apps/web",
+      "port": 4300
+    }
+  ]
+}

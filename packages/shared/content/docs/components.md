@@ -4,7 +4,6 @@ section: Components
 order: 20
 description: Spartan helm components with live examples, and how each one runs on native.
 ---
-
 # Components
 
 These pages show the Spartan **helm** components that live in `packages/ui/helm`. They are the forward way to build UI in this project: plain HTML elements and attributes, styled with Tailwind classes and the shared theme tokens.
@@ -15,7 +14,7 @@ Every example is a real Angular template. The code in the Code tab is the code t
 
 Helm components are mostly attribute directives and small components on top of headless **brain** primitives. You add an attribute to an element you already know:
 
-```html live
+```html
 <button hlmBtn variant="outline">A button element with the hlmBtn attribute</button>
 ```
 
@@ -23,27 +22,27 @@ Variants, such as `variant="outline"`, are inputs on the directive. Colours come
 
 ## Pages
 
-| Page | Components |
-| --- | --- |
-| [Button](/docs/ui-button) | `hlmBtn` |
-| [Badge](/docs/ui-badge) | `hlmBadge` |
-| [Card](/docs/ui-card) | `hlmCard` and its parts |
-| [Form controls](/docs/ui-form-controls) | `hlmInput`, `hlmLabel`, `hlmTextarea`, `hlm-checkbox`, `hlm-switch`, `hlm-radio-group` |
-| [Tabs](/docs/ui-tabs) | `hlmTabs` and its parts |
-| [Accordion](/docs/ui-accordion) | `hlmAccordion` and its parts |
-| [Dialog](/docs/ui-dialog) | `hlm-dialog` and its parts |
-| [Alert](/docs/ui-alert) | `hlmAlert` |
-| [Progress, skeleton, avatar and separator](/docs/ui-feedback) | `hlm-progress`, `hlmSkeleton`, `hlm-avatar`, `hlmSeparator` |
-| [Select](/docs/ui-select) | `hlm-select` and its parts |
-| [Slider](/docs/ui-slider) | `hlm-slider` |
-| [Popover](/docs/ui-popover) | `hlm-popover` and its parts |
-| [Dropdown menu](/docs/ui-dropdown-menu) | `hlmDropdownMenuTrigger`, `hlm-dropdown-menu` and its parts |
-| [Sheet](/docs/ui-sheet) | `hlm-sheet` and its parts |
-| [Drawer](/docs/ui-drawer) | `hlm-drawer` and its parts |
-| [Table](/docs/ui-table) | `hlmTable` and its parts |
-| [Calendar](/docs/ui-calendar) | `hlm-calendar`, `hlm-calendar-multi`, `hlm-calendar-range` |
-| [Tooltip](/docs/ui-tooltip) | `hlmTooltip` |
-| [More components](/docs/ui-more) | toggle, toggle group, collapsible, hover card, kbd, spinner, breadcrumb, native select, alert dialog |
+| Page                                                       | Components                                                                                           |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| [Button](/docs/ui-button)                                     | `hlmBtn`                                                                                           |
+| [Badge](/docs/ui-badge)                                       | `hlmBadge`                                                                                         |
+| [Card](/docs/ui-card)                                         | `hlmCard` and its parts                                                                            |
+| [Form controls](/docs/ui-form-controls)                       | `hlmInput`, `hlmLabel`, `hlmTextarea`, `hlm-checkbox`, `hlm-switch`, `hlm-radio-group`   |
+| [Tabs](/docs/ui-tabs)                                         | `hlmTabs` and its parts                                                                            |
+| [Accordion](/docs/ui-accordion)                               | `hlmAccordion` and its parts                                                                       |
+| [Dialog](/docs/ui-dialog)                                     | `hlm-dialog` and its parts                                                                         |
+| [Alert](/docs/ui-alert)                                       | `hlmAlert`                                                                                         |
+| [Progress, skeleton, avatar and separator](/docs/ui-feedback) | `hlm-progress`, `hlmSkeleton`, `hlm-avatar`, `hlmSeparator`                                  |
+| [Select](/docs/ui-select)                                     | `hlm-select` and its parts                                                                         |
+| [Slider](/docs/ui-slider)                                     | `hlm-slider`                                                                                       |
+| [Popover](/docs/ui-popover)                                   | `hlm-popover` and its parts                                                                        |
+| [Dropdown menu](/docs/ui-dropdown-menu)                       | `hlmDropdownMenuTrigger`, `hlm-dropdown-menu` and its parts                                      |
+| [Sheet](/docs/ui-sheet)                                       | `hlm-sheet` and its parts                                                                          |
+| [Drawer](/docs/ui-drawer)                                     | `hlm-drawer` and its parts                                                                         |
+| [Table](/docs/ui-table)                                       | `hlmTable` and its parts                                                                           |
+| [Calendar](/docs/ui-calendar)                                 | `hlm-calendar`, `hlm-calendar-multi`, `hlm-calendar-range`                                     |
+| [Tooltip](/docs/ui-tooltip)                                   | `hlmTooltip`                                                                                       |
+| [More components](/docs/ui-more)                              | toggle, toggle group, collapsible, hover card, kbd, spinner, breadcrumb, native select, alert dialog |
 
 ## More in the workspace
 

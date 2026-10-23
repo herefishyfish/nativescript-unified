@@ -261,6 +261,7 @@ check('mobile: TOC hidden', !(await mp.locator('[data-testid=toc]').isVisible())
   check('home: showcase lists the twelve shared examples', (await vp.locator('[data-testid=example-tab]').count()) === 12);
   await vp.locator('[data-testid=example-tab]', { hasText: 'Analytics' }).click();
   await vp.waitForTimeout(300);
+  check('home: showcase offers App Store, Google Play and StackBlitz', (await vp.locator('[data-testid=example-get-app] .home-store-link').allInnerTexts()).join('|').replace(/\s+/g, ' ').match(/App Store.*Google Play.*StackBlitz/) !== null);
   check('home: picking an example renders it in the phone frame', (await vp.locator('[data-testid=example-title]').innerText()) === 'Analytics' && (await vp.locator('[data-testid=example-phone] example-analytics').count()) === 1);
   await vp.keyboard.press('ArrowRight');
   await vp.waitForTimeout(300);

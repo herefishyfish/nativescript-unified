@@ -2,6 +2,7 @@ import { NgComponentOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, computed, signal, viewChildren } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  lucideApple,
   lucideCalendarDays,
   lucideChartColumn,
   lucideChartLine,
@@ -9,13 +10,16 @@ import {
   lucideLogIn,
   lucideMusic,
   lucideNewspaper,
+  lucidePlay,
   lucideSettings,
   lucideShoppingCart,
   lucideStar,
   lucideTag,
   lucideUserRound,
+  lucideZap,
 } from '@ng-icons/lucide';
 import { EXAMPLES } from '@nativescript-unified/shared';
+import { EXAMPLES_APP_LINKS } from '../core/site';
 
 type View = 'preview' | 'code' | 'styles';
 
@@ -43,6 +47,9 @@ const iconName = (icon: string) => 'lucide' + icon.replace(/(^|-)(\w)/g, (_, __,
       lucideNewspaper,
       lucideChartLine,
       lucideChartScatter,
+      lucideApple,
+      lucidePlay,
+      lucideZap,
     }),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -85,6 +92,26 @@ const iconName = (icon: string) => 'lucide' + icon.replace(/(^|-)(\w)/g, (_, __,
         <p class="mt-6 text-sm text-muted-foreground">
           One component and one stylesheet, with no platform imports. The native app opens the same component from its UI tab, with the same Code and Styles views.
         </p>
+
+        <div role="group" aria-labelledby="example-get-app-title" class="mt-6" data-testid="example-get-app">
+          <p id="example-get-app-title" class="text-sm font-medium">Run it on a device</p>
+          <div class="mt-3 grid gap-2">
+            @for (link of appLinks; track link.id) {
+              @if (link.url; as url) {
+                <a class="home-store-link" [href]="url" target="_blank" rel="noopener" [attr.data-testid]="'example-get-app-' + link.id">
+                  <ng-icon [name]="link.icon" size="20" aria-hidden="true" />
+                  <span class="home-store-text"><span class="home-store-caption">{{ link.caption }}</span>{{ link.label }}</span>
+                </a>
+              } @else {
+                <span class="home-store-link" aria-disabled="true" [attr.data-testid]="'example-get-app-' + link.id">
+                  <ng-icon [name]="link.icon" size="20" aria-hidden="true" />
+                  <span class="home-store-text"><span class="home-store-caption">{{ link.caption }}</span>{{ link.label }}</span>
+                  <span class="home-tag">Coming soon</span>
+                </span>
+              }
+            }
+          </div>
+        </div>
       </div>
 
       <div class="flex min-w-0 justify-center">
@@ -103,6 +130,7 @@ const iconName = (icon: string) => 'lucide' + icon.replace(/(^|-)(\w)/g, (_, __,
 })
 export class HomeShowcase {
   protected readonly examples = EXAMPLES;
+  protected readonly appLinks = EXAMPLES_APP_LINKS;
   protected readonly icon = iconName;
   protected readonly views: readonly { id: View; label: string }[] = [
     { id: 'preview', label: 'Preview' },

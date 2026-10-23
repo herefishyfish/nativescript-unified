@@ -142,6 +142,12 @@ pre.docs-code { background: var(--card); border: 1px solid var(--border); border
 pre.home-showcase-code { width: 100%; max-width: 48rem; height: 46rem; overflow: auto; font-size: 0.8rem; }
 .home-showcase-placeholder { display: flex; justify-content: center; }
 .home-showcase-placeholder .home-phone { background: var(--muted); box-shadow: 0 0 0 1px var(--border); }
+.home-store-link { display: flex; align-items: center; gap: 0.7rem; padding: 0.5rem 0.9rem; border: 1px solid var(--foreground); border-radius: 0.65rem; background: var(--foreground); color: var(--background); transition: opacity 0.15s; }
+a.home-store-link:hover { opacity: 0.85; }
+.home-store-link[aria-disabled='true'] { border-style: dashed; border-color: var(--border); background: var(--card); color: var(--muted-foreground); }
+.home-store-link .home-tag { margin-left: auto; white-space: nowrap; }
+.home-store-text { display: flex; flex-direction: column; font-size: 0.95rem; font-weight: 600; line-height: 1.2; }
+.home-store-caption { font-size: 0.68rem; font-weight: 500; }
 
 /* Platform status. */
 .home-status { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 2rem; height: 2rem; border: 1px dashed var(--border); border-radius: 999px; color: var(--muted-foreground); }

@@ -1,4 +1,5 @@
 // Headless Edge audit of the prerendered docs. Usage: node tools/audit-web.mjs [baseUrl]
+// Set AUDIT_BROWSER to a Chromium executable to use it instead of Edge (for example on Linux CI).
 // Needs the prerendered site served: npx nx run web:preview (vite preview of dist/apps/web/analog/public). Screenshots go to .audit/screenshots.
 import { mkdirSync } from 'node:fs';
 import { chromium } from 'playwright-core';
@@ -19,7 +20,7 @@ const base = process.argv[2] ?? 'http://localhost:4300';
 const out = process.env.AUDIT_OUT ?? '.audit/screenshots';
 mkdirSync(out, { recursive: true });
 
-const browser = await chromium.launch({ channel: 'msedge', headless: true });
+const browser = await chromium.launch(process.env.AUDIT_BROWSER ? { executablePath: process.env.AUDIT_BROWSER, headless: true } : { channel: 'msedge', headless: true });
 const results = [];
 const check = (name, ok, detail = '') => {
   results.push({ name, ok });
@@ -107,7 +108,7 @@ await page.locator('docs-demo-live switch button').click();
 await page.waitForTimeout(200);
 check('Switch toggles on click', (await page.locator('docs-demo-live switch button').getAttribute('aria-checked')) === 'false');
 await open(page, '/docs/button-and-text-field');
-check('Spartan helm button renders in demo', (await page.locator('docs-demo-live button[hlmBtn], docs-demo-live button[data-slot=button]').count()) === 4);
+check('Spartan helm button and input render in the HTML-first demo', (await page.locator('docs-demo-live button[hlmBtn], docs-demo-live button[data-slot=button]').count()) === 2 && (await page.locator('docs-demo-live input[hlmInput]').count()) === 1);
 
 // 4. Navigation without reload, dark mode toggle, persistence.
 await open(page, '/docs/introduction');
@@ -242,12 +243,32 @@ check('mobile: TOC hidden', !(await mp.locator('[data-testid=toc]').isVisible())
   const vctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, permissions: ['clipboard-read', 'clipboard-write'] });
   const vp = await vctx.newPage();
   await open(vp, '/');
-  check('home: hero with h1, two CTAs and a live HTML and helm demo', (await vp.locator('[data-testid=hero] h1').innerText()).includes('HTML first') && (await vp.locator('[data-testid=hero] a[hlmbtn], [data-testid=hero] a[data-slot=button]').count()) === 2 && (await vp.locator('[data-testid=home-flex]').count()) === 1);
-  check('home: live demo is plain HTML in a flex row', (await style(vp, '[data-testid=home-flex]', 'flex-direction')) === 'row');
-  check('home: three what/why cards and six quick links', (await vp.locator('[data-testid=feature-card]').count()) === 3 && (await vp.locator('[data-testid=quick-link]').count()) === 6);
-  const hrefs = await vp.locator('[data-testid=quick-link]').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+  check('home: hero with h1, two CTAs and a live helm card', (await vp.locator('[data-testid=hero] h1').innerText()).includes('One HTML template') && (await vp.locator('[data-testid=hero] a[hlmbtn], [data-testid=hero] a[data-slot=button]').count()) === 2 && (await vp.locator('[data-testid=home-card] [hlmcard]').count()) === 1);
+  const heroCard = vp.locator('[data-testid=home-card]');
+  const heroBefore = await heroCard.innerText();
+  await heroCard.locator('[role=switch]').first().click();
+  await vp.waitForTimeout(200);
+  check('home: the hero card is live (its switch updates the text)', heroBefore.includes('Alerts off') && (await heroCard.innerText()).includes('Alerts on'));
+  check('home: the hero code is the card source, highlighted', (await vp.locator('[data-testid=home-demo] pre .token.tag').count()) > 5 && (await vp.locator('[data-testid=home-demo] pre').innerText()).includes('<section hlmCard'));
+  check('home: six feature cards from the shared FEATURES data', (await vp.locator('[data-testid=feature-card]').count()) === 6);
+  const hrefs = await vp.locator('[data-testid=feature-card], [data-testid=hero] a[hlmbtn]').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
   const statuses = await Promise.all(hrefs.map((h) => fetch(base + h + '/').then((r) => r.status)));
-  check('home: every quick link resolves to a prerendered page', statuses.every((s) => s === 200), hrefs.join(','));
+  check('home: every feature card and CTA resolves to a prerendered page', statuses.every((s) => s === 200), hrefs.join(','));
+  const homeHtml = await (await fetch(base + '/')).text();
+  check('home: prerendered HTML carries the showcase placeholder, not the examples', homeHtml.includes('home-showcase-placeholder') && !homeHtml.includes('data-testid="example-tab"'));
+  await vp.locator('#examples').scrollIntoViewIfNeeded();
+  await vp.locator('[data-testid=example-tab]').first().waitFor({ timeout: 10000 });
+  check('home: showcase lists the twelve shared examples', (await vp.locator('[data-testid=example-tab]').count()) === 12);
+  await vp.locator('[data-testid=example-tab]', { hasText: 'Analytics' }).click();
+  await vp.waitForTimeout(300);
+  check('home: picking an example renders it in the phone frame', (await vp.locator('[data-testid=example-title]').innerText()) === 'Analytics' && (await vp.locator('[data-testid=example-phone] example-analytics').count()) === 1);
+  await vp.keyboard.press('ArrowRight');
+  await vp.waitForTimeout(300);
+  check('home: ArrowRight moves to and selects the next example', (await vp.locator('[data-testid=example-tab][aria-selected=true]').innerText()).includes('Settings') && (await vp.evaluate(() => document.activeElement?.getAttribute('aria-selected'))) === 'true');
+  await vp.locator('[data-testid=example-view-code]').click();
+  check('home: Code view shows the example component source', (await vp.locator('[data-testid=example-source]').innerText()).includes("selector: 'example-settings'"));
+  await vp.locator('[data-testid=example-view-preview]').click();
+  await vp.evaluate(() => scrollTo(0, 0));
   check('home: no horizontal overflow at 1280', await vp.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await vp.screenshot({ path: `${out}/home-visual.png`, fullPage: true });
   await open(vp, '/', 'dark');
@@ -447,7 +468,7 @@ const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
   const legacySlugs = ['stack-layout', 'grid-layout', 'flexbox-layout', 'wrap-layout', 'dock-layout', 'absolute-layout', 'split-view', 'label', 'image', 'scroll-view', 'list-view', 'controls', 'button-and-text-field', 'indicators', 'navigation-views', 'polyfill-limitations'];
   await open(page, '/docs/introduction');
   const groups = await page.locator('[data-testid=sidebar] h2').allInnerTexts();
-  check('sidebar groups lead with HTML first and Components, then Legacy NativeScript tags', JSON.stringify(groups.map((g) => g.toLowerCase())) === JSON.stringify(['getting started', 'html first', 'components', 'legacy nativescript tags', 'guides']), groups.join(' | '));
+  check('sidebar groups lead with HTML first and Components, then Legacy NativeScript tags', JSON.stringify(groups.map((g) => g.toLowerCase())) === JSON.stringify(['getting started', 'html first', 'routing and content', 'components', 'legacy nativescript tags']), groups.join(' | '));
   const legacyLinks = await page.locator('[data-testid=sidebar] h2:has-text("Legacy") + ul a').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
   check('Legacy group lists the overview plus all 16 legacy pages', legacyLinks.length === 17 && legacySlugs.every((s) => legacyLinks.includes('/docs/' + s)) && legacyLinks.includes('/docs/legacy-tags'), legacyLinks.join(','));
   const noBanner = [];
@@ -478,6 +499,7 @@ const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
   const tabs = page.locator(`${preview} [hlmtabs]`).first();
   check('Tabs page: first tab active, second panel hidden', (await tabs.getByText('Make changes to your account here.').isVisible()) && !(await tabs.getByText('Change your password here.').isVisible()));
   await tabs.getByRole('tab', { name: 'Password' }).click();
+  await page.waitForTimeout(200);
   check('Tabs page: clicking Password shows its panel', (await tabs.getByText('Change your password here.').isVisible()) && !(await tabs.getByText('Make changes to your account here.').isVisible()));
   await open(page, '/docs/ui-accordion');
   const acc = page.locator(`${preview} hlm-accordion`).first();
@@ -511,7 +533,7 @@ const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
   const gridEq = page.locator('[data-testid=doc] .docs-demo-preview .grid').first();
   check('grid-layout migration demo is a CSS grid with 2 columns', (await gridEq.evaluate((e) => getComputedStyle(e).gridTemplateColumns.split(' ').length)) === 2);
   await open(page, '/');
-  check('home: no polyfill tags in the hero demo, quick links lead with HTML first, legacy last', (await page.locator('[data-testid=hero] stacklayout').count()) === 0 && (await page.locator('[data-testid=quick-link]').first().getAttribute('href')) === '/docs/introduction' && (await page.locator('[data-testid=quick-link]').last().getAttribute('href')) === '/docs/legacy-tags');
+  check('home: no polyfill tags in the hero demo, feature cards lead with HTML first, legacy last', (await page.locator('[data-testid=hero] stacklayout').count()) === 0 && (await page.locator('[data-testid=feature-card]').first().getAttribute('href')) === '/docs/html-first' && (await page.locator('[data-testid=feature-card]').last().getAttribute('href')) === '/docs/legacy-tags');
   // 11c. More helm components: open/interact checks.
   await open(page, '/docs/ui-select');
   await page.locator(`${preview} hlm-select-trigger button`).first().click();
@@ -572,6 +594,7 @@ const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
   check('Tooltip page: hovering shows "Add to library"', await page.locator('[role=tooltip]', { hasText: 'Add to library' }).first().isVisible().catch(() => false));
   await open(page, '/docs/ui-more');
   await page.locator(`${preview} button[hlmtoggle]`).first().click();
+  await page.waitForTimeout(200);
   check('More page: toggle sets aria-pressed', (await page.locator(`${preview} button[hlmtoggle]`).first().getAttribute('aria-pressed')) === 'true');
   await page.locator(`${preview} button[hlmcollapsibletrigger]`).click();
   await page.waitForTimeout(300);

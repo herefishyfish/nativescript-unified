@@ -73,6 +73,6 @@ A `relative` container with `absolute` children, positioned with `left-*` and `t
 
 ## On native
 
-On a device, MasonKit lays out the same elements with CSS flex and grid. The native app's CSS uses unitless lengths because `px` means physical pixels in NativeScript. See [Writing shared HTML features](/docs/shared-features).
+On a device, Mason, MasonKit's layout engine, lays out the same elements with CSS flex, grid, block flow and positioning, so the classes above mean the same thing there. Lengths on MasonKit elements follow the web too: `px` is a CSS pixel, and `rem`, `%` and `calc()` resolve. See [Writing shared HTML features](/docs/shared-features) for the rules shared templates follow.
 
 If you have existing `<StackLayout>` or `<GridLayout>` markup, see [Legacy NativeScript tags](/docs/legacy-tags).

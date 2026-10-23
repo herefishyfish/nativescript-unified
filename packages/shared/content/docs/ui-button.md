@@ -48,9 +48,9 @@ description: The hlmBtn directive for button and a elements, with variants and s
 
 ## Native
 
-`button hlmBtn` works on native. On the Android emulator (API 36), every variant and size renders in light and dark, taps fire `(click)`, and the disabled button is dimmed. iOS has not been run.
+`button hlmBtn` works on native. On the Android emulator (API 36), every variant and size renders in light and dark, taps fire `(click)`, and the disabled button is dimmed. These results have not been checked on iOS yet.
 
 Two gaps remain:
 
-- On `a hlmBtn`, the text sits at the top of the button and is underlined. A tap on the demo link does nothing. See [Links between docs pages](/docs/web-vs-native).
-- Size and shape utilities such as `h-12` or `rounded-full` on `hlmBtn` have no effect, because helm's own rules win. See [Known native limitations](/docs/web-vs-native).
+- On `a hlmBtn`, the text sits at the top of the button and is underlined. A tap on the demo link does nothing. See [Links between docs pages](/docs/web-vs-native#known-native-limitations).
+- Size and shape utilities such as `h-12` or `rounded-full` on `hlmBtn` have no effect, because helm's own rules win. See [Known native limitations](/docs/web-vs-native#known-native-limitations).

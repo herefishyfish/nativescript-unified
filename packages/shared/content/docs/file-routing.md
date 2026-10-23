@@ -1,7 +1,7 @@
 ---
 title: File-based routing
-section: Getting started
-order: 5
+section: Routing and content
+order: 15
 description: One pages/ convention on web and native.
 ---
 

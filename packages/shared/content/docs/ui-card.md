@@ -29,6 +29,6 @@ The parts are `hlmCard`, `hlmCardHeader`, `hlmCardTitle`, `hlmCardDescription`, 
 
 ## Native
 
-The card works on native. On the Android emulator (API 36), the header, title, description, content and footer render with their padding in light and dark, and the footer buttons respond to taps. iOS has not been run.
+The card works on native. On the Android emulator (API 36), the header, title, description, content and footer render with their padding in light and dark, and the footer buttons respond to taps. These results have not been checked on iOS yet.
 
-The card has no visible edge, because its ring and shadow are not drawn. It blends into a background of the same colour. Utilities such as `gap-*` or `p-*` on `hlmCard` have no effect, because helm's own rules win. See [Known native limitations](/docs/web-vs-native).
+The card has no visible edge, because its ring and shadow are not drawn. It blends into a background of the same colour. Utilities such as `gap-*` or `p-*` on `hlmCard` have no effect, because helm's own rules win. See [Known native limitations](/docs/web-vs-native#known-native-limitations).

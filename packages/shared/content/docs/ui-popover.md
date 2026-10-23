@@ -26,10 +26,11 @@ description: A floating panel anchored to a trigger button.
 ```
 
 `hlm-popover` takes `align`, `sideOffset`, `state` and `closeOnOutsidePointerEvents`, and emits `stateChanged` and `closed`.
-The popover overlay gets ole="dialog" from the brain popover, and helm has no input for an accessible name on it. In your own app, check that against your accessibility requirements.
+
+The popover overlay gets `role="dialog"` from the brain popover, and helm has no input for an accessible name on it. In your own app, check that against your accessibility requirements.
 
 ## Native
 
 The popover opens in a native popover window from `@nativescript-community/ui-popover`, anchored to its trigger. `align` and `sideOffset` set where the window sits. Select, combobox, autocomplete and date picker use the same anchored window.
 
-On the Android emulator (API 36), the popover opened below its trigger in light and dark, with its title, description and input. The Android back button closed it. The helm card draws without its shadow and ring there. iOS has not been run.
+On the Android emulator (API 36), the popover opened below its trigger in light and dark, with its title, description and input. The Android back button closed it. The helm card draws without its shadow and ring there. These results have not been checked on iOS yet.

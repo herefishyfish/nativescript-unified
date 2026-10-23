@@ -1,7 +1,7 @@
 ---
 title: Markdown content on native
-section: Guides
-order: 60
+section: Routing and content
+order: 16
 description: Content files, front matter and the Markdown renderer in analog-native.
 ---
 

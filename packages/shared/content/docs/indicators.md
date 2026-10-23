@@ -28,4 +28,4 @@ Hidden until `busy` is set.
 
 ## HTML-first equivalent
 
-Spartan helm has a progress bar, a skeleton and a spinner. See [Progress, skeleton, avatar and separator](/docs/ui-feedback) for live progress and skeleton examples.
+Spartan helm has a progress bar, a skeleton and a spinner. `<Progress>` becomes `hlm-progress`, and `<ActivityIndicator>` becomes `hlm-spinner`. See [Progress, skeleton, avatar and separator](/docs/ui-feedback) for progress and skeleton, and [Kbd and spinner](/docs/ui-more#kbd-and-spinner) for the spinner.

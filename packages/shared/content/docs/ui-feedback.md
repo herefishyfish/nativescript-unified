@@ -55,11 +55,11 @@ description: Small display components for progress, loading placeholders, avatar
 
 ## Native
 
-Results on the Android emulator (API 36), in light and dark. iOS has not been run.
+Results on the Android emulator (API 36), in light and dark. These results have not been checked on iOS yet.
 
 - **Progress:** the track renders, but the indicator is not drawn, so the bar looks empty at any value.
 - **Skeleton:** the blocks are not visible. No error is logged.
-- **Avatar:** the fallback circle renders, but the initials sit in the top left instead of the center. See [Known native limitations](/docs/web-vs-native).
+- **Avatar:** the fallback circle renders, but the initials sit in the top left instead of the center. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
 - **Separator:** works.
 
 `apps/native/src/app.css` adds a `motion-safe` variant override because NativeScript drops media queries. Without it, the spinner and skeleton animations would never run.

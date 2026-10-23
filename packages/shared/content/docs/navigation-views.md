@@ -75,4 +75,6 @@ On `ios`, `Tabs` becomes a bottom bar and `Pager` shows only dots. On `material`
 
 ## HTML-first equivalent
 
-For web-style tabs, use [Tabs](/docs/ui-tabs). The workspace also has helm `drawer`, `sheet`, `sidebar` and `navigation-menu` folders in `packages/ui/helm`, which have no pages here yet. On native, the example app uses the real `ActionBar` from `@nativescript/angular`, so ActionBar is not something you replace there. See [Web vs native](/docs/web-vs-native).
+For in-page tabs, use helm [Tabs](/docs/ui-tabs). For a side panel, use the [Sheet](/docs/ui-sheet), and for a bottom panel, the [Drawer](/docs/ui-drawer). The workspace also has helm `sidebar` and `navigation-menu` folders in `packages/ui/helm`, which have no pages here yet.
+
+On native, the example app uses the real `ActionBar` from `@nativescript/angular` and real bottom tabs from `@nativescript-community/ui-bottom-navigation`, so those are not things you replace there. See [Web vs native](/docs/web-vs-native).

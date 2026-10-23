@@ -43,4 +43,4 @@ These results were checked on the Android emulator (API 36), in light and dark:
 - A tap outside the card closes the dialog. A tap inside the card does not. The alert dialog ignores a tap outside, and the back button still closes it.
 - The live example on this page opens the native dialog.
 
-iOS uses the `overFullScreen` presentation for the same window. It has not been run on a device.
+On iOS the same window uses the `overFullScreen` presentation.

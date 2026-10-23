@@ -1,15 +1,15 @@
 ---
 title: FAQ
-section: Guides
-order: 61
+section: Getting started
+order: 5
 description: Short answers, each checked against the workspace.
 ---
 
 # FAQ
 
-## Does the native app run on a device?
+## Which platforms does it run on?
 
-It runs on Android. The app was built and run on an Android emulator (API 36), and it renders these docs pages with their live demos. iOS has not been built yet. See [Installation](/docs/installation) and [Web vs native](/docs/web-vs-native).
+The web, iOS and Android are the main targets. The same NativeScript app also runs on macOS and Windows, which are not the main focus. The native app renders these docs pages with their live demos on the device. The component notes in these docs were recorded on an Android emulator (API 36). See [Installation](/docs/installation) and [Web vs native](/docs/web-vs-native).
 
 ## Why are web and native separate apps?
 
@@ -33,18 +33,22 @@ Not through the polyfills. Use HTML elements or Spartan. On a device `<Button>` 
 
 ## Can a demo react to input?
 
-Yes. A demo is a real Angular template, so a template reference on a polyfill gives you its instance. Toggle this switch:
+Yes. A demo is a real Angular template, so a template reference gives you the component instance. Toggle this switch:
 
 ```html live
-<StackLayout orientation="horizontal" class="items-center gap-3">
-  <Switch #sw></Switch>
-  <Label [text]="sw.checked() ? 'On' : 'Off'"></Label>
-</StackLayout>
+<div class="flex flex-row items-center gap-3">
+  <hlm-switch #sw aria-label="Demo switch" />
+  <span class="text-sm">{{ sw.checked() ? 'On' : 'Off' }}</span>
+</div>
 ```
+
+## Does `px` mean the same thing on native?
+
+On MasonKit elements, yes: `px` is a CSS pixel, the same size as a NativeScript dip, and `rem`, `em`, `vw`, `vh` and `calc()` resolve as they do in a browser. On core NativeScript views such as `Label` or `ActionBar`, `px` is a device pixel. A bare number means a dip on both. See [Writing shared HTML features](/docs/shared-features).
 
 ## How do I add a docs page?
 
-Add a `.md` file to `packages/shared/content/docs`. The slug is the file name. Front matter has `title`, `section`, `order` and `description`. Pages sort by `order`, then by title, and sections appear in the order of their first page. A fenced block tagged `html live` is both shown and rendered as a demo.
+Add a `.md` file to `packages/shared/content/docs`. The slug is the file name. Front matter has `title`, `section`, `order` and `description`. Pages sort by `order`, then by title, and sections appear in the order of their first page. A fenced block tagged `html live` is both shown and rendered as a demo. Both apps pick the file up: the web prerenders it at `/docs/<slug>`, and the native app lists it on its Guide or Components tab.
 
 ## Is the site prerendered?
 

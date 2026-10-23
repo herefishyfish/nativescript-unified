@@ -12,20 +12,11 @@ description: What is not polyfilled, and the HTML-first alternative.
 
 The `web-polyfills` package has **no** `<Button>` or `<TextField>` component. The full list of tags it implements is:
 
-`ActionBar`, `NavigationButton`, `Tabs`, `Pager`, `Drawer`, `GridLayout`, `StackLayout`, `WrapLayout`, `AbsoluteLayout`, `DockLayout`, `FlexboxLayout`, `SplitView`, `ContentView`, `ScrollView`, `ActivityIndicator`, `Progress`, `Switch`, `Slider`, `SearchBar`, `SegmentedBar`, `ListPicker`, `Label`, `FormattedString`, `Span`, `Placeholder`, `Image`, `DatePicker`, `TimePicker`, `HtmlView`, `ListView`, `Repeater` and `WebView`.
+`ActionBar`, `NavigationButton`, `Tabs`, `Pager`, `Drawer`, `GridLayout`, `StackLayout`, `WrapLayout`, `AbsoluteLayout`, `DockLayout`, `FlexboxLayout`, `SplitView`, `ContentView`, `ScrollView`, `ActivityIndicator`, `Progress`, `Switch`, `Slider`, `SearchBar`, `SegmentedBar`, `ListPicker`, `Label`, `FormattedString`, `Span` (also as `NSpan`), `Placeholder`, `Image`, `DatePicker`, `TimePicker`, `HtmlView`, `ListView`, `Repeater` and `WebView`.
 
-In an HTML-first app you use the HTML elements for those two. On the web this site uses the Spartan `helm` button:
+In an HTML-first app you use the HTML elements for those two, styled with Spartan helm. See the HTML-first equivalent below.
 
-```html live
-<StackLayout orientation="horizontal" class="gap-2">
-  <button hlmBtn>Default</button>
-  <button hlmBtn variant="secondary">Secondary</button>
-  <button hlmBtn variant="outline">Outline</button>
-  <button hlmBtn variant="ghost">Ghost</button>
-</StackLayout>
-```
-
-On a device, MasonKit renders `<button>` and `<input>` as native views. On an Android emulator (API 36), `button hlmBtn` and `input hlmInput` render, taps fire `(click)`, and the input takes typed text. See [Button](/docs/ui-button) and [Form controls](/docs/ui-form-controls) for the gaps that remain. iOS has not been run.
+On a device, MasonKit renders `<button>` and `<input>` as native views. On an Android emulator (API 36), `button hlmBtn` and `input hlmInput` render, taps fire `(click)`, and the input takes typed text. See [Button](/docs/ui-button) and [Form controls](/docs/ui-form-controls) for the gaps that remain. These results have not been checked on iOS yet.
 
 ## HtmlView and ContentView
 
@@ -37,4 +28,16 @@ On a device, MasonKit renders `<button>` and `<input>` as native views. On an An
 
 ## HTML-first equivalent
 
-This page already points the same way: there is no polyfill for these two tags because HTML and Spartan cover them. See [Button](/docs/ui-button) and [Form controls](/docs/ui-form-controls).
+`<Button text="Save">` is `<button hlmBtn>Save</button>`, and `<TextField hint="Email">` is `<input hlmInput placeholder="Email" />`:
+
+```html live
+<div class="flex max-w-sm flex-col gap-3">
+  <input hlmInput type="email" placeholder="Email" aria-label="Email" />
+  <div class="flex flex-row flex-wrap gap-2">
+    <button hlmBtn>Save</button>
+    <button hlmBtn variant="outline">Cancel</button>
+  </div>
+</div>
+```
+
+See [Button](/docs/ui-button) and [Form controls](/docs/ui-form-controls) for every variant.

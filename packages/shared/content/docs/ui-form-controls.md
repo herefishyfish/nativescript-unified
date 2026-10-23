@@ -68,4 +68,4 @@ These controls work on native. On the Android emulator (API 36), in light and da
 - The checkbox and the switch toggle, and the demo text follows `checked()`.
 - The radio group selects an item when you tap its circle. A tap on the item's text does not select it.
 
-iOS has not been run.
+These results have not been checked on iOS yet.

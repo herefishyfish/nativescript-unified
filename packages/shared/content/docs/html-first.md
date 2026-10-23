@@ -28,7 +28,7 @@ The forward way to build in this project is plain HTML. A page is a template mad
 
 ## The four layers
 
-1. **Elements.** `div`, `p`, `h1` to `h6`, `ul`, `li`, `a`, `span`, `img`, `button`. On the web they are the browser's own. On a device, [MasonKit](https://github.com/triniwiz/nativescript-mason) registers HTML-shaped native elements with `@nativescript/angular`.
+1. **Elements.** `div`, `p`, `h1` to `h6`, `ul`, `li`, `a`, `span`, `img`, `button`. On the web they are the browser's own. On a device, [MasonKit](https://github.com/triniwiz/nativescript-mason) registers HTML-shaped native elements with `@nativescript/angular`, with browser-like defaults: headings and paragraphs get their usual margins and lists get markers.
 2. **Layout.** CSS flex and grid. See [Layout with flex and grid](/docs/html-layout).
 3. **Styling.** Tailwind utility classes using token names such as `bg-background`, `text-foreground` and `bg-primary text-primary-foreground`. See [Theming](/docs/theming).
 4. **Components.** Spartan helm, as attributes and small components. See [Components](/docs/components).
@@ -53,7 +53,7 @@ If you are coming from NativeScript tags, this is the HTML-first replacement for
 
 ## Shared between web and native
 
-Pages that use only plain elements and token classes can live in `packages/shared` and render in both apps. See [Writing shared HTML features](/docs/shared-features). Anything that needs a platform API stays in `apps/web` or `apps/native`. See [Web vs native](/docs/web-vs-native).
+Pages that use only plain elements, token classes and helm can live in `packages/shared` and render in both apps. See [Writing shared HTML features](/docs/shared-features). Anything that needs a platform API stays in `apps/web` or `apps/native`. See [Web vs native](/docs/web-vs-native).
 
 > [!NOTE]
-> The Tailwind classes and helm components on this site are verified on the web. `apps/native` uses `@nativescript/tailwind` and the same tokens. On an Android emulator (API 36), the native app renders these docs pages and their live demos. Each component page ends with a Native note that says what works there. iOS has not been run. See [Web vs native](/docs/web-vs-native) for the known native limitations.
+> `apps/native` uses `@nativescript/tailwind` and the same tokens, and on an Android emulator (API 36) it renders these pages and their live demos. A few utilities and helm components behave differently there. See [Known native limitations](/docs/web-vs-native#known-native-limitations) and [Native status](/docs/components#native-status).

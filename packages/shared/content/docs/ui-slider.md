@@ -27,6 +27,7 @@ Two values make two thumbs.
 ```
 
 The inputs also include `orientation`, `disabled`, `inverted` and `showTicks`.
+
 ## Native
 
-The slider is broken on native. On the Android emulator (API 36), in light and dark, both demos draw the track and the filled range at their start values, but no thumbs. A tap or a drag on the track does not change the value. The brain thumb measures itself with `getBoundingClientRect()`, which MasonKit elements do not have, so it throws. See [Known native limitations](/docs/web-vs-native). iOS has not been run.
+The slider is broken on native. On the Android emulator (API 36), in light and dark, both demos draw the track and the filled range at their start values, but no thumbs. A tap or a drag on the track does not change the value. The brain thumb measures itself with `getBoundingClientRect()`, which MasonKit elements do not have, so it throws. See [Known native limitations](/docs/web-vs-native#known-native-limitations). These results have not been checked on iOS yet.

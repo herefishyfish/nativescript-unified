@@ -65,4 +65,15 @@ description: Switch, Slider, SearchBar, SegmentedBar, ListPicker, DatePicker and
 
 ## HTML-first equivalent
 
-Spartan helm has a switch, checkbox, radio group, input and textarea. See [Form controls](/docs/ui-form-controls) for live examples. The workspace also contains helm `slider`, `select` and `date-picker` folders under `packages/ui/helm`, but they have no pages here yet.
+Each of these has a Spartan helm counterpart with a live example:
+
+| Legacy view | HTML first |
+| --- | --- |
+| `Switch` | `hlm-switch` on [Form controls](/docs/ui-form-controls) |
+| `Slider` | `hlm-slider` on [Slider](/docs/ui-slider) |
+| `SearchBar` | `input hlmInput type="search"` on [Form controls](/docs/ui-form-controls) |
+| `SegmentedBar` | `hlmToggleGroup` on [More components](/docs/ui-more) |
+| `ListPicker` | `hlm-select` on [Select](/docs/ui-select) |
+| `DatePicker` | `hlm-calendar` on [Calendar](/docs/ui-calendar) |
+
+A `TimePicker` has no helm counterpart. The workspace also has a helm `date-picker` folder under `packages/ui/helm`, which has no page here yet. Check the [Native status](/docs/components#native-status) table before you rely on the slider, select or calendar in the native app.

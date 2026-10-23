@@ -21,6 +21,7 @@ Web and native diverge often, so they are two apps at the top of the workspace. 
 | Build | Vite with `@analogjs/platform`, prerendered | Vite with `@nativescript/vite` and the `nativescriptAnalog()` plugin |
 | Dark mode | `dark` class on `<html>` | `ns-dark` class on the root view |
 | Styling | Tailwind and Spartan helm | Tailwind through `@nativescript/tailwind` and Spartan helm, with the same `tokens.css` |
+| CSS `px` | A CSS pixel | A CSS pixel on MasonKit elements, a device pixel on core NativeScript views |
 | Legacy NativeScript tags | Rendered by `web-polyfills`, for existing markup only | Real native views |
 
 ## Pages
@@ -69,15 +70,9 @@ That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders
 
 ## Spartan on native
 
-`packages/ui/native` holds the glue helm needs on NativeScript, and `provideSpartanNativeScript()` installs it. The native app renders these docs pages, and each `html live` demo is compiled on the device against the same helm components the web uses. The results below come from an Android emulator (API 36, x86_64), in light and dark. iOS has not been run.
+`packages/ui/native` holds the glue helm needs on NativeScript, and `provideSpartanNativeScript()` installs it. The native app renders these docs pages, and each `html live` demo is compiled on the device against the same helm components the web uses. Dialogs, sheets, drawers, popovers and menus open in native windows instead of a CDK overlay.
 
-Each component page ends with a Native note that says what works there. In short:
-
-- **Work:** button, badge, card, alert, tabs, form controls, dialog, alert dialog, drawer, popover, dropdown menu, toggle, toggle group, collapsible, breadcrumb and separator. Some of them have visual gaps.
-- **Render with large gaps:** table, calendar, progress and skeleton.
-- **Broken:** accordion, select, slider, tooltip, hover card and native select.
-
-See [Components](/docs/components).
+Each component page ends with a Native note that says what was seen on an Android emulator (API 36, x86_64), in light and dark. [Native status](/docs/components#native-status) sums them up in one table. These results have not been checked on iOS yet.
 
 ## Known native limitations
 

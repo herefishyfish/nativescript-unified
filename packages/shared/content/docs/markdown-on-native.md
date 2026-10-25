@@ -44,7 +44,7 @@ The slug matches the file name, not a `slug` field in front matter.
 
 ## Markdown as a route
 
-A `.md` file inside `pages/` is a route. `apps/native/src/app/pages/docs.md` becomes `/docs`, rendered by `MarkdownRouteComponent`, and its `title` front matter becomes the route title and the `ActionBar` title.
+A `.md` file inside `pages/` is a route. `apps/native/src/app/pages/docs/index.md` becomes `/docs`, rendered by `MarkdownRouteComponent`, and its `title` front matter becomes the route title and the `ActionBar` title. It is an `index.md` so `docs/[slug].page.ts` can serve `/docs/:slug` next to it. A `docs.md` beside that directory would be a layout for the slug pages.
 
 ## What each element becomes
 

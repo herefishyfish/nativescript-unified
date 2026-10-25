@@ -1,26 +1,15 @@
-import { ActionBarComponent } from '@nativescript/angular';
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MarkdownComponent, injectContent } from '@nativescript-unified/analog-native';
+import type { RouteMeta } from '@nativescript-unified/analog-native';
 
 /**
- * One shared docs page. `<analog-markdown>` renders the Markdown as native elements; every
- * `html live` block becomes a Preview / Code tab pair with a live JIT-compiled demo.
+ * `/guide/:slug` used to be the docs page. Shared Markdown links `/docs/:slug`, so this redirects there.
+ *
+ * The file router mounts `routeMeta` on the empty-path child of `:slug`. A string `redirectTo` only
+ * substitutes positional params of that empty path, which has none. The redirect function receives the
+ * snapshot, and an empty path inherits the parent `:slug`.
  */
-@Component({
-  selector: 'guide-doc-page',
-  imports: [ActionBarComponent, AsyncPipe, MarkdownComponent],
-  schemas: [NO_ERRORS_SCHEMA],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    @if (doc$ | async; as doc) {
-      <ActionBar [title]="$any(doc.attributes)['title'] ?? doc.slug" />
-      <scroll class="markdown-route">
-        <analog-markdown [content]="doc" />
-      </scroll>
-    }
-  `,
-})
-export default class GuideDocPage {
-  protected readonly doc$ = injectContent({ param: 'slug', subdirectory: 'docs' });
-}
+export const routeMeta: RouteMeta = {
+  pathMatch: 'full',
+  redirectTo: ({ params }) => `/docs/${params['slug']}`,
+};
+
+export default class GuideSlugRedirect {}

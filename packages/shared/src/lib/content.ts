@@ -2,7 +2,7 @@
 export interface Feature {
   title: string;
   body: string;
-  /** Slug of the docs page that covers it. Web links to /docs/<slug>, native to /guide/<slug>. */
+  /** Slug of the docs page that covers it. Both apps address that page at /docs/<slug>. */
   docs?: string;
 }
 

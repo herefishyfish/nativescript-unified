@@ -6,7 +6,8 @@ const COMPONENTS_SECTION = 'Components';
 
 /**
  * Index of the shared docs Markdown (packages/shared/content/docs), the same files the web docs render.
- * `kind` picks the tab: the component pages, or every other section.
+ * Tiles open `/docs/<slug>`, the path those files link to. `kind` picks the tab: the component
+ * pages, or every other section.
  */
 @Component({
   selector: 'guide-list',
@@ -23,7 +24,7 @@ const COMPONENTS_SECTION = 'Components';
               <h2 class="text-sm font-semibold text-muted-foreground">{{ section.title }}</h2>
             }
             @for (doc of section.pages; track doc.slug) {
-              <a [href]="'/guide/' + doc.slug" class="flex flex-col gap-1 p-3 rounded-lg bg-card text-card-foreground">
+              <a [href]="'/docs/' + doc.slug" class="flex flex-col gap-1 p-3 rounded-lg bg-card text-card-foreground">
                 <span class="text-base font-medium">{{ doc.title }}</span>
                 <span class="text-sm text-muted-foreground">{{ doc.description }}</span>
               </a>

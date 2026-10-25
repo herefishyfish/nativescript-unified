@@ -72,10 +72,12 @@ export class BrnAccordionTrigger implements FocusableOption {
 
 	private validateAriaStructure(): void {
 		const element = this._el.nativeElement;
-		// Non-DOM renderers (NativeScript) have no attributes or parent elements to validate.
-		if (typeof element.getAttribute !== 'function') return;
+		// NativeScript views are not DOM nodes. Menus shim getAttribute onto ViewBase, and the
+		// Angular renderer sets a lower-case tagName (`button`, `h3`) with no parentElement.
+		if (typeof element.getAttribute !== 'function' || typeof element.tagName !== 'string') return;
+		if (!('parentElement' in element)) return;
 
-		const isButton = element.tagName === 'BUTTON';
+		const isButton = element.tagName.toUpperCase() === 'BUTTON';
 		const hasButtonRole = element.getAttribute('role') === 'button';
 
 		if (!isButton && !hasButtonRole) {
@@ -86,16 +88,20 @@ export class BrnAccordionTrigger implements FocusableOption {
 		}
 
 		const parent = element.parentElement;
-		if (!parent) {
-			const message = 'BrnAccordionTrigger: The trigger button must be wrapped in a heading element.';
-			if (isDevMode()) {
-				throw Error(message);
-			} else {
-				console.warn(message);
+		if (!parent || typeof parent.tagName !== 'string' || typeof parent.getAttribute !== 'function') {
+			// A DOM node with no parent is an authoring error. Anything else is not a DOM parent.
+			if (parent === null) {
+				const message = 'BrnAccordionTrigger: The trigger button must be wrapped in a heading element.';
+				if (isDevMode()) {
+					throw Error(message);
+				} else {
+					console.warn(message);
+				}
 			}
+			return;
 		}
 
-		const isNativeHeading = /^H[1-6]$/.test(parent.tagName);
+		const isNativeHeading = /^H[1-6]$/i.test(parent.tagName);
 		const hasHeadingRole = parent.getAttribute('role') === 'heading';
 
 		if (!isNativeHeading && !hasHeadingRole) {
@@ -105,7 +111,11 @@ export class BrnAccordionTrigger implements FocusableOption {
 			);
 		}
 
-		if (hasHeadingRole && !parent.hasAttribute('aria-level')) {
+		const hasAriaLevel =
+			typeof parent.hasAttribute === 'function'
+				? parent.hasAttribute('aria-level')
+				: parent.getAttribute('aria-level') != null;
+		if (hasHeadingRole && !hasAriaLevel) {
 			throw Error('BrnAccordionTrigger: Elements with role="heading" must have an aria-level attribute.');
 		}
 	}

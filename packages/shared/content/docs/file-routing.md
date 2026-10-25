@@ -41,6 +41,8 @@ The Markdown under `packages/shared/content/docs` is read at build time, and eac
 
 `apps/native` uses `analog-native`, a package that implements the same conventions for NativeScript. It exists because the AnalogJS router package calls plain `provideRouter` and misses the NativeScript location strategy and `RouterExtensions`, and because AnalogJS content renders to an HTML string that a native view cannot show.
 
+The shared docs use the same URLs as the web app. `docs/[slug].page.ts` serves `/docs/:slug`, which is what the Markdown links to. `guide/index.page.ts` stays the `/guide` list, and `guide/[slug].page.ts` redirects to `/docs/:slug`.
+
 Differences you should know about:
 
 - `analog-native` also accepts `.md` files in `pages/` as Markdown routes.

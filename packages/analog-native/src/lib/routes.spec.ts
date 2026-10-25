@@ -148,4 +148,46 @@ describe('createRoutes', () => {
   it('returns no routes for no files', () => {
     expect(createRoutes({})).toEqual([]);
   });
+
+  it('serves a markdown index and a param page as siblings under a componentless parent', async () => {
+    const routes = await resolve(
+      createRoutes(
+        {
+          '/src/app/pages/docs/index.md': markdown('index', { title: 'Docs' }),
+          '/src/app/pages/docs/[slug].page.ts': page('Doc'),
+        },
+        { markdownComponent: MarkdownPage },
+      ),
+    );
+
+    expect(routes).toEqual([
+      {
+        path: 'docs',
+        children: [
+          { path: '', component: 'MarkdownPage' },
+          { path: ':slug', component: 'Doc' },
+        ],
+      },
+    ]);
+  });
+
+  it('nests a param page under a same-named markdown file, which makes that file a layout', async () => {
+    const routes = await resolve(
+      createRoutes(
+        {
+          '/src/app/pages/docs.md': markdown('docs', { title: 'Docs' }),
+          '/src/app/pages/docs/[slug].page.ts': page('Doc'),
+        },
+        { markdownComponent: MarkdownPage },
+      ),
+    );
+
+    expect(routes).toEqual([
+      {
+        path: 'docs',
+        component: 'MarkdownPage',
+        children: [{ path: ':slug', component: 'Doc' }],
+      },
+    ]);
+  });
 });

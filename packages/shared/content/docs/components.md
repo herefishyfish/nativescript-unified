@@ -76,7 +76,7 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Progress and skeleton](/docs/ui-feedback) | Partial | The progress indicator and the skeleton blocks are not drawn. |
 | [Table](/docs/ui-table) | Partial | The cells of each row stack vertically. |
 | [Calendar](/docs/ui-calendar) | Partial | Only the first day of each week shows. A tap on a day selects it. |
-| [Accordion](/docs/ui-accordion) | Broken | Renders an empty preview. |
+| [Accordion](/docs/ui-accordion) | Partial | No longer throws on MasonKit's lower-case tag names. The trigger toggles, and closed content stays hidden. Not rechecked on an emulator. |
 | [Select](/docs/ui-select) | Broken | The list opens, but a tap on an item does nothing. |
 | [Slider](/docs/ui-slider) | Broken | No thumbs, and the value does not change. |
 | [Tooltip](/docs/ui-tooltip) | Broken | Throws, and a touch screen has no hover. |

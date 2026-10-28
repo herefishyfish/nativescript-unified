@@ -128,7 +128,7 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
 
     @for (segment of segments(); track $index) {
       @if (segment.kind === 'live') {
-        <ng-container *ngComponentOutlet="liveCodeComponent; inputs: { code: segment.code }" />
+        <ng-container *ngComponentOutlet="liveCodeComponent; inputs: { code: segment.code, info: segment.info }" />
       } @else {
         <ng-container *ngTemplateOutlet="render; context: { $implicit: segment.tokens }" />
       }

@@ -46,7 +46,7 @@ describe('segmentMarkdown', () => {
   it('splits top-level tokens at live blocks and carries the code', () => {
     const segments = segmentMarkdown([para, live, para, live], true);
     expect(segments.map((s) => s.kind)).toEqual(['tokens', 'live', 'tokens', 'live']);
-    expect(segments[1]).toEqual({ kind: 'live', code: '<button>x</button>' });
+    expect(segments[1]).toEqual({ kind: 'live', code: '<button>x</button>', info: 'html live' });
     expect((segments[2] as { tokens: MarkdownToken[] }).tokens).toEqual([para]);
   });
 

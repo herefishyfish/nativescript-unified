@@ -3,8 +3,10 @@ import { CodeBlockComponent } from '@nativescript-unified/analog-native';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
+  Injector,
   input,
   NO_ERRORS_SCHEMA,
   PendingTasks,
@@ -46,21 +48,24 @@ import { HlmTextarea } from '@spartan-ng/helm/textarea';
 import { HlmToggle } from '@spartan-ng/helm/toggle';
 import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { HlmCheckboxImports as NativeCheckboxImports } from '../../../../../packages/ui/native/shims/helm-checkbox';
+import { HlmSliderImports as NativeSliderImports } from '../../../../../packages/ui/native/shims/helm-slider';
+import { HlmSwitchImports as NativeSwitchImports } from '../../../../../packages/ui/native/shims/helm-switch';
+import { NATIVE_ELEMENTS } from '../native-elements';
 
 /**
  * Helm pieces a docs `html live` block can use, mirroring the web demo's import list
  * (apps/web/src/app/docs/demo.ts). Elements a demo does not use are never instantiated;
  * helm tags without native glue degrade to empty containers through NO_ERRORS_SCHEMA.
+ * The checkbox, switch and slider are added per demo: spartan's, or the native ones.
  */
-const DEMO_IMPORTS = [
+const SHARED_IMPORTS = [
   HlmButton,
   HlmBadge,
   ...HlmCardImports,
   HlmInput,
   HlmLabel,
   HlmTextarea,
-  HlmCheckbox,
-  ...HlmSwitchImports,
   ...HlmRadioGroupImports,
   ...HlmTabsImports,
   ...HlmAccordionImports,
@@ -82,13 +87,17 @@ const DEMO_IMPORTS = [
   ...HlmPopoverImports,
   ...HlmSelectImports,
   ...HlmSheetImports,
-  ...HlmSliderImports,
   HlmSpinner,
   ...HlmTableImports,
   HlmToggle,
   ...HlmToggleGroupImports,
   ...HlmTooltipImports,
 ];
+
+const DEMO_IMPORTS = [...SHARED_IMPORTS, HlmCheckbox, ...HlmSwitchImports, ...HlmSliderImports];
+
+/** For `html live native` blocks: the platform checkbox, switch and slider (docs/native-elements). */
+const NATIVE_DEMO_IMPORTS = [...SHARED_IMPORTS, ...NativeCheckboxImports, ...NativeSwitchImports, ...NativeSliderImports];
 
 /**
  * The Angular JIT compiler loads on demand (`@nativescript/vite` code-splits the import and
@@ -104,19 +113,20 @@ const loadCompiler = () =>
 const cache = new Map<string, Type<unknown>>();
 
 /** Compiles the template string in a docs code block into a standalone component (Angular JIT). The code on the page is the code that runs. */
-function demoComponent(template: string): Type<unknown> {
-  let cmp = cache.get(template);
+function demoComponent(template: string, native: boolean): Type<unknown> {
+  const key = `${native}:${template}`;
+  let cmp = cache.get(key);
   if (!cmp) {
     class Demo {}
     Component({
       selector: 'ns-live-demo-view',
-      imports: DEMO_IMPORTS,
+      imports: native ? NATIVE_DEMO_IMPORTS : DEMO_IMPORTS,
       schemas: [NO_ERRORS_SCHEMA],
       changeDetection: ChangeDetectionStrategy.OnPush,
       template,
     })(Demo);
     cmp = Demo;
-    cache.set(template, cmp);
+    cache.set(key, cmp);
   }
   return cmp;
 }
@@ -131,6 +141,9 @@ function demoComponent(template: string): Type<unknown> {
  * render inside the markdown's MasonKit scroll container. Both panes stay mounted, so the
  * preview keeps its state when the user switches tabs (same as the web frame's two panels
  * staying in the DOM); the inactive one is collapsed, so the frame fits the active pane.
+ *
+ * A block tagged `html live native` previews with platform widgets: NATIVE_ELEMENTS for its
+ * `input` and `textarea`, and the native checkbox, switch and slider.
  */
 @Component({
   selector: 'ns-live-demo',
@@ -145,7 +158,7 @@ function demoComponent(template: string): Type<unknown> {
       </div>
       <div class="live-demo-pane" [class.live-demo-pane-hidden]="tab() !== 'preview'">
         <div class="live-demo-preview">
-          <ng-container *ngComponentOutlet="demo()" />
+          <ng-container *ngComponentOutlet="demo(); injector: demoInjector()" />
         </div>
       </div>
       <div class="live-demo-pane" [class.live-demo-pane-hidden]="tab() !== 'code'">
@@ -156,16 +169,24 @@ function demoComponent(template: string): Type<unknown> {
 })
 export class NsLiveDemo {
   readonly code = input.required<string>();
+  /** The block's info string, `html live` and any words after it. */
+  readonly info = input('');
   private readonly tasks = inject(PendingTasks);
+  private readonly injector = inject(Injector);
   protected readonly tab = signal<'preview' | 'code'>('preview');
   protected readonly demo = signal<Type<unknown> | null>(null);
+  private readonly native = computed(() => this.info().split(/\s+/).includes('native'));
+  protected readonly demoInjector = computed(() =>
+    this.native() ? Injector.create({ providers: [NATIVE_ELEMENTS], parent: this.injector }) : undefined,
+  );
 
   constructor() {
     effect(() => {
       const code = this.code();
+      const native = this.native();
       void this.tasks.run(async () => {
         await loadCompiler();
-        this.demo.set(demoComponent(code));
+        this.demo.set(demoComponent(code, native));
       });
     });
   }

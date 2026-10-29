@@ -104,8 +104,9 @@ describe('core view components', () => {
     const fixture = await show(MetersHost);
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('Label')?.querySelector('.t')?.textContent).toBe('Hello');
-    const fill = el.querySelector('Progress')?.querySelector('.fill') as HTMLElement;
-    expect(fill.style.width).toBe('50%');
+    const progress = el.querySelector('Progress') as HTMLProgressElement;
+    expect(progress.getAttribute('value')).toBe('40');
+    expect(progress.getAttribute('max')).toBe('80');
     expect((el.querySelector('ActivityIndicator') as HTMLElement).hasAttribute('busy')).toBe(true);
   });
 

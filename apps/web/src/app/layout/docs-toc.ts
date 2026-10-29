@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, effect, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import type { TocItem } from '../docs/content';
 
 @Component({
@@ -12,7 +13,7 @@ import type { TocItem } from '../docs/content';
           @for (item of items(); track item.id) {
             <li>
               <a
-                [href]="'#' + item.id"
+                [href]="hrefFor(item.id)"
                 class="-ml-px block border-l py-0.5 hover:text-foreground"
                 [class]="item.id === active() ? 'border-primary font-medium text-primary' : 'border-transparent text-muted-foreground'"
                 [class.pl-6]="item.depth === 3"
@@ -31,6 +32,12 @@ import type { TocItem } from '../docs/content';
 export class DocsToc {
   readonly items = input.required<TocItem[]>();
   protected readonly active = signal('');
+  private readonly router = inject(Router);
+
+  /** The page's own path plus the fragment. A bare `#id` resolves against `<base href="/">`, the home page. */
+  protected hrefFor(id: string): string {
+    return `${this.router.url.split('#')[0]}#${id}`;
+  }
 
   constructor() {
     effect((onCleanup) => {
@@ -62,7 +69,7 @@ export class DocsToc {
     event.preventDefault();
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
-    history.replaceState(null, '', '#' + id);
+    history.replaceState(null, '', this.hrefFor(id));
     this.active.set(id);
   }
 }

@@ -1,5 +1,5 @@
 import { NgComponentOutlet } from '@angular/common';
-import { CodeBlockComponent } from '@nativescript-unified/analog-native';
+import { CodeBlockComponent, HrefDirective } from '@nativescript-unified/analog-native';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -39,7 +39,6 @@ import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { HlmSeparator } from '@spartan-ng/helm/separator';
 import { HlmSheetImports } from '@spartan-ng/helm/sheet';
 import { HlmSkeleton } from '@spartan-ng/helm/skeleton';
-import { HlmSliderImports } from '@spartan-ng/helm/slider';
 import { HlmSpinner } from '@spartan-ng/helm/spinner';
 import { HlmSwitchImports } from '@spartan-ng/helm/switch';
 import { HlmTableImports } from '@spartan-ng/helm/table';
@@ -49,6 +48,7 @@ import { HlmToggle } from '@spartan-ng/helm/toggle';
 import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { HlmCheckboxImports as NativeCheckboxImports } from '../../../../../packages/ui/native/shims/helm-checkbox';
+// Spartan's slider measures its track and follows pointer events, which native views have neither of.
 import { HlmSliderImports as NativeSliderImports } from '../../../../../packages/ui/native/shims/helm-slider';
 import { HlmSwitchImports as NativeSwitchImports } from '../../../../../packages/ui/native/shims/helm-switch';
 import { NATIVE_ELEMENTS } from '../native-elements';
@@ -60,6 +60,7 @@ import { NATIVE_ELEMENTS } from '../native-elements';
  * The checkbox, switch and slider are added per demo: spartan's, or the native ones.
  */
 const SHARED_IMPORTS = [
+  HrefDirective,
   HlmButton,
   HlmBadge,
   ...HlmCardImports,
@@ -94,7 +95,7 @@ const SHARED_IMPORTS = [
   ...HlmTooltipImports,
 ];
 
-const DEMO_IMPORTS = [...SHARED_IMPORTS, HlmCheckbox, ...HlmSwitchImports, ...HlmSliderImports];
+const DEMO_IMPORTS = [...SHARED_IMPORTS, HlmCheckbox, ...HlmSwitchImports, ...NativeSliderImports];
 
 /** For `html live native` blocks: the platform checkbox, switch and slider (docs/native-elements). */
 const NATIVE_DEMO_IMPORTS = [...SHARED_IMPORTS, ...NativeCheckboxImports, ...NativeSwitchImports, ...NativeSliderImports];
@@ -144,6 +145,10 @@ function demoComponent(template: string, native: boolean): Type<unknown> {
  *
  * A block tagged `html live native` previews with platform widgets: NATIVE_ELEMENTS for its
  * `input` and `textarea`, and the native checkbox, switch and slider.
+ *
+ * A block tagged `html live web` demonstrates a web polyfill's own API (`<ns-tab>`, `<ns-page>`, a
+ * `Drawer` with an `open` signal), which has no NativeScript view behind it. The app shows its code
+ * and a note instead of compiling it.
  */
 @Component({
   selector: 'ns-live-demo',
@@ -158,7 +163,13 @@ function demoComponent(template: string, native: boolean): Type<unknown> {
       </div>
       <div class="live-demo-pane" [class.live-demo-pane-hidden]="tab() !== 'preview'">
         <div class="live-demo-preview">
-          <ng-container *ngComponentOutlet="demo(); injector: demoInjector()" />
+          @if (webOnly()) {
+            <p class="text-sm text-muted-foreground">
+              This demo uses the web polyfill's markup. In the app, use the NativeScript view itself. See the Code tab.
+            </p>
+          } @else {
+            <ng-container *ngComponentOutlet="demo(); injector: demoInjector()" />
+          }
         </div>
       </div>
       <div class="live-demo-pane" [class.live-demo-pane-hidden]="tab() !== 'code'">
@@ -176,6 +187,7 @@ export class NsLiveDemo {
   protected readonly tab = signal<'preview' | 'code'>('preview');
   protected readonly demo = signal<Type<unknown> | null>(null);
   private readonly native = computed(() => this.info().split(/\s+/).includes('native'));
+  protected readonly webOnly = computed(() => this.info().split(/\s+/).includes('web'));
   protected readonly demoInjector = computed(() =>
     this.native() ? Injector.create({ providers: [NATIVE_ELEMENTS], parent: this.injector }) : undefined,
   );
@@ -184,6 +196,7 @@ export class NsLiveDemo {
     effect(() => {
       const code = this.code();
       const native = this.native();
+      if (this.webOnly()) return;
       void this.tasks.run(async () => {
         await loadCompiler();
         this.demo.set(demoComponent(code, native));

@@ -31,11 +31,14 @@
 .markdown li { line-height: 1.5; }
 
 .markdown ul,
-.markdown ol { margin: 0; padding-left: 24; }
+.markdown ol { margin: 0; padding-left: 8; list-style-type: none; }
 
-/* MasonKit's `ul` has no markers under Tailwind's preflight, as on the web; prose wants them. */
-.markdown ul { list-style-type: disc; }
-.markdown ol { list-style-type: decimal; }
+/* The component draws each marker as a `span.md-marker`: an app may back `li` with a block element that draws
+   none (spartan's native layer does), and a MasonKit `li` would draw a second one, hence list-style-type: none. */
+.markdown li { display: flex; flex-direction: row; }
+.markdown .md-marker { width: 16; flex-shrink: 0; }
+.markdown ol .md-marker { width: 24; }
+.markdown .md-li-body { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 
 .markdown a { color: #0969da; text-decoration: underline; }
 

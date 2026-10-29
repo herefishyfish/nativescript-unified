@@ -1,15 +1,17 @@
 import { Directive, ElementRef, HostListener, inject, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterExtensions } from '@nativescript/angular';
+import { Utils } from '@nativescript/core';
 
 const EXTERNAL_URL = /^(?:[a-z][a-z\d+.-]*:|\/\/)/i;
 
 /**
- * Makes `<a href>` on MasonKit route app paths through the Angular router.
+ * Makes `<a href>` on MasonKit route app paths through the Angular router and open external URLs.
  *
- * MasonKit's `<a>` opens its `href` with `Utils.openUrl` on click. External URLs keep that
- * behaviour. For app paths the directive clears the element's `href`, so MasonKit has
- * nothing to open, and navigates with `RouterExtensions` instead.
+ * MasonKit's own `<a>` opens its `href` with `Utils.openUrl` on click, but an app may back `a` with
+ * another element (spartan's native layer uses a block), so the directive opens external URLs
+ * itself. For app paths it clears the element's `href`, so MasonKit has nothing to open, and
+ * navigates with `RouterExtensions` instead.
  */
 @Directive({ selector: 'a[href]' })
 export class HrefDirective {
@@ -23,13 +25,18 @@ export class HrefDirective {
   @Input({ required: true })
   set href(value: string | null | undefined) {
     this.target = value ?? '';
-    this.element.href = EXTERNAL_URL.test(this.target) ? this.target : '';
+    // Cleared for every URL: the click handler opens it, and MasonKit's `<a>` would open it a second time.
+    this.element.href = '';
   }
 
   @HostListener('click')
   navigate(): void {
     const href = this.target;
-    if (!href || href.startsWith('#') || EXTERNAL_URL.test(href)) {
+    if (!href || href.startsWith('#')) {
+      return;
+    }
+    if (EXTERNAL_URL.test(href)) {
+      Utils.openUrl(href.startsWith('//') ? `https:${href}` : href);
       return;
     }
     const url = new URL(href, `app://local${this.router.url}`);

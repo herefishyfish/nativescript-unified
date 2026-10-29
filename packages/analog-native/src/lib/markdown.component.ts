@@ -80,14 +80,20 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
     <ng-template #ul let-t>
       <ul>
         @for (item of t.items; track $index) {
-          <li><ng-container *ngTemplateOutlet="render; context: { $implicit: item.tokens }" /></li>
+          <li>
+            <span class="md-marker">•</span>
+            <div class="md-li-body"><ng-container *ngTemplateOutlet="render; context: { $implicit: item.tokens }" /></div>
+          </li>
         }
       </ul>
     </ng-template>
     <ng-template #ol let-t>
       <ol>
         @for (item of t.items; track $index) {
-          <li><ng-container *ngTemplateOutlet="render; context: { $implicit: item.tokens }" /></li>
+          <li>
+            <span class="md-marker">{{ (t.start || 1) + $index }}.</span>
+            <div class="md-li-body"><ng-container *ngTemplateOutlet="render; context: { $implicit: item.tokens }" /></div>
+          </li>
         }
       </ol>
     </ng-template>

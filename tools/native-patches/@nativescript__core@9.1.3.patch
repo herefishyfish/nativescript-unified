@@ -109,3 +109,64 @@ index e75c7c8..c48a7c9 100644
          for (const property in cssExpsProperties) {
              const hadOldValue = property in oldProperties;
              const oldValue = hadOldValue ? oldProperties[property] : undefined;
+diff --git a/ui/core/properties/index.js b/ui/core/properties/index.js
+index 2c0c5cf..b33adaf 100644
+--- a/ui/core/properties/index.js
++++ b/ui/core/properties/index.js
+@@ -171,21 +171,46 @@ export function _evaluateCssVariableExpression(view, cssName, value) {
+         if (idx === -1) {
+             continue;
+         }
+-        const endIdx = output.indexOf(')', idx);
++        // The var( ends at its own closing parenthesis: a fallback can hold parentheses (`rgba(0, 0, 0, 0.1)`).
++        let endIdx = -1;
++        for (let i = idx + 4, depth = 1; i < output.length; i++) {
++            if (output[i] === '(') {
++                depth++;
++            }
++            else if (output[i] === ')' && --depth === 0) {
++                endIdx = i;
++                break;
++            }
++        }
+         if (endIdx === -1) {
+             continue;
+         }
+-        const matched = output
+-            .substring(idx + 4, endIdx)
+-            .split(',')
+-            .map((v) => v.trim())
+-            .filter((v) => !!v);
+-        const cssVariableName = matched.shift();
++        // The name ends at the first top-level comma; the rest, commas and all, is the fallback.
++        const inner = output.substring(idx + 4, endIdx);
++        let comma = -1;
++        for (let i = 0, depth = 0; i < inner.length; i++) {
++            if (inner[i] === '(') {
++                depth++;
++            }
++            else if (inner[i] === ')') {
++                depth--;
++            }
++            else if (inner[i] === ',' && depth === 0) {
++                comma = i;
++                break;
++            }
++        }
++        const cssVariableName = (comma === -1 ? inner : inner.substring(0, comma)).trim();
+         let cssVariableValue = view.style.getCssVariable(cssVariableName);
+-        if (cssVariableValue === null && matched.length) {
+-            cssVariableValue = _evaluateCssVariableExpression(view, cssName, matched.join(', ')).split(',')[0];
++        // `initial` is the guaranteed-invalid value (Tailwind's @property fallbacks set it), so the fallback applies.
++        if (cssVariableValue === 'initial') {
++            cssVariableValue = null;
++        }
++        if (cssVariableValue === null && comma !== -1) {
++            // An empty fallback (`var(--tw-ring-inset,)`) substitutes nothing, as in CSS.
++            cssVariableValue = _evaluateCssVariableExpression(view, cssName, inner.substring(comma + 1).trim());
+         }
+-        if (!cssVariableValue) {
++        else if (!cssVariableValue) {
+             cssVariableValue = 'unset';
+         }
+         output = `${output.substring(0, idx)}${cssVariableValue}${output.substring(endIdx + 1)}`;

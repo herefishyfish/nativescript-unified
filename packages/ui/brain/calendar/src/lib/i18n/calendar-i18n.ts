@@ -46,6 +46,32 @@ export function provideBrnCalendarI18n(configuration?: Partial<BrnCalendarI18n>)
 	};
 }
 
+const MONTH_NAMES = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
+];
+
+let localeOptionsSupported: boolean | undefined;
+
+/**
+ * Whether `toLocaleDateString` honours its options. A runtime without full ICU (NativeScript's V8 on Android) ignores
+ * them and returns the whole date, so the defaults fall back to English names there.
+ */
+function localeDateOptions(): boolean {
+	localeOptionsSupported ??= new Date(2000, 0, 1).toLocaleDateString('en-US', { month: 'long' }) === 'January';
+	return localeOptionsSupported;
+}
+
 const defaultCalendarI18n: BrnCalendarI18n = {
 	formatWeekdayName: (index: number) => {
 		const weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -59,17 +85,20 @@ const defaultCalendarI18n: BrnCalendarI18n = {
 		return Array.from({ length: lastYear - firstYear + 1 }, (_, i) => firstYear + i);
 	},
 	formatHeader: (month: number, year: number) => {
+		if (!localeDateOptions()) return `${MONTH_NAMES[month]} ${year}`;
 		return new Date(year, month).toLocaleDateString(undefined, {
 			month: 'long',
 			year: 'numeric',
 		});
 	},
 	formatMonth: (month: number) => {
+		if (!localeDateOptions()) return MONTH_NAMES[month].slice(0, 3);
 		return new Date(2000, month).toLocaleDateString(undefined, {
 			month: 'short',
 		});
 	},
 	formatYear: (year: number): string => {
+		if (!localeDateOptions()) return String(year);
 		return new Date(year, 0).toLocaleDateString(undefined, {
 			year: 'numeric',
 		});

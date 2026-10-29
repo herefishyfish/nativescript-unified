@@ -50,3 +50,78 @@
 	transform: none;
 	animation: none;
 }
+
+/* table, tr, td, th (helm table, calendar): MasonKit has no table layout, so the tags are block boxes
+   (registerSpartanNativeElements). A row lays its cells out side by side, each taking an equal share, as a table
+   with even content does. */
+.style-vega tr {
+	display: flex;
+	flex-direction: row;
+}
+
+.style-vega td,
+.style-vega th {
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: 0;
+	min-width: 0;
+}
+
+/* shadow-*, ring-* (cards, popovers, menus, inputs): Tailwind gives the shadow layers their empty initial value with
+   @property, which NativeScript drops, so every composed box-shadow referenced undefined variables and drew nothing.
+   On `*`, as @property's inherits: false keeps them per element; any utility or helm rule that sets one wins. */
+* {
+	--tw-shadow: 0 0 #0000;
+	--tw-inset-shadow: 0 0 #0000;
+	--tw-inset-ring-shadow: 0 0 #0000;
+	--tw-ring-offset-shadow: 0 0 #0000;
+	--tw-ring-shadow: 0 0 #0000;
+}
+
+/* .spartan-tabs-trigger after:bg-foreground after:h-0.5 (line variant): there are no ::after boxes, so the active
+   trigger's own bottom border draws the underline. */
+.style-vega [data-slot='tabs-list'][data-variant='line'] [data-slot='tabs-trigger'][data-state='active'] {
+	border-bottom-width: 2;
+	border-bottom-color: var(--foreground);
+}
+
+/* .spartan-select-content w-(--brn-select-width) overflow-y-auto: brain writes the trigger's width in px, which
+   NativeScript reads as device pixels, and the popover window measured the panel at zero width; and a MasonKit scroll
+   box inside a popover window takes the taps meant for its options. The panel sizes to its options, never narrower
+   than min-w-36, and does not scroll: a long list runs to the window's edge. */
+.style-vega .spartan-select-content {
+	width: auto;
+	min-width: 144;
+	overflow: visible;
+}
+
+/* td, and its day button, w-full aspect-square (helm calendar): an aspect ratio follows the full-width preferred size
+   before the row shares the width out, so each day was as tall as the table was wide. Cells take their share, and a
+   day is --cell-size tall. */
+.style-vega td,
+.style-vega th {
+	width: auto;
+	height: auto;
+	aspect-ratio: auto;
+}
+
+.style-vega td > button {
+	width: 100%;
+	height: 32;
+	aspect-ratio: auto;
+}
+
+/* .spartan-progress inline-flex, and hlm-calendar's inline-flex root: MasonKit lays an inline-flex box out as an
+   inline text run, so the calendar's header sat at the bottom of a tall empty run with the weeks spilling out of
+   it, and the progress indicator was laid out but not painted. Both are full-width blocks here anyway. */
+.style-vega .spartan-progress,
+.style-vega .spartan-calendar > div {
+	display: flex;
+}
+
+/* .spartan-slider-track bg-muted, .spartan-slider-range bg-primary: the one-value slider is the platform slider
+   (shims/helm-slider.ts), coloured from the same tokens. */
+.style-vega .native-slider {
+	color: var(--primary);
+	track-background-color: var(--muted);
+}

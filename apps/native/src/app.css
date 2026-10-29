@@ -12,6 +12,9 @@
 @source '../../../packages/analog-native/src';
 @source '../../../packages/ui/helm';
 @source '../../../packages/ui/native';
+/* The docs' live demos are templates in Markdown; without this, classes only they use (bg-primary on a div,
+   grid-cols-[80px_1fr], w-[90px]) are never generated. */
+@source '../../../packages/shared/content';
 
 /* NativeScript stamps ns-dark on the root view instead of the web's .dark. */
 @custom-variant dark (&:is(.ns-dark *));

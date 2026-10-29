@@ -23,8 +23,14 @@ process.env['NS_VENDOR_EXCLUDE'] = rootDependencies.filter((name) => !appDepende
 // other file keeps spartan's MasonKit components. Each shim, packages/ui/native/shims/helm-<name>.ts, needs its package.
 const NATIVE_HELM = ['switch', 'checkbox', 'slider'];
 const NATIVE_HELM_IMPORTERS = /\/packages\/shared\/src\/lib\/examples\//;
+// Spartan's slider measures its track and follows pointer events, which native views have neither of, so every
+// file gets the shim (one value: the platform slider; a range: a touch-driven helm-styled slider).
+const ALWAYS_NATIVE_HELM = ['slider'];
 
-/** Resolves `@spartan-ng/helm/<name>` in NATIVE_HELM to its native shim, for the files NATIVE_HELM_IMPORTERS matches. */
+/**
+ * Resolves `@spartan-ng/helm/<name>` in NATIVE_HELM to its native shim, for the files NATIVE_HELM_IMPORTERS matches,
+ * and in ALWAYS_NATIVE_HELM for every file.
+ */
 function nativeHelm(): Plugin {
   const shims = new Map(
     NATIVE_HELM.map((name) => [`@spartan-ng/helm/${name}`, join(workspaceRoot, `packages/ui/native/shims/helm-${name}.ts`)]),
@@ -37,7 +43,9 @@ function nativeHelm(): Plugin {
       order: 'pre',
       handler(source, importer) {
         const shim = shims.get(source);
-        return shim && importer && NATIVE_HELM_IMPORTERS.test(normalizePath(importer)) ? shim : null;
+        if (!shim || !importer) return null;
+        const always = ALWAYS_NATIVE_HELM.some((name) => source === `@spartan-ng/helm/${name}`);
+        return always || NATIVE_HELM_IMPORTERS.test(normalizePath(importer)) ? shim : null;
       },
     },
   };

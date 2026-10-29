@@ -1,5 +1,5 @@
 diff --git a/hmr/server/core-bundle.js b/hmr/server/core-bundle.js
-index 993097b9d861a2a7c477f4e664213efec3eb6293..7ecb177136fd2c899d32f4cc6e874250f7ba1976 100644
+index 993097b..aeb436e 100644
 --- a/hmr/server/core-bundle.js
 +++ b/hmr/server/core-bundle.js
 @@ -490,6 +490,8 @@ export async function generateCoreBundle(options) {
@@ -12,7 +12,7 @@ index 993097b9d861a2a7c477f4e664213efec3eb6293..7ecb177136fd2c899d32f4cc6e874250
          // Keep every module body — core relies on registration side effects
          // (CssAnimationProperty.register, global.registerModule, …).
 diff --git a/hmr/server/deps-bundle.js b/hmr/server/deps-bundle.js
-index 8f2fa15556244f7ef811b5e2ea0fc6a19bab74d3..75c9040968d70195cedb8cc0889924b28919a3d1 100644
+index 8f2fa15..d6d4fca 100644
 --- a/hmr/server/deps-bundle.js
 +++ b/hmr/server/deps-bundle.js
 @@ -712,6 +712,8 @@ export async function generateDepsBundle(options) {
@@ -35,20 +35,19 @@ index 8f2fa15556244f7ef811b5e2ea0fc6a19bab74d3..75c9040968d70195cedb8cc0889924b2
      const names = new Set(extractDirectExportedNames(code));
      let match;
 diff --git a/hmr/server/websocket-module-specifiers.js b/hmr/server/websocket-module-specifiers.js
-index 74f50a77f48f3873aebf375a29d06b16c29440a3..3b45734918e6e5d33a65d20450eebb1bdfd2812f 100644
+index 74f50a7..fd23e88 100644
 --- a/hmr/server/websocket-module-specifiers.js
 +++ b/hmr/server/websocket-module-specifiers.js
-@@ -387,7 +387,8 @@ export function resolveCandidateFilePath(candidate, projectRoot, workspaceRoot)
+@@ -387,7 +387,7 @@ export function resolveCandidateFilePath(candidate, projectRoot, workspaceRoot)
          const resolvedRoot = path.resolve(root);
          let absPath = null;
          if (cleaned.startsWith('/@fs/')) {
 -            absPath = cleaned.slice('/@fs'.length);
-+            // "/@fs/D:/..." on Windows: drop the slash before the drive letter.
-+            absPath = cleaned.slice('/@fs'.length).replace(/^\/(?=[A-Za-z]:\/)/, '');
++            absPath = cleaned.slice('/@fs'.length).replace(/^\/([A-Za-z]:)/, '$1');
          }
          else if (cleaned.includes('/node_modules/')) {
              absPath = path.resolve(resolvedRoot, `.${cleaned}`);
-@@ -465,9 +466,12 @@ export function rewriteFsAbsoluteToNsM(spec, projectRoot, workspaceRoot) {
+@@ -465,9 +465,12 @@ export function rewriteFsAbsoluteToNsM(spec, projectRoot, workspaceRoot) {
      // /@fs/<abs-path> — strip the prefix to recover the absolute path.
      // On posix this is "/Users/...". On Windows Vite emits "/@fs/C:/..."
      // where the path retains its drive letter.
@@ -62,7 +61,7 @@ index 74f50a77f48f3873aebf375a29d06b16c29440a3..3b45734918e6e5d33a65d20450eebb1b
      const toPosix = (value) => value.replace(/\\/g, '/');
      const stripTrailing = (value) => value.replace(/\/+$/, '');
      const projectRootPosix = stripTrailing(toPosix(path.resolve(projectRoot)));
-@@ -548,7 +552,7 @@ export function filterExistingNodeModulesTransformCandidates(spec, candidates, p
+@@ -548,7 +551,7 @@ export function filterExistingNodeModulesTransformCandidates(spec, candidates, p
              if (realResolved !== resolved) {
                  const realIsInsideNodeModules = realResolved.split(path.sep).includes('node_modules');
                  if (!realIsInsideNodeModules) {
@@ -71,7 +70,7 @@ index 74f50a77f48f3873aebf375a29d06b16c29440a3..3b45734918e6e5d33a65d20450eebb1b
                  }
              }
          }
-@@ -571,7 +575,7 @@ export function filterExistingNodeModulesTransformCandidates(spec, candidates, p
+@@ -571,7 +574,7 @@ export function filterExistingNodeModulesTransformCandidates(spec, candidates, p
                      // Rewrite the URL to its fs-anchored form so Vite reads it directly
                      // instead of bouncing through bare-specifier resolution that the
                      // hoisted package's `exports` field may refuse.
@@ -80,21 +79,8 @@ index 74f50a77f48f3873aebf375a29d06b16c29440a3..3b45734918e6e5d33a65d20450eebb1b
                  }
              }
          }
-diff --git a/hmr/server/websocket-ns-m-request.js b/hmr/server/websocket-ns-m-request.js
-index a11fbd5d24579cdf572a91f70cb06561bfa43cd0..c3dcb03020a1483058bf33ee49340a2edb2efd1f 100644
---- a/hmr/server/websocket-ns-m-request.js
-+++ b/hmr/server/websocket-ns-m-request.js
-@@ -148,7 +148,7 @@ export function resolveFsAnchoredSpec(spec, serverRoot, workspaceRoot) {
-     const roots = [serverRoot, ...(workspaceRoot && path.resolve(workspaceRoot) !== path.resolve(serverRoot) ? [workspaceRoot] : [])];
-     for (const root of roots) {
-         const rootPosix = root.replace(/\\/g, '/').replace(/\/$/, '');
--        const fsId = `/@fs${rootPosix}${spec.startsWith('/') ? '' : '/'}${spec}`;
-+        const fsId = `/@fs${rootPosix.startsWith('/') ? '' : '/'}${rootPosix}${spec.startsWith('/') ? '' : '/'}${spec}`;
-         if (resolveCandidateFilePath(fsId, serverRoot, workspaceRoot)) {
-             return fsId;
-         }
 diff --git a/hmr/shared/vendor/manifest.js b/hmr/shared/vendor/manifest.js
-index 54ba11ef9c329df049fa93b01b2ce47c9fb1ac3e..afd83e1582e752ad6a7f85602a0c6e21f71e17ed 100644
+index 54ba11e..5580039 100644
 --- a/hmr/shared/vendor/manifest.js
 +++ b/hmr/shared/vendor/manifest.js
 @@ -313,6 +313,8 @@ async function generateVendorBundle(options) {

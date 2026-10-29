@@ -11,6 +11,7 @@ import {
 	type OverlayRef,
 } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { DOCUMENT } from '@angular/common';
 import {
 	computed,
 	Directive,
@@ -22,6 +23,7 @@ import {
 	NgZone,
 	numberAttribute,
 	type OnDestroy,
+	Renderer2,
 	type OnInit,
 	type Signal,
 	signal,
@@ -37,6 +39,7 @@ import {
 	provideExposedSideProviderExisting,
 	provideExposesStateProviderExisting,
 } from '@spartan-ng/brain/core';
+import { BrnOverlayService, type BrnOverlayRef } from '@spartan-ng/brain/overlay';
 import { BehaviorSubject, fromEvent, merge, type Observable, of, Subject } from 'rxjs';
 import { delay, distinctUntilChanged, filter, map, share, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { injectBrnHoverCardDefaultOptions } from './brn-hover-card.token';
@@ -181,6 +184,11 @@ export class BrnHoverCardContentService {
 
 	private _config: BrnHoverCardOptions = {};
 	private _overlayRef?: OverlayRef;
+	/** Without a DOM window (NativeScript) there is no CDK overlay container; the card opens through the overlay host. */
+	private readonly _touch = !inject(DOCUMENT).defaultView;
+	private readonly _overlayService = inject(BrnOverlayService);
+	private _touchRef?: BrnOverlayRef;
+	private _touchContent?: { template: TemplateRef<unknown>; vcr: ViewContainerRef };
 	private _positionStrategy?: FlexibleConnectedPositionStrategy;
 	private _destroyed$ = new Subject<void>();
 
@@ -221,6 +229,7 @@ export class BrnHoverCardContentService {
 
 	public setConfig(config: BrnHoverCardOptions) {
 		this._config = config;
+		if (this._touch) return;
 		if (config.attachTo) {
 			const align = config.align ?? 'bottom';
 			const positions = config.attachPositions ?? POSITION_MAP[align];
@@ -246,6 +255,10 @@ export class BrnHoverCardContentService {
 	}
 
 	public setContent(value: TemplateRef<unknown> | BrnHoverCardContent, vcr: ViewContainerRef) {
+		if (this._touch) {
+			this._touchContent = { template: value instanceof TemplateRef ? value : value.template, vcr };
+			return;
+		}
 		this._content.set(new TemplatePortal<unknown>(value instanceof TemplateRef ? value : value.template, vcr));
 
 		if (!this._overlayRef) {
@@ -255,6 +268,26 @@ export class BrnHoverCardContentService {
 
 	public setState(newState: 'open' | 'closed') {
 		this._state.set(newState);
+	}
+
+	/** Opens or closes the card for a tap on the trigger, where there is no hover. */
+	public toggleTouch(): void {
+		if (this._touchRef?.open) {
+			this._touchRef.close();
+			return;
+		}
+		const content = this._touchContent;
+		const align = this._config.align ?? 'bottom';
+		if (!content) return;
+		this.setState('open');
+		const ref = this._overlayService.open(content.template, content.vcr, undefined, {
+			attachTo: this._config.attachTo,
+			attachPositions: POSITION_MAP[align],
+			closeOnOutsidePointerEvents: true,
+			hasBackdrop: false,
+		});
+		this._touchRef = ref;
+		ref.closed$.subscribe(() => this.setState('closed'));
 	}
 
 	public show() {
@@ -290,6 +323,8 @@ export class BrnHoverCardTrigger implements OnInit, OnDestroy {
 	private readonly _el = inject(ElementRef);
 	private readonly _contentService = inject(BrnHoverCardContentService);
 	private readonly _focusMonitor = inject(FocusMonitor);
+	private readonly _renderer = inject(Renderer2);
+	private readonly _touch = !inject(DOCUMENT).defaultView;
 
 	public readonly focused$: Observable<boolean> = this._focusMonitor.monitor(this._el).pipe(map((e) => e !== null));
 
@@ -351,6 +386,11 @@ export class BrnHoverCardTrigger implements OnInit, OnDestroy {
 
 	public ngOnInit() {
 		this._contentService.setConfig({ attachTo: this._el, align: this.align(), sideOffset: this.sideOffset() });
+		if (this._touch) {
+			const stop = this._renderer.listen(this._el.nativeElement, 'tap', () => this._contentService.toggleTouch());
+			this._destroy$.subscribe(stop);
+			return;
+		}
 		this.showing$.subscribe((isHovered) => {
 			if (isHovered) {
 				this._contentService.show();

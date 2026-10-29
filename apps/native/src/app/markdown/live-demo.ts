@@ -47,6 +47,8 @@ import { HlmTextarea } from '@spartan-ng/helm/textarea';
 import { HlmToggle } from '@spartan-ng/helm/toggle';
 import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { HlmToasterImports } from '@spartan-ng/helm/sonner';
+import { toast } from '@spartan-ng/brain/sonner';
 import { HlmCheckboxImports as NativeCheckboxImports } from '../../../../../packages/ui/native/shims/helm-checkbox';
 // Spartan's slider measures its track and follows pointer events, which native views have neither of.
 import { HlmSliderImports as NativeSliderImports } from '../../../../../packages/ui/native/shims/helm-slider';
@@ -93,6 +95,7 @@ const SHARED_IMPORTS = [
   HlmToggle,
   ...HlmToggleGroupImports,
   ...HlmTooltipImports,
+  ...HlmToasterImports,
 ];
 
 const DEMO_IMPORTS = [...SHARED_IMPORTS, HlmCheckbox, ...HlmSwitchImports, ...NativeSliderImports];
@@ -118,7 +121,10 @@ function demoComponent(template: string, native: boolean): Type<unknown> {
   const key = `${native}:${template}`;
   let cmp = cache.get(key);
   if (!cmp) {
-    class Demo {}
+    class Demo {
+      /** brain's toast(), so a demo can show one from a click. */
+      protected readonly toast = toast;
+    }
     Component({
       selector: 'ns-live-demo-view',
       imports: native ? NATIVE_DEMO_IMPORTS : DEMO_IMPORTS,

@@ -122,7 +122,7 @@ index e5fcd404ba8a8e43c205636a329ba73c9a7c0368..d826082ad0993742e0de5104cc749edc
 -  return input.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 -}
 diff --git a/src/removeUnsupported.js b/src/removeUnsupported.js
-index f4027ee..ed1afe6 100644
+index f4027ee8999ab65026a5be9ebe154a8c0c420e8a..164ade3ca09df5b633b1fc249d4cd790996fe11b 100644
 --- a/src/removeUnsupported.js
 +++ b/src/removeUnsupported.js
 @@ -7,7 +7,9 @@ function isSupportedProperty(prop, val = null) {
@@ -298,16 +298,22 @@ index f4027ee..ed1afe6 100644
        // invalid with core 8.8+ at moment
        // Note: could be supported at somepoint
        if (decl.prop === "placeholder-color" && decl.value?.includes("color-mix")) {
-@@ -187,7 +272,7 @@ module.exports = (options = { debug: false }) => {
+@@ -187,7 +272,13 @@ module.exports = (options = { debug: false }) => {
  
        // invalid with core 8.8+ at moment
        // Note: could be supported at somepoint
 -      if (decl.value?.includes("currentColor")) {
 +      if (/currentcolor/i.test(decl.value)) {
++        return decl.remove();
++      }
++
++      // CSS system colors (spartan's native-select options use bg-[Canvas] text-[CanvasText]) are not
++      // colors to NativeScript's Color.
++      if (/^(Canvas|CanvasText|LinkText|VisitedText|ActiveText|ButtonFace|ButtonText|ButtonBorder|Field|FieldText|Highlight|HighlightText|SelectedItem|SelectedItemText|Mark|MarkText|GrayText|AccentColor|AccentColorText)$/i.test(decl.value.trim())) {
          return decl.remove();
        }
  
-@@ -236,6 +321,57 @@ module.exports = (options = { debug: false }) => {
+@@ -236,6 +327,57 @@ module.exports = (options = { debug: false }) => {
            });
        }
  
@@ -365,7 +371,7 @@ index f4027ee..ed1afe6 100644
        // remove unsupported properties
        if (
          !decl.prop.startsWith("--") &&
-@@ -339,18 +475,96 @@ const supportedProperties = {
+@@ -339,18 +481,96 @@ const supportedProperties = {
    "tab-text-color": true,
    "tab-text-font-size": true,
    "text-transform": true,

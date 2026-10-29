@@ -14,6 +14,7 @@ const packages = {
   '@nativescript__angular': '@nativescript/angular',
   '@nativescript__vite': '@nativescript/vite',
   '@triniwiz__nativescript-masonkit': '@triniwiz/nativescript-masonkit',
+  '@nativescript-community__ui-core-tabs': '@nativescript-community/ui-core-tabs',
 };
 const gitPatch = ['C:/Program Files/Git/usr/bin/patch.exe', 'patch'].find((p) => p === 'patch' || existsSync(p));
 

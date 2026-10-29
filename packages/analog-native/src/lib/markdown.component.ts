@@ -25,7 +25,8 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
 
 /**
  * Renders Markdown tokens as native MasonKit elements: `h1`-`h6`, `p`, `ul`/`ol`/`li`,
- * `div.md-blockquote`, `div.md-code > pre > code`, `hr`, `img`, a CSS-grid table, and inline
+ * `div.md-blockquote`, `div.md-code > pre > code`, `hr`, `img`, a CSS-grid table in a sideways
+ * scroller (`div.md-table-scroll > div.md-table`), and inline
  * `strong`, `em`, `del`, `code`, `a`, `br`. The `renderers` table in the template maps a template
  * key to the `ng-template` that renders it; unknown keys (raw HTML, `space`) render nothing.
  *
@@ -101,15 +102,21 @@ function isImageParagraph(paragraph: Tokens.Paragraph): boolean {
     <ng-template #code let-t><analog-code [code]="t.text" [lang]="t.lang" /></ng-template>
     <ng-template #hr><hr /></ng-template>
     <ng-template #table let-t>
-      <div class="md-table" [style.grid-template-columns]="'repeat(' + t.header.length + ', auto)'">
-        @for (cell of t.header; track $index) {
-          <span class="md-th"><ng-container *ngTemplateOutlet="render; context: { $implicit: cell.tokens }" /></span>
-        }
-        @for (row of t.rows; track $index) {
-          @for (cell of row; track $index) {
-            <span class="md-td"><ng-container *ngTemplateOutlet="render; context: { $implicit: cell.tokens }" /></span>
+      <div class="md-table-scroll">
+        <div
+          class="md-table"
+          [style.grid-template-columns]="'repeat(' + t.header.length + ', auto)'"
+          [style.min-width]="t.header.length * tableColumnMinWidth"
+        >
+          @for (cell of t.header; track $index) {
+            <span class="md-th"><ng-container *ngTemplateOutlet="render; context: { $implicit: cell.tokens }" /></span>
           }
-        }
+          @for (row of t.rows; track $index) {
+            @for (cell of row; track $index) {
+              <span class="md-td"><ng-container *ngTemplateOutlet="render; context: { $implicit: cell.tokens }" /></span>
+            }
+          }
+        </div>
       </div>
     </ng-template>
 
@@ -148,6 +155,9 @@ export class MarkdownComponent {
   });
 
   protected readonly segments = computed(() => segmentMarkdown(this.tokens(), this.liveCodeComponent !== null));
+
+  /** Narrowest a table column gets before the table scrolls sideways instead of squeezing it. */
+  protected readonly tableColumnMinWidth = 160;
 
   protected readonly asCallout = calloutOf;
 

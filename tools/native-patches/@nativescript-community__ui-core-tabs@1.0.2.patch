@@ -1,0 +1,16 @@
+diff --git a/tab-navigation/index.android.js b/tab-navigation/index.android.js
+index 4a97700cba5ed94adff6762dec4f5e420f516614..5fcc3e7ddbfcb361e86ea7880f9f397cfd1ff114 100644
+--- a/tab-navigation/index.android.js
++++ b/tab-navigation/index.android.js
+@@ -513,6 +513,11 @@ export class TabNavigation extends TabNavigationBase {
+             // so it does not respect the css color
+             return;
+         }
++        // An inherited color can arrive before the item's native view exists (or after it is gone);
++        // _setItemColor applies style.color when the view is created.
++        if (!tabStripItem.nativeViewProtected) {
++            return;
++        }
+         const androidColor = value instanceof Color ? value.android : value;
+         tabStripItem.nativeViewProtected.setTextColor(androidColor);
+     }

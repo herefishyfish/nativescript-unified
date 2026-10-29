@@ -30,7 +30,7 @@
     "@ng-icons/lucide": "^32.4.0",
     "@nstudio/nativescript-menu": "1.0.5",
     "@tanstack/charts": "0.16.0",
-    "@triniwiz/nativescript-masonkit": "1.0.0-beta.120",
+    "@triniwiz/nativescript-masonkit": "1.0.0-beta.127",
     "@valor/nativescript-websockets": "^2.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

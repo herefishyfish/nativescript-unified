@@ -49,19 +49,35 @@ The same markup twice. In the app, the first demo is MasonKit and the second dra
 
 A docs block tagged `html live native` previews the native way in the app. The web ignores the extra word.
 
+## Core views
+
+NativeScript core has its own controls, which need no package: `Switch`, `Slider`, `SearchBar`, `Progress` and the rest of [Switch, Slider and pickers](/docs/controls). They draw the platform's default widget, not the theme, and they take NativeScript's properties and events instead of helm's, so a helm template does not carry over to them. On the web, the polyfills draw them.
+
+```html live
+<div class="flex max-w-sm flex-col gap-3">
+  <SearchBar hint="Search the docs"></SearchBar>
+  <div class="flex items-center gap-2">
+    <Switch checked="true"></Switch>
+    <span class="text-sm">Sync</span>
+  </div>
+  <Slider value="40"></Slider>
+  <Progress value="65"></Progress>
+</div>
+```
+
 ## Packages
 
-Install the package for each widget you use:
+Install the package for each widget you use. The last column is the core view for the same control. It needs no package, but on Android it draws the older platform widget (a SeekBar, not the Material slider) and takes core's API instead of helm's.
 
-| Widget | Package | Android | iOS |
-| --- | --- | --- | --- |
-| `input` | `@nativescript-community/ui-textfield` | Material TextInputLayout | UITextField |
-| `textarea` | `@nativescript-community/ui-textview` | Material TextInputLayout | UITextView |
-| `hlm-switch` | `@nativescript-community/ui-switch` | Material switch | UISwitch |
-| `hlm-checkbox` | `@nativescript-community/ui-checkbox` | Material checkbox | SF Symbols toggle |
-| `hlm-slider` | `@nativescript-community/ui-slider` | Material slider | UISlider |
-| Dialogs | `@nativescript-community/ui-dialogs` | Material dialogs | UIAlertController |
-| `button` | None, it is core's `Button` | Button | UIButton |
+| Widget | Package | Android | iOS | Core view |
+| --- | --- | --- | --- | --- |
+| `input` | `@nativescript-community/ui-textfield` | Material TextInputLayout | UITextField | `TextField` |
+| `textarea` | `@nativescript-community/ui-textview` | Material TextInputLayout | UITextView | `TextView` |
+| `hlm-switch` | `@nativescript-community/ui-switch` | Material switch | UISwitch | `Switch` |
+| `hlm-checkbox` | `@nativescript-community/ui-checkbox` | Material checkbox | SF Symbols toggle | None |
+| `hlm-slider` | `@nativescript-community/ui-slider` | Material slider | UISlider | `Slider` |
+| Dialogs | `@nativescript-community/ui-dialogs` | Material dialogs | UIAlertController | `Dialogs` |
+| `button` | None, it is core's `Button` | Button | UIButton | `NButton` |
 
 ```bash
 npm install @nativescript-community/ui-textfield @nativescript-community/ui-textview @nativescript-community/ui-switch @nativescript-community/ui-checkbox @nativescript-community/ui-slider @nativescript-community/ui-dialogs -w apps/native

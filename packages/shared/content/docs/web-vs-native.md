@@ -84,7 +84,7 @@ That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders
 - A popover opens in an anchored window from `@nativescript-community/ui-popover`. Select, combobox, autocomplete and date picker use the same window.
 - A dropdown menu opens the platform menu from `@nativescript-community/ui-menu`. That is a Material 3 popup menu on Android and a `UIMenu` on iOS.
 
-[Native status](/docs/components#native-status) records what each component's demo did on an Android emulator (API 36, x86_64), in light and dark. These results have not been checked on iOS yet.
+[Native status](/docs/components#native-status) records what each component's demo did on an Android emulator (API 36, x86_64). These results have not been checked on iOS yet.
 
 ## Known native limitations
 
@@ -92,8 +92,7 @@ These apply across components.
 
 - **Helm rules beat utilities on helm hosts.** helm's `.style-vega .spartan-*` rules have a specificity of 0,2,0 and sit outside any layer, so they override a Tailwind utility you put on the same element. For example, `h-12` or `rounded-full` on `hlmBtn`, or `gap-*` and `p-*` on `hlmCard`, have no effect. This happens on the web too. A fix is planned.
 - **Opacity-modified token colours.** Classes such as `bg-input/80`, `bg-destructive/10` and `dark:bg-input/30` keep the plain light token colour on native, in every theme.
-- **Text layout in MasonKit.** A button does not center its text. A text element with `display: flex` does not center its text, so avatar initials sit in the top left. A text element nested inside another text element drops the styling of its inline children. Text ignores `white-space: pre`, so code blocks render as plain text.
-- **Browser APIs in brain components.** Some brain components call browser APIs that do not exist on NativeScript, and throw. MasonKit elements have no `getBoundingClientRect()`, which breaks the select and the slider. There is no `document.defaultView`, which breaks the tooltip. The NativeScript document has no `createElement()`, so a CDK overlay cannot be created, which breaks the hover card.
+- **Text layout in MasonKit.** A button does not always center its text on its first layout. An `inline-flex` box lays its children out as an inline text run, so `apps/native` overrides it for the progress bar and the calendar (`packages/ui/native/native-overrides.css`). A text element nested inside another text element drops the styling of its inline children. Text ignores `white-space: pre`, so code blocks render as plain text.
+- **Browser APIs in brain components.** MasonKit elements have no `getBoundingClientRect()` or pointer events, there is no `document.defaultView`, and the NativeScript document has no `createElement()` for a CDK overlay. Where brain needs these, it takes a no-DOM path: the select trigger measures itself on `layoutChanged`, and the tooltip and hover card open on a tap through the overlay host. The slider and the toaster are native shims (`packages/ui/native/shims`).
 - **Media queries.** NativeScript drops media queries. `apps/native/src/app.css` overrides the `motion-safe` variant so that the spinner and skeleton animations run.
-- **Links inside a live demo.** An `<a href>` with an app path inside a live demo does nothing when tapped. Links in the docs Markdown use `/docs/:slug`, and the native app serves those pages at the same path.
-- **Hover.** A touch screen has no hover, and the tooltip and the hover card open on hover.
+- **Hover.** A touch screen has no hover, so the tooltip and the hover card open on a tap instead.

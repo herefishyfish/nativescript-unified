@@ -24,7 +24,7 @@ Each was checked on the emulator after the change.
 | Native select | Options printed as text, no menu | No `select` element on native | `select`/`option` elements: the chosen option in a box, the platform menu on tap |
 | Dropdown menu | No label or separators, shortcut glued to the label | Only items were passed to the platform menu | Sections, label headings, shortcut as subtitle, submenus |
 | Tooltip, hover card | Threw on load | `document.defaultView` and CDK `Overlay.create` | No-DOM path: open on tap through the overlay host; popover windows keep the panel's width |
-| Slider | No thumb or no value, range had no thumbs, demo threw | Brain needs DOM measurement and pointer events | The native shim everywhere: platform slider for one value, a touch-driven helm range for two |
+| Slider | No thumb or no value, range had no thumbs, demo threw | Brain needs DOM measurement and pointer events | A shim everywhere: MasonKit's `<input type="range">` for one value (the Material slider on the native-widget screens), a touch-driven helm range for two |
 | ListPicker, ListView, Repeater | One entry per character | A string `items` was iterated | Comma-separated strings are split, as the web polyfills do |
 | Markdown | No bullets, external links dead, `a hlmBtn` did not navigate | `li` and `a` are block-backed, without MasonKit's markers and link handling | The component draws markers; `HrefDirective` opens external URLs and is in the demo imports |
 | navigation-views | The page blanked the whole app | Demos use the web polyfills' own markup | `html live web`: the app shows the code and a note |

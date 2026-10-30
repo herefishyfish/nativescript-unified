@@ -68,7 +68,7 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Dialog](/docs/ui-dialog) | Works | Opens in a native modal window. A tap on the scrim closes it. |
 | [Alert](/docs/ui-alert) | Works | |
 | [Select](/docs/ui-select) | Works | Opens in a native popover window. The list does not scroll, so a long list runs to the window's edge. |
-| [Slider](/docs/ui-slider) | Works | One value is the platform slider. A range is helm's track and thumbs, moved by touch. Keyboard steps are web only. |
+| [Slider](/docs/ui-slider) | Works | One value is MasonKit's range input (a SeekBar on Android). A range is helm's track and thumbs, moved by touch. Keyboard steps are web only. |
 | [Popover](/docs/ui-popover) | Works | Opens in a native popover window. |
 | [Dropdown menu](/docs/ui-dropdown-menu) | Works | Opens the platform menu, with labels, separators, shortcuts and submenus. |
 | [Sheet](/docs/ui-sheet) | Works | Bottom sheets open in a native bottom sheet, other sides in a side drawer. |

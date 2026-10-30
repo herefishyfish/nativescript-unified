@@ -52,6 +52,7 @@ import { toast } from '@spartan-ng/brain/sonner';
 import { HlmCheckboxImports as NativeCheckboxImports } from '../../../../../packages/ui/native/shims/helm-checkbox';
 // Spartan's slider measures its track and follows pointer events, which native views have neither of.
 import { HlmSliderImports as NativeSliderImports } from '../../../../../packages/ui/native/shims/helm-slider';
+import { HlmSliderImports as MasonKitSliderImports } from '../../../../../packages/ui/native/shims/masonkit-slider';
 import { HlmSwitchImports as NativeSwitchImports } from '../../../../../packages/ui/native/shims/helm-switch';
 import { NATIVE_ELEMENTS } from '../native-elements';
 
@@ -98,7 +99,7 @@ const SHARED_IMPORTS = [
   ...HlmToasterImports,
 ];
 
-const DEMO_IMPORTS = [...SHARED_IMPORTS, HlmCheckbox, ...HlmSwitchImports, ...NativeSliderImports];
+const DEMO_IMPORTS = [...SHARED_IMPORTS, HlmCheckbox, ...HlmSwitchImports, ...MasonKitSliderImports];
 
 /** For `html live native` blocks: the platform checkbox, switch and slider (docs/native-elements). */
 const NATIVE_DEMO_IMPORTS = [...SHARED_IMPORTS, ...NativeCheckboxImports, ...NativeSwitchImports, ...NativeSliderImports];

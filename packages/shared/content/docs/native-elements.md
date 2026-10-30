@@ -7,7 +7,7 @@ description: Draw form controls, helm components and dialogs with platform widge
 
 # Native elements
 
-By default, MasonKit draws every HTML element on the device, including the form controls. `<input>` and `<textarea>` are MasonKit views, and helm's switch and checkbox are built from MasonKit boxes. The slider is the exception: spartan's slider measures its track and follows pointer events, which native views do not have, so it is always the native slider below. You can have chosen parts of an app draw platform widgets from `@nativescript-community` instead. The template stays the same, and the web still renders HTML.
+By default, MasonKit draws every HTML element on the device, including the form controls. `<input>` and `<textarea>` are MasonKit views, and helm's switch and checkbox are built from MasonKit boxes. The slider is the exception: spartan's slider measures its track and follows pointer events, which native views do not have, so it is always a shim: MasonKit's `<input type="range">` by default, and the Material slider below where you choose platform widgets. You can have chosen parts of an app draw platform widgets from `@nativescript-community` instead. The template stays the same, and the web still renders HTML.
 
 This app keeps MasonKit everywhere except the example screens on the UI tab and the second demo below.
 
@@ -150,7 +150,7 @@ const NATIVE_HELM_IMPORTERS = /\/packages\/shared\/src\/lib\/examples\//;
 ```
 
 - `hlm-switch` and `hlm-checkbox` keep `checked`, `(checkedChange)`, `disabled`, `aria-label`, `#ref.checked()` and `ngModel`.
-- `hlm-slider` keeps `value`, `min`, `max`, `step`, `disabled` and `(valueChange)`. The platform slider has one thumb, so a range (`[value]="[20, 70]"`) draws helm's track and thumbs, moved by touch. `apps/native/vite.config.mts` resolves `@spartan-ng/helm/slider` to the shim for every file (`ALWAYS_NATIVE_HELM`).
+- `hlm-slider` keeps `value`, `min`, `max`, `step`, `disabled` and `(valueChange)`. The platform slider has one thumb, so a range (`[value]="[20, 70]"`) draws helm's track and thumbs, moved by touch. Every other file gets `shims/masonkit-slider.ts` (`ALWAYS_NATIVE_HELM` in `apps/native/vite.config.mts`): one value is MasonKit's `<input type="range">`, with the same range for two.
 
 ## Browser dialogs
 

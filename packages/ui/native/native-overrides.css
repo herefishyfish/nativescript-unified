@@ -119,8 +119,12 @@
 	display: flex;
 }
 
-/* .spartan-slider-track bg-muted, .spartan-slider-range bg-primary: the one-value slider is the platform slider
+/* .spartan-slider-track bg-muted, .spartan-slider-range bg-primary: the one-value slider is MasonKit's range input
+   (shims/masonkit-slider.ts, tinted from `color`) or, on the native-widget screens, the Material slider
    (shims/helm-slider.ts), coloured from the same tokens. */
+.style-vega .masonkit-slider {
+	color: var(--primary);
+}
 .style-vega .native-slider {
 	color: var(--primary);
 	track-background-color: var(--muted);

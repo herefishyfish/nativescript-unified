@@ -12,11 +12,13 @@ description: ActionBar, NavigationButton, Tabs, Pager and Drawer, with iOS and M
 
 These views are implemented by the polyfills. Four of them take `platform="ios"` or `platform="material"`, which restyles them as an approximation of the native look. The default is `default`.
 
+The demos on this page use the polyfills' own markup (`ns-tab`, `ns-page`, slots), not NativeScript's, so the native app shows their code only. On a device, NativeScript's `ActionBar`, `Tabs`, `Pager` and `Drawer` are page-level views with their own child elements.
+
 ## ActionBar
 
 `title` is the bar title. `<NavigationButton text="Back">` is the back control. Other children go in the `leading` or `trailing` slot. `large` turns on the iOS large title.
 
-```html live
+```html live web
 <StackLayout class="gap-3">
   <ActionBar title="Inbox">
     <NavigationButton text="Back"></NavigationButton>
@@ -31,7 +33,7 @@ These views are implemented by the polyfills. Four of them take `platform="ios"`
 
 Children are plain `<ns-tab label="...">` elements. `selectedIndex` picks the tab, and `segmented` makes the iOS look a segmented control.
 
-```html live
+```html live web
 <Tabs selectedIndex="1" class="rounded border">
   <ns-tab label="One">First tab content</ns-tab>
   <ns-tab label="Two">Second tab content</ns-tab>
@@ -43,7 +45,7 @@ Children are plain `<ns-tab label="...">` elements. `selectedIndex` picks the ta
 
 Children are `<ns-page>` elements. One shows at a time, with Prev and Next buttons and dots. There is no swipe or scroll snapping.
 
-```html live
+```html live web
 <Pager class="rounded border">
   <ns-page>Page one</ns-page>
   <ns-page>Page two</ns-page>
@@ -55,7 +57,7 @@ Children are `<ns-page>` elements. One shows at a time, with Prev and Next butto
 
 The default content is the page, and `slot="drawer"` is the panel. `open` is a model, and `width` defaults to 280 pixels. The panel is positioned over the content, so give the drawer a height.
 
-```html live
+```html live web
 <Drawer #d class="rounded border" style="height: 200px" [width]="200">
   <div slot="drawer" class="p-3">
     <p>Drawer panel</p>

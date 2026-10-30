@@ -13,10 +13,10 @@ description: Image with src and alt.
 `<Image>` renders an `<img>`. It takes `src` and `alt`, and the image is capped at the width of its container.
 
 ```html live
-<Image src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='80'%3E%3Crect width='160' height='80' rx='10' fill='%2327695f'/%3E%3Ctext x='80' y='46' font-size='18' text-anchor='middle' fill='%23f2ebdd'%3EImage%3C/text%3E%3C/svg%3E" alt="Teal placeholder"></Image>
+<Image src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAABQCAIAAAARP+ljAAAAlklEQVR42u3RMQ0AAAgEsXeDLGb8G8AEE2lyCq6paT0uFgAWYAEWYAEWYAEGLMACLMACLMACDFiABViABViABViAAQuwAAuwAAuwAAMWYAEWYAEWYAEGLMACLMACLMACLMCABViABViABViAAQuwAAuwAAuwAAN2AbAAC7AAC7AACzBgARZgARZgARZgwAIswAIswLpqAXHIsLPftyiDAAAAAElFTkSuQmCC" alt="Teal placeholder" class="rounded-lg"></Image>
 ```
 
-Nothing is rendered when `src` is empty.
+Nothing is rendered when `src` is empty. On a device, a `data:` URI must be base64 (`data:image/png;base64,...`), and Android does not decode SVG.
 
 ## HTML-first equivalent
 

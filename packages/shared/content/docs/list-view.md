@@ -14,10 +14,10 @@ Both take `items` as a comma-separated string or an array, and show each item as
 
 ## ListView
 
-Each row is a button. The `itemTap` output emits the row index.
+Each row is a button. The `itemTap` output emits the row index. On a device a ListView scrolls its rows, so give it a height.
 
 ```html live
-<ListView items="Apples, Bananas, Cherries" class="rounded border"></ListView>
+<ListView items="Apples, Bananas, Cherries" class="h-40 rounded border"></ListView>
 ```
 
 ## Repeater

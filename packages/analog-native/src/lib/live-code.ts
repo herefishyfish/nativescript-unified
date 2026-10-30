@@ -4,8 +4,10 @@ import type { MarkdownToken } from './types';
 
 /**
  * Standalone component rendered in place of a fenced code block tagged `html live`.
- * The component must have a `code` string input; it typically pairs the live view with
- * the source, for example Preview / Code tabs (see the web docs' demo frame).
+ * The component must have a `code` string input and an `info` string input, the block's
+ * info string (`html live` and any words after it, such as `html live native`); it
+ * typically pairs the live view with the source, for example Preview / Code tabs (see the
+ * web docs' demo frame).
  * When no component is provided, a live block falls back to `pre > code` like any block.
  */
 export const MARKDOWN_LIVE_CODE_COMPONENT = new InjectionToken<Type<unknown>>(
@@ -34,7 +36,7 @@ export function isLiveCodeBlock(token: MarkdownToken): token is Tokens.Code {
  */
 export type MarkdownSegment =
   | { kind: 'tokens'; tokens: MarkdownToken[] }
-  | { kind: 'live'; code: string };
+  | { kind: 'live'; code: string; info: string };
 
 /**
  * Splits top-level tokens at `html live` code blocks, the same block model the web docs
@@ -51,7 +53,7 @@ export function segmentMarkdown(tokens: MarkdownToken[], live: boolean): Markdow
   for (const token of tokens) {
     if (live && isLiveCodeBlock(token)) {
       flush();
-      segments.push({ kind: 'live', code: (token as Tokens.Code).text });
+      segments.push({ kind: 'live', code: token.text, info: token.lang ?? '' });
     } else {
       run.push(token);
     }

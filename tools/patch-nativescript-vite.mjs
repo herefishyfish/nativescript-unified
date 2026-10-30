@@ -8,6 +8,9 @@
 //    as a bare specifier before its real path, and the bare lookup lands on the package
 //    entry, so the device gets `core.mjs` under the chunk URL. Trying the real file first
 //    serves the right module.
+// 4. `import css from 'x.css?raw'` fails the /ns/m link-check, which drops the query and checks Vite's DOM css
+//    module (no default export). The /ns/m css route always exports the css text, so css targets are skipped.
+// 5. That css route also drops `?raw` and registers the file as app css. With `?raw` it now only exports the text.
 import { createRequire } from 'node:module';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -22,6 +25,22 @@ const replacements = [
     file: 'hmr/server/websocket-module-specifiers.js',
     broken: "absPath = cleaned.slice('/@fs'.length);",
     fixed: String.raw`absPath = cleaned.slice('/@fs'.length).replace(/^\/([A-Za-z]:)/, '$1');`,
+  },
+  {
+    file: 'hmr/server/websocket-ns-m.js',
+    broken: "let targetCode = '';",
+    fixed: "let targetCode = '';\n                            if (CSS_MODULE_RE.test(u.pathname))\n                                continue;",
+  },
+  {
+    file: 'hmr/server/websocket-ns-m.js',
+    broken: 'const inlineRes = await sharedTransformRequest(`${inlineSpec}?inline`);',
+    fixed:
+      "const cssRaw = urlObj.searchParams.has('raw');\n                    const inlineRes = await sharedTransformRequest(`${inlineSpec}?${cssRaw ? 'raw' : 'inline'}`);",
+  },
+  {
+    file: 'hmr/server/websocket-ns-m.js',
+    broken: "buildCssRegisterSnippetFromVar(spec, '__ns_css_text__')",
+    fixed: "(cssRaw ? '' : buildCssRegisterSnippetFromVar(spec, '__ns_css_text__'))",
   },
 ];
 
@@ -44,7 +63,7 @@ function patch(file, transform) {
 }
 
 for (const { file, broken, fixed } of replacements) {
-  patch(file, (source) => source.replace(broken, () => fixed));
+  patch(file, (source) => (source.includes(fixed) ? source : source.replace(broken, () => fixed)));
 }
 
 patch('hmr/server/websocket-ns-m-request.js', (source) => {

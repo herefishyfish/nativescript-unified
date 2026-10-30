@@ -74,29 +74,28 @@ export class NsActivityIndicator {
   readonly busy = input(false, { transform: booleanAttribute });
 }
 
-/** Web fallback for Progress. `value` and `max` (default 100). */
+/**
+ * Web fallback for Progress. `value` and `max` (default 100).
+ *
+ * HTML tag names are case-insensitive, so `<Progress>` is the browser's own `<progress>` element, which draws its bar
+ * and never renders children. The polyfill sets its value and themes the bar instead.
+ */
 @Component({
   selector: 'Progress',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div class="track" role="progressbar" aria-label="Progress" [attr.aria-valuenow]="value()" [attr.aria-valuemin]="0" [attr.aria-valuemax]="max()">
-      <div class="fill" [style.width.%]="pct()"></div>
-    </div>
-  `,
+  host: { 'aria-label': 'Progress', '[attr.value]': 'clamped()', '[attr.max]': 'max()' },
+  template: '',
   styles: `
-    :host { display: flex; }
-    .track { display: flex; flex-direction: row; width: 100%; height: 4px; background: var(--ns-border); border-radius: 2px; overflow: hidden; }
-    .fill { height: 4px; background: var(--ns-primary); }
+    :host { appearance: none; display: block; width: 100%; height: 4px; border: 0; border-radius: 2px; overflow: hidden; background: var(--ns-border); }
+    :host::-webkit-progress-bar { background: var(--ns-border); }
+    :host::-webkit-progress-value { background: var(--ns-primary); }
+    :host::-moz-progress-bar { background: var(--ns-primary); }
   `,
 })
 export class NsProgress {
   readonly value = input(0, { transform: numberAttribute });
   readonly max = input(100, { transform: numberAttribute });
-  protected readonly pct = computed(() => {
-    const max = this.max();
-    if (max <= 0) return 0;
-    return Math.min(100, Math.max(0, (this.value() / max) * 100));
-  });
+  protected readonly clamped = computed(() => Math.min(this.max(), Math.max(0, this.value())));
 }
 
 /** Web fallback for Switch. Property `checked`; event `checkedChange`. */
@@ -132,7 +131,7 @@ export class NsSwitch {
   template: `<input type="range" aria-label="Slider" [min]="min()" [max]="max()" [value]="current()" (input)="onInput($event)" />`,
   styles: `
     :host { display: flex; }
-    input { flex: 1; width: 100%; }
+    input { flex: 1; width: 100%; accent-color: var(--ns-primary); }
   `,
 })
 export class NsSlider {

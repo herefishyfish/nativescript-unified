@@ -11,7 +11,7 @@ description: A slider with a track, range and thumbs, driven by the keyboard or 
 
 ```html live
 <div class="flex max-w-sm flex-col gap-3">
-  <hlm-slider [value]="[40]" [min]="0" [max]="100" [step]="5" aria-label="Volume" (valueChange)="level.textContent = $event[0]" />
+  <hlm-slider [value]="[40]" [min]="0" [max]="100" [step]="5" aria-label="Volume" (valueChange)="level.textContent = '' + $event[0]" />
   <p class="text-sm">Value: <span #level data-testid="slider-value">40</span></p>
 </div>
 ```

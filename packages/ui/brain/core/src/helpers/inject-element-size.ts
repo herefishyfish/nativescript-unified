@@ -41,6 +41,10 @@ export function injectElementSize(
 			return size;
 		}
 
+		if (typeof element.getBoundingClientRect !== 'function') {
+			return observeLaidOutView(element as unknown as LaidOutView, size, destroyRef);
+		}
+
 		afterNextRender({
 			read: () => {
 				// Initial read
@@ -69,6 +73,31 @@ export function injectElementSize(
 
 		return size.asReadonly();
 	});
+}
+
+/** An element without a DOM box, such as a NativeScript view, that reports its size after each layout pass. */
+interface LaidOutView {
+	getActualSize?(): { width: number; height: number };
+	on?(event: 'layoutChanged', callback: () => void): void;
+	off?(event: 'layoutChanged', callback: () => void): void;
+}
+
+/** Tracks a view that has no DOM box and no ResizeObserver through its `layoutChanged` event. */
+function observeLaidOutView(
+	view: LaidOutView,
+	size: WritableSignal<{ width: number; height: number } | undefined>,
+	destroyRef: DestroyRef,
+): Signal<{ width: number; height: number } | undefined> {
+	if (typeof view.getActualSize !== 'function' || typeof view.on !== 'function') {
+		return size.asReadonly();
+	}
+	const update = () => {
+		const { width, height } = view.getActualSize!();
+		size.set({ width, height });
+	};
+	view.on('layoutChanged', update);
+	destroyRef.onDestroy(() => view.off?.('layoutChanged', update));
+	return size.asReadonly();
 }
 
 const observerMap = new Map<HTMLElement, SizeEntry>();

@@ -31,15 +31,20 @@
 .markdown li { line-height: 1.5; }
 
 .markdown ul,
-.markdown ol { margin: 0; padding-left: 24; }
+.markdown ol { margin: 0; padding-left: 8; list-style-type: none; }
 
-/* MasonKit's `ul` has no markers under Tailwind's preflight, as on the web; prose wants them. */
-.markdown ul { list-style-type: disc; }
-.markdown ol { list-style-type: decimal; }
+/* The component draws each marker as a `span.md-marker`: an app may back `li` with a block element that draws
+   none (spartan's native layer does), and a MasonKit `li` would draw a second one, hence list-style-type: none. */
+.markdown li { display: flex; flex-direction: row; }
+.markdown .md-marker { width: 16; flex-shrink: 0; }
+.markdown ol .md-marker { width: 24; }
+.markdown .md-li-body { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 
 .markdown a { color: #0969da; text-decoration: underline; }
 
+/* inline-block: MasonKit sits a padded inline box on its text's baseline only when it is inline-block. */
 .markdown code {
+  display: inline-block;
   font-family: monospace;
   font-size: 14;
   background-color: #eff1f3;
@@ -59,7 +64,7 @@
   padding: 12;
 }
 
-.markdown pre code { background-color: transparent; padding: 0; white-space: pre; }
+.markdown pre code { display: inline; background-color: transparent; padding: 0; white-space: pre; }
 
 /* Links read as text in a sentence, even where an app backs `a` with a block element. */
 .markdown a { display: inline-block; }
@@ -97,6 +102,9 @@
 .markdown hr { margin: 8 0; height: 1; border-width: 0; background-color: #d1d9e0; }
 
 .markdown img { width: 100%; height: 180; object-fit: cover; border-radius: 6; }
+
+/* Like a code block, a table wider than the screen scrolls sideways. */
+.markdown .md-table-scroll { overflow-x: auto; }
 
 .markdown .md-table {
   display: grid;

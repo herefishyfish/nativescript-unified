@@ -5,15 +5,18 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { findExample } from '@nativescript-unified/shared';
 import { map } from 'rxjs';
+import { NATIVE_ELEMENTS } from '../../native-elements';
 import { DemoCodeTabs } from '../../tabs/demo-code-tabs';
 
 /**
  * One shared example screen (packages/shared/src/lib/examples), opened from a UI tab tile: the styled screen on
- * the Preview tab, its component and stylesheet on the Code and Styles tabs.
+ * the Preview tab, its component and stylesheet on the Code and Styles tabs. The screen draws its text fields with
+ * platform widgets (NATIVE_ELEMENTS), and vite.config.mts gives it the native checkbox, switch and slider.
  */
 @Component({
   selector: 'example-page',
   imports: [ActionBarComponent, DemoCodeTabs, NgComponentOutlet],
+  providers: [NATIVE_ELEMENTS],
   schemas: [NO_ERRORS_SCHEMA],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

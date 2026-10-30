@@ -92,6 +92,17 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 	 */
 	private _createViews(kind: NativeWindow['kind']): SurfaceViews {
 		const pane = this._renderer.createElement('div') as View;
+		if (kind === 'popover') {
+			// A popover window can be wider than its panel (it spans from the anchor to the screen edge); the panel keeps
+			// its own width, as a CDK overlay pane sizes to its content.
+			for (const [style, value] of [
+				['display', 'flex'],
+				['flexDirection', 'column'],
+				['alignItems', 'flex-start'],
+			]) {
+				this._renderer.setStyle(pane, style, value);
+			}
+		}
 		if (kind !== 'modal') return { root: pane, pane, backdrop: null };
 		const root = this._renderer.createElement('div') as View;
 		const backdrop = this._renderer.createElement('div') as View;

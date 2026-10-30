@@ -33,7 +33,9 @@ import { hasModifierKey } from '@angular/cdk/keycodes';
 import { waitForElementAnimations } from '@spartan-ng/brain/core';
 import { of, Subject, Subscription, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { BrnOverlayRef, BrnOverlayService } from '@spartan-ng/brain/overlay';
 import { BrnTooltipContent } from './brn-tooltip-content';
+import { BrnTooltipTouchPanel, type BrnTooltipTouchData } from './brn-tooltip-touch-panel';
 import { BrnTooltipGroup } from './brn-tooltip-group';
 import {
 	BRN_TOOLTIP_FALLBACK_POSITIONS,
@@ -43,6 +45,9 @@ import {
 } from './brn-tooltip-position';
 import { BrnTooltipType } from './brn-tooltip-type';
 import { injectBrnTooltipDefaultOptions } from './brn-tooltip.token';
+
+/** How long a tooltip opened by touch stays up, on top of `hideDelay`. */
+const TOUCH_TOOLTIP_READ_MS = 1500;
 
 interface DelayConfig {
 	isShow: boolean;
@@ -100,6 +105,10 @@ export class BrnTooltip {
 
 	constructor() {
 		afterNextRender(() => {
+			if (!this._document.defaultView) {
+				this._initTouchTriggers();
+				return;
+			}
 			this._dir.change.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(() => {
 				if (this._overlayRef) {
 					this._updatePosition();
@@ -277,6 +286,42 @@ export class BrnTooltip {
 			this._renderer.listen(this._elementRef.nativeElement, 'focus', () => this._requestShow()),
 			this._renderer.listen(this._elementRef.nativeElement, 'blur', () => this.delay(false, this.hideDelay())),
 		];
+	}
+
+	/**
+	 * Without a DOM window (NativeScript) there is no hover or focus to open on and no CDK overlay container. A tap
+	 * or long press opens the tooltip in the overlay host's anchored window, and it closes after a reading pause.
+	 */
+	private _initTouchTriggers(): void {
+		const element = this._elementRef.nativeElement;
+		this._listenersRefs = [
+			...this._listenersRefs,
+			this._renderer.listen(element, 'tap', () => this._showTouch()),
+			this._renderer.listen(element, 'longPress', () => this._showTouch()),
+		];
+	}
+
+	private _touchRef: BrnOverlayRef | undefined = undefined;
+
+	private _showTouch(): void {
+		const text = this._tooltipText();
+		if (this.mutableTooltipDisabled() || !text || this._touchRef?.open) return;
+		const position = this.position();
+		const data: BrnTooltipTouchData = { text, position, classes: this._config.tooltipContentClasses };
+		const ref = this._injector.get(BrnOverlayService).open(BrnTooltipTouchPanel, undefined, data, {
+			attachTo: this._elementRef,
+			attachPositions: [BRN_TOOLTIP_POSITIONS_MAP[position]],
+			closeOnOutsidePointerEvents: true,
+			hasBackdrop: false,
+			role: 'tooltip',
+		});
+		this._touchRef = ref;
+		this.show.emit();
+		const autoHide = setTimeout(() => ref.close(), TOUCH_TOOLTIP_READ_MS + this.hideDelay());
+		ref.closed$.subscribe(() => {
+			clearTimeout(autoHide);
+			this.hide.emit();
+		});
 	}
 
 	private _isHoverPointer(event: PointerEvent): boolean {

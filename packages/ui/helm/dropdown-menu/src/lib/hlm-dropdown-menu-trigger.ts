@@ -70,14 +70,16 @@ export class HlmDropdownMenuTrigger {
 		const view = template.createEmbeddedView({ $implicit: this._cdkTrigger.menuData }, this._injector);
 		view.detectChanges();
 		this._cdkTrigger.opened.next();
+		const menu = cdkMenuItems(this._cdkTrigger.getMenu(), menuHost);
 		void menuHost
 			.open({
 				anchor: this._elementRef.nativeElement,
 				side: this.side(),
 				align: this.align(),
-				items: cdkMenuItems(this._cdkTrigger.getMenu(), menuHost),
+				items: menu.items,
 			})
 			.finally(() => {
+				menu.destroy();
 				view.destroy();
 				this._cdkTrigger.closed.next();
 			});

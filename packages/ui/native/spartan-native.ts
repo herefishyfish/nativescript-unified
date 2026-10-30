@@ -11,6 +11,7 @@ import { Canvas } from '@nativescript/canvas';
 import { CSSType, ViewBase } from '@nativescript/core';
 import { masonMeta } from '@triniwiz/nativescript-masonkit/angular';
 import { Div, Span } from '@triniwiz/nativescript-masonkit/web';
+import { OptionElement, SelectElement } from './select-element';
 import { BrnMenuHost } from '@spartan-ng/brain/core';
 import { BrnDialogHost } from '@spartan-ng/brain/dialog';
 import { BrnOverlayHost } from '@spartan-ng/brain/overlay';
@@ -66,11 +67,20 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
 			element.removeAttribute ??= function (this: Record<string, unknown>, name: string) {
 				this[name] = undefined;
 			};
+			// Brain keeps the active option in view with scrollIntoView, guarded by isPlatformBrowser, which is true
+			// here. Native lists scroll themselves, so it does nothing.
+			element.scrollIntoView ??= () => undefined;
 		}),
 		// Angular's dev-mode image checks read the DOM document, which NativeScript does not have.
 		{ provide: IMAGE_CONFIG, useValue: { disableImageSizeWarning: true, disableImageLazyLoadWarning: true } },
 	]);
 }
+
+const BLOCK_TAGS = ['button', 'a', 'li', 'kbd', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+const TABLE_TAGS = ['table', 'caption', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td'];
+// Elements whose content is text: the icon glyph, and the value hosts brain fills through `textContent`, which a
+// block box does not draw.
+const TEXT_TAGS = ['ng-icon', 'hlm-select-value', 'hlm-combobox-value'];
 
 /**
  * Element mappings spartan's markup needs on MasonKit. Call after installMasonKit(), before bootstrap.
@@ -79,15 +89,20 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
  * hold block children, but spartan styles them as flex boxes (buttons and links with icons and gaps, list items, key
  * caps, labels around a control, the accordion's heading around its trigger), so they are backed by a block element.
  * Each keeps its own tag as its CSS type, so type selectors (`h1`, `.markdown li`, `a`) match as they do on the web.
+ * MasonKit has no table elements, so helm's table and calendar markup gets block-backed `table`, `tr`, `td` and the
+ * rest; native-overrides.css lays a row's cells out side by side. `select` shows the chosen `option` and opens the
+ * platform menu of the options (select-element.ts).
  * The @ng-icons/core shim draws a glyph, so `ng-icon` is text that can also sit inside helm's text elements.
  * The @tanstack/angular-charts shim paints into a `Canvas`.
  */
 export function registerSpartanNativeElements(): void {
-	for (const tag of ['button', 'a', 'li', 'kbd', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']) {
+	for (const tag of [...BLOCK_TAGS, ...TABLE_TAGS]) {
 		@CSSType(tag)
 		class Block extends Div {}
 		registerElement(tag, () => Block, masonMeta);
 	}
-	registerElement('ng-icon', () => Span, masonMeta);
+	registerElement('select', () => SelectElement, masonMeta);
+	registerElement('option', () => OptionElement, masonMeta);
+	for (const tag of TEXT_TAGS) registerElement(tag, () => Span, masonMeta);
 	registerElement('Canvas', () => Canvas);
 }

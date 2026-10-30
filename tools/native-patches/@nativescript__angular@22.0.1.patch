@@ -1,8 +1,8 @@
 diff --git a/fesm2022/nativescript-angular.mjs b/fesm2022/nativescript-angular.mjs
-index 1c399efb889c1629dc06d4fdfd148bd35101f33c..cdbd3a5dae385281e416af33bb8f054e4a5ae4f1 100644
+index 4efdc85..213cc26 100644
 --- a/fesm2022/nativescript-angular.mjs
 +++ b/fesm2022/nativescript-angular.mjs
-@@ -672,7 +672,11 @@ function runNativeScriptAngularApp(options) {
+@@ -662,7 +662,11 @@ function runNativeScriptAngularApp(options) {
      if (oldAddEventListener) {
          global.NativeScriptGlobals.events.addEventListener = oldAddEventListener;
      }
@@ -15,7 +15,7 @@ index 1c399efb889c1629dc06d4fdfd148bd35101f33c..cdbd3a5dae385281e416af33bb8f054e
          // handle HMR Application.run
          global['__dispose_app_ng_platform__'] = () => {
              disposePlatform('hotreload');
-@@ -1456,7 +1460,12 @@ class ViewUtil {
+@@ -1325,7 +1329,12 @@ class ViewUtil {
              return;
          }
          // Unknown attribute value -- just set it to our object as is.
@@ -26,9 +26,9 @@ index 1c399efb889c1629dc06d4fdfd148bd35101f33c..cdbd3a5dae385281e416af33bb8f054e
 +            view.notify({ eventName: `${attributeName}Change`, object: view, value, oldValue: previous });
 +        }
      }
-     removeParentReferencesFromItems(items) {
-         for (const item of items) {
-@@ -1891,6 +1900,8 @@ class NativeScriptRenderer {
+     getProperties(instance) {
+         const type = instance && instance.constructor;
+@@ -1708,6 +1717,8 @@ class NativeScriptRenderer {
          if (NativeScriptDebug.enabled) {
              NativeScriptDebug.rendererLog(`NativeScriptRenderer.removeAttribute ${namespace ? namespace + ':' : ''}${el}.${name}`);
          }

@@ -20,15 +20,15 @@ description: Label, FormattedString and Span.
 
 ## FormattedString and Span
 
-`<FormattedString>` holds `<NSpan>` children, each with its own `text`. A span can set `font-weight` and `color`.
+`<FormattedString>` holds `<NSpan>` children, each with its own `text`. Style a span with classes such as `font-bold` and `text-primary`, which work on both platforms. The web polyfill also reads `font-weight` and `color` attributes, but on a device those set nothing.
 
 On a device MasonKit owns the `span` and `Span` tags, so NativeScript's own Span is `<NSpan>` (and its Button is `<NButton>`). The web polyfill answers to both `Span` and `NSpan`.
 
 ```html live
 <Label>
   <FormattedString>
-    <NSpan text="Bold " font-weight="700"></NSpan>
-    <NSpan text="and teal " color="var(--primary)"></NSpan>
+    <NSpan text="Bold " class="font-bold"></NSpan>
+    <NSpan text="and teal " class="text-primary"></NSpan>
     <NSpan text="and plain."></NSpan>
   </FormattedString>
 </Label>

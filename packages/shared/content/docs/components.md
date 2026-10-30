@@ -50,39 +50,40 @@ Variants, such as `variant="outline"`, are inputs on the directive. Colours come
 | [Table](/docs/ui-table) | `hlmTable` and its parts |
 | [Calendar](/docs/ui-calendar) | `hlm-calendar`, `hlm-calendar-multi`, `hlm-calendar-range` |
 | [Tooltip](/docs/ui-tooltip) | `hlmTooltip` |
+| [Toast](/docs/ui-sonner) | `hlm-toaster` and `toast()` |
 | [More components](/docs/ui-more) | toggle, toggle group, collapsible, hover card, kbd, spinner, breadcrumb, native select, alert dialog |
 
 ## Native status
 
-The native app renders these pages too, and compiles each demo on the device against the same helm components. This table records what each demo did on an Android emulator (API 36), in light and dark. These results have not been checked on iOS yet.
+The native app renders these pages too, and compiles each demo on the device against the same helm components. This table records what each demo did on an Android emulator (API 36) on 29 October 2026. These results have not been checked on iOS yet.
 
 | Component | Android | Notes |
 | --- | --- | --- |
-| [Button](/docs/ui-button) | Works | `a hlmBtn` text sits at the top of the button. |
+| [Button](/docs/ui-button) | Works | A link styled as a button navigates. |
 | [Badge](/docs/ui-badge) | Works | |
-| [Card](/docs/ui-card) | Works | No ring or shadow is drawn. |
-| [Form controls](/docs/ui-form-controls) | Works | The textarea has no inner padding. A radio item selects only from its circle. |
-| [Tabs](/docs/ui-tabs) | Works | The `line` variant draws no underline. |
-| [Dialog](/docs/ui-dialog) | Works | Opens in a native modal window. |
+| [Card](/docs/ui-card) | Works | Ring and shadow are drawn. |
+| [Form controls](/docs/ui-form-controls) | Works | A radio's text does not select it, on the web either, because the demo does not wrap it in a `label`. |
+| [Tabs](/docs/ui-tabs) | Works | |
+| [Accordion](/docs/ui-accordion) | Works | |
+| [Dialog](/docs/ui-dialog) | Works | Opens in a native modal window. A tap on the scrim closes it. |
 | [Alert](/docs/ui-alert) | Works | |
+| [Select](/docs/ui-select) | Works | Opens in a native popover window. The list does not scroll, so a long list runs to the window's edge. |
+| [Slider](/docs/ui-slider) | Works | One value is the platform slider. A range is helm's track and thumbs, moved by touch. Keyboard steps are web only. |
 | [Popover](/docs/ui-popover) | Works | Opens in a native popover window. |
-| [Dropdown menu](/docs/ui-dropdown-menu) | Works | Opens the platform menu. No submenus, labels or separators yet. A shortcut's text is joined to its item's label. |
+| [Dropdown menu](/docs/ui-dropdown-menu) | Works | Opens the platform menu, with labels, separators, shortcuts and submenus. |
 | [Sheet](/docs/ui-sheet) | Works | Bottom sheets open in a native bottom sheet, other sides in a side drawer. |
 | [Drawer](/docs/ui-drawer) | Works | Opens in a native bottom sheet. |
-| [Toggle, toggle group, collapsible, breadcrumb, alert dialog](/docs/ui-more) | Works | |
-| [Separator](/docs/ui-feedback) | Works | |
-| [Kbd and spinner](/docs/ui-more) | Partial | Render. The keys sit slightly above the baseline. |
-| [Avatar](/docs/ui-feedback) | Partial | Initials sit in the top left. |
-| [Progress and skeleton](/docs/ui-feedback) | Partial | The progress indicator and the skeleton blocks are not drawn. |
-| [Table](/docs/ui-table) | Partial | The cells of each row stack vertically. |
-| [Calendar](/docs/ui-calendar) | Partial | Only the first day of each week shows. A tap on a day selects it. |
-| [Accordion](/docs/ui-accordion) | Partial | No longer throws on MasonKit's lower-case tag names. The trigger toggles, and closed content stays hidden. Not rechecked on an emulator. |
-| [Select](/docs/ui-select) | Broken | The list opens, but a tap on an item does nothing. |
-| [Slider](/docs/ui-slider) | Broken | No thumbs, and the value does not change. |
-| [Tooltip](/docs/ui-tooltip) | Broken | Throws, and a touch screen has no hover. |
-| [Hover card and native select](/docs/ui-more) | Broken | The hover card throws on load. The native select opens nothing. |
+| [Table](/docs/ui-table) | Works | `colspan` is ignored: each cell takes an equal share of its row. |
+| [Calendar](/docs/ui-calendar) | Works | |
+| [Tooltip](/docs/ui-tooltip) | Works | Opens on a tap or long press and closes itself. There is no arrow. |
+| [Toast](/docs/ui-sonner) | Works | A native toaster draws the toasts where it sits in the layout. |
+| [Toggle, toggle group, collapsible, breadcrumb, alert dialog, kbd, spinner](/docs/ui-more) | Works | |
+| [Hover card](/docs/ui-more) | Works | Opens on a tap instead of a hover. |
+| [Native select](/docs/ui-more) | Works | Opens the platform menu. |
+| [Separator, avatar, skeleton](/docs/ui-feedback) | Works | |
+| [Progress](/docs/ui-feedback) | Partial | The indicator is sized but its fill is not painted. |
 
-Most of the gaps come from a few causes that affect every component. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
+The pages under Legacy NativeScript tags are web polyfills of NativeScript's own views. On a device those tags are NativeScript's real views, and several demos there render differently or not at all (see `docs/native-parity-log.md` in the repository). Most of the remaining gaps come from a few causes that affect every component. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
 
 ## More in the workspace
 

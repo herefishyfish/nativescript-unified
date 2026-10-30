@@ -35,6 +35,8 @@ import { HlmTableImports } from '@spartan-ng/helm/table';
 import { HlmToggleImports } from '@spartan-ng/helm/toggle';
 import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
+import { HlmToasterImports } from '@spartan-ng/helm/sonner';
+import { toast } from '@spartan-ng/brain/sonner';
 import { NS_ELEMENTS } from '@nativescript-unified/web-polyfills';
 
 /** Spartan helm pieces the Components pages demo. Every helm component here already exists in packages/ui/helm. */
@@ -74,6 +76,7 @@ const HELM_IMPORTS = [
   ...HlmToggleImports,
   ...HlmToggleGroupImports,
   ...HlmTooltipImports,
+  ...HlmToasterImports,
 ];
 const DEMO_IMPORTS = [...Object.values(NS_ELEMENTS), ...HELM_IMPORTS];
 /**
@@ -97,7 +100,10 @@ const cache = new Map<string, Type<unknown>>();
 export function demoComponent(template: string): Type<unknown> {
   let cmp = cache.get(template);
   if (!cmp) {
-    class Demo {}
+    class Demo {
+      /** brain's toast(), so a demo can show one from a click. */
+      protected readonly toast = toast;
+    }
     Component({
       selector: 'docs-demo-live',
       imports: DEMO_IMPORTS,

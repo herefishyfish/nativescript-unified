@@ -15,13 +15,15 @@ import { installMasonKit } from '@triniwiz/nativescript-masonkit/angular';
 import { AppComponent } from './app/app.component';
 import { NsLiveDemo } from './app/markdown/live-demo';
 import { provideSpartanNativeScript, registerSpartanNativeElements } from '../../../packages/ui/native/spartan-native';
-import { registerCoreElementAliases } from '../../../packages/ui/native/core-elements';
+import { registerCommaSeparatedItems, registerCoreElementAliases } from '../../../packages/ui/native/core-elements';
 import { installTouchFeedback } from '../../../packages/ui/native/touch-feedback';
+import { installNativeDialogs } from '../../../packages/ui/native/native-elements/dialogs';
 import { View } from '@triniwiz/nativescript-masonkit';
 
 View.preflight = true;
 
 registerCoreElementAliases();
+registerCommaSeparatedItems();
 installMasonKit({
   componentHosts: {
     // Page roots and hosts whose template is a fill-parent `<scroll>` stay transparent, so the
@@ -30,6 +32,8 @@ installMasonKit({
   },
 });
 registerSpartanNativeElements();
+// Material alert(), confirm() and prompt() instead of core's; see docs/native-elements.
+installNativeDialogs();
 registerElement('BottomNavigation', () => BottomNavigation);
 registerElement('Tabs', () => Tabs);
 registerElement('TabStrip', () => TabStrip);

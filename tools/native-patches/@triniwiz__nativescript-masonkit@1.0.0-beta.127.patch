@@ -1,8 +1,8 @@
 diff --git a/common.js b/common.js
-index 7ee2f5a..adce1c3 100644
+index 7f3a2cd..8f70c2e 100644
 --- a/common.js
 +++ b/common.js
-@@ -17,7 +17,7 @@ import { masonEngine } from './windows-panel-helpers';
+@@ -24,7 +24,7 @@ import { masonEngine, removeNativeChild } from './panel-helpers';
  import { TextNode } from './text-node';
  import { compile } from './pseudo';
  import { frameworkRegistry } from './framework-registry';
@@ -11,7 +11,7 @@ index 7ee2f5a..adce1c3 100644
  function getViewStyle(view) {
      const ret = (__ANDROID__ ? view.get() : view.deref());
      return ret._styleHelper;
-@@ -1344,7 +1344,7 @@ export class ViewBase extends CustomLayoutView {
+@@ -1812,7 +1812,7 @@ export class ViewBase extends CustomLayoutView {
      // -- Unified text node update (cross-platform) --
      _updateTextNode(node, operation = null) {
          this._invalidateAttachCursor();
@@ -20,7 +20,7 @@ index 7ee2f5a..adce1c3 100644
          const textNode = this._createOrUpdateNativeTextNode(node, text);
          if (!operation)
              return;
-@@ -2985,4 +2985,22 @@ function wrapNativeEvent(type) {
+@@ -3905,4 +3905,22 @@ function wrapNativeEvent(type) {
              return new Event();
      }
  }
@@ -46,7 +46,7 @@ index 7ee2f5a..adce1c3 100644
 +    };
 +}
 diff --git a/img/index.android.js b/img/index.android.js
-index cbe4519..af587d6 100644
+index 5df259f..53ffe69 100644
 --- a/img/index.android.js
 +++ b/img/index.android.js
 @@ -8,11 +8,32 @@ let Img = class Img extends ImageBase {
@@ -83,7 +83,7 @@ index cbe4519..af587d6 100644
              return view;
          }
 diff --git a/img/index.ios.js b/img/index.ios.js
-index 9321ff4..591def6 100644
+index a4f2f3e..aad611d 100644
 --- a/img/index.ios.js
 +++ b/img/index.ios.js
 @@ -8,12 +8,26 @@ let Img = class Img extends ImageBase {
@@ -114,10 +114,10 @@ index 9321ff4..591def6 100644
              view.didLayout = () => {
                  this.requestLayout();
 diff --git a/input/index.android.js b/input/index.android.js
-index a5ede03..cdea628 100644
+index 47b6d79..d2b5583 100644
 --- a/input/index.android.js
 +++ b/input/index.android.js
-@@ -83,7 +83,7 @@ let Input = class Input extends InputBase {
+@@ -108,7 +108,7 @@ let Input = class Input extends InputElementBase {
      }
      [placeholderProperty.setNative](value) {
          if (this._view) {
@@ -125,51 +125,24 @@ index a5ede03..cdea628 100644
 +            this._view.setPlaceholder(value ?? '');
          }
      }
-     set valueAsNumber(value) {
+     // Core's placeholder-color (also what ::placeholder { color } compiles to), as on TextField.
 diff --git a/properties.js b/properties.js
-index 6a3df3f..9ec444c 100644
+index 18b7d1c..32fadfb 100644
 --- a/properties.js
 +++ b/properties.js
-@@ -101,6 +101,7 @@ export const displayProperty = new CssProperty({
+@@ -128,6 +128,7 @@ export const displayProperty = new CssProperty({
              case 'inline-block':
              case 'inline-flex':
              case 'inline-grid':
 +            case 'contents':
                  return value;
-             default:
-                 return undefined;
+             // The legacy boxes `line-clamp` utilities ask for.
+             case '-webkit-box':
 diff --git a/style.js b/style.js
-index 815eaba..d8a77ff 100644
+index 8140c2f..0944af8 100644
 --- a/style.js
 +++ b/style.js
-@@ -1903,6 +1903,12 @@ export class Style {
-         }
-         const normalized = normalizeColorValue(value);
-         if (normalized == null) {
-+            // unset (e.g. its CSS class was removed): drop back to the inherited color
-+            if (value == null) {
-+                this.prepareMut();
-+                setInt8(this.style_view, StyleKeys.FONT_COLOR_STATE, 0);
-+                this.commitState(StateKeys.FONT_COLOR);
-+            }
-             return;
-         }
-         this.prepareMut();
-@@ -1929,6 +1935,13 @@ export class Style {
-         }
-         const normalized = normalizeColorValue(value);
-         if (normalized == null) {
-+            // unset (e.g. its CSS class was removed): clear to transparent
-+            if (value == null) {
-+                this.prepareMut();
-+                setUint32(this.style_view, StyleKeys.BACKGROUND_COLOR, 0);
-+                setInt8(this.style_view, StyleKeys.BACKGROUND_COLOR_STATE, 0);
-+                this.commitState(StateKeys.BACKGROUND_COLOR);
-+            }
-             return;
-         }
-         this.prepareMut();
-@@ -2034,6 +2047,11 @@ export class Style {
+@@ -2926,6 +2926,11 @@ export class Style {
                  display = 2;
                  displayMode = 2;
                  break;

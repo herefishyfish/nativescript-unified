@@ -9,7 +9,7 @@ description: Colour tokens, dark mode, scoped palettes and the NativeScript poly
 
 All colours come from one file: `packages/ui/styles/tokens.css`. It uses shadcn-style names (`--background`, `--foreground`, `--primary`, and so on) with plain hex values, because NativeScript CSS has no `oklch`. Both apps import it, so the web and the device share one palette.
 
-The palette is inspired by the New Balance Numeric Jamie Foy 306 in "Sea Salt / Vintage Teal": a warm cream background, a deep teal-black foreground and a vintage teal accent. The hex values are estimates, not sampled from the shoe.
+The palette is a warm cream background, a deep teal-black foreground and a teal accent.
 
 | Token | Light | Dark |
 | --- | --- | --- |

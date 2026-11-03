@@ -32,9 +32,11 @@ Otherwise, use plain HTML. Each page in this section ends with an HTML-first equ
 
 ## What is in this section
 
-- **Layouts:** [StackLayout](/docs/stack-layout), [GridLayout](/docs/grid-layout), [FlexboxLayout](/docs/flexbox-layout), [WrapLayout](/docs/wrap-layout), [DockLayout](/docs/dock-layout), [AbsoluteLayout](/docs/absolute-layout) and [SplitView](/docs/split-view).
+- **Layouts:** [StackLayout](/docs/stack-layout), [GridLayout](/docs/grid-layout), [FlexboxLayout](/docs/flexbox-layout), [WrapLayout](/docs/wrap-layout), [DockLayout](/docs/dock-layout) and [AbsoluteLayout](/docs/absolute-layout).
 - **Views:** [Label](/docs/label), [Image](/docs/image), [ScrollView](/docs/scroll-view), [ListView and Repeater](/docs/list-view), [Switch, Slider and pickers](/docs/controls), [Button and TextField](/docs/button-and-text-field), [ActivityIndicator and Progress](/docs/indicators) and [Navigation views](/docs/navigation-views).
 - **Limits:** [Polyfill limitations](/docs/polyfill-limitations).
+
+[SplitView](/docs/split-view) has a polyfill too, but it is not legacy. It is a native layout that apps keep using, so its page is under App structure.
 
 ## Not custom elements
 

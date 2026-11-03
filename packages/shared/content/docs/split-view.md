@@ -1,23 +1,29 @@
 ---
 title: SplitView
-section: Legacy NativeScript tags
-order: 47
-description: Primary, supplementary, secondary and inspector columns.
+section: App structure
+order: 17
+description: A sidebar and a detail column side by side, the layout of tablet apps.
 ---
 
 # SplitView
 
-> [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [CSS grid](/docs/html-layout). See [Legacy NativeScript tags](/docs/legacy-tags).
+`<SplitView>` is NativeScript core's split layout: a sidebar beside a detail column, as in a tablet's mail or settings app. It is a native view, not legacy markup, so an HTML-first app keeps using it on a device. On iOS it is a `UISplitViewController`, which shows its columns side by side on a wide screen and collapses them into one column on a phone. On Android it is a plain container.
 
-`<SplitView>` is a column layout driven by roles. Each child sets `splitRole` to `primary`, `supplementary`, `secondary` or `inspector`.
+Each child sets `splitRole` to say which column it fills:
 
 | Attribute | On | Meaning |
 | --- | --- | --- |
-| `splitRole` | child | Which column the child sits in. `split-role` also works. |
-| `preferredPrimaryColumnWidthFraction` | SplitView | A number from 0 to 1 for the primary column. The other columns share what remains. |
+| `splitRole` | child | `primary`, `supplementary`, `secondary` or `inspector` |
+| `preferredPrimaryColumnWidthFraction` | SplitView | The primary column's share of the width, from 0 to 1 |
+| `preferredSupplementaryColumnWidthFraction`, `preferredInspectorColumnWidthFraction` | SplitView | The same for those columns, on iOS |
+| `displayMode` | SplitView | How the columns sit, on iOS: `automatic`, `secondaryOnly`, `oneBesideSecondary`, `oneOverSecondary`, `twoBesideSecondary`, `twoOverSecondary` or `twoDisplaceSecondary` |
+| `splitBehavior` | SplitView | `automatic`, `tile`, `overlay` or `displace`, on iOS |
 
-Columns follow the roles that are actually present, in the order primary, supplementary, secondary, inspector. With no roles at all it is primary beside secondary, and children without a role fill columns by their position.
+From code, `showPrimary()` and `hidePrimary()` open and close the primary column, and each other role has the same pair.
+
+## On the web
+
+A browser has no split view controller, so the `web-polyfills` package draws `<SplitView>` as a CSS grid with one column per role present, in the order primary, supplementary, secondary, inspector. It reads `splitRole` (or `split-role`) and `preferredPrimaryColumnWidthFraction`. With no roles at all, it puts primary beside secondary, and children without a role fill columns by their position.
 
 ```html live
 <SplitView preferredPrimaryColumnWidthFraction="0.3" class="gap-2" style="height: 140px">
@@ -34,11 +40,9 @@ Columns follow the roles that are actually present, in the order primary, supple
 </SplitView>
 ```
 
-The polyfill maps it to a CSS grid with one column per present role.
+In the native app on Android, these demos show only one column, because SplitView is a plain container there.
 
-## HTML-first equivalent
-
-The polyfill is a CSS grid with one column per present role. With two roles and a 0.3 primary fraction, the HTML version is a two-column grid:
+In an HTML page, write the grid directly. With two roles and a 0.3 primary fraction, that is a two-column grid:
 
 ```html live
 <div class="grid grid-cols-[30%_1fr] gap-2" style="height: 140px">

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import type { TocItem } from '../docs/content';
@@ -33,10 +34,11 @@ export class DocsToc {
   readonly items = input.required<TocItem[]>();
   protected readonly active = signal('');
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
-  /** The page's own path plus the fragment. A bare `#id` resolves against `<base href="/">`, the home page. */
+  /** The page's own URL, base path included, plus the fragment. A bare `#id` resolves against `<base href>`, the home page. */
   protected hrefFor(id: string): string {
-    return `${this.router.url.split('#')[0]}#${id}`;
+    return `${this.location.prepareExternalUrl(this.router.url.split('#')[0])}#${id}`;
   }
 
   constructor() {

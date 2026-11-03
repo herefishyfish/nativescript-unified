@@ -79,6 +79,7 @@ function searchEntries(meta: { slug: string; title: string; section: string; des
  * `virtual:docs-search` exports the search index, built from the same parse.
  */
 export function docsPlugin(contentDir: string): Plugin {
+  let base = '/';
   const parseAll = () =>
     readdirSync(contentDir)
       .filter((file) => file.endsWith('.md'))
@@ -88,7 +89,7 @@ export function docsPlugin(contentDir: string): Plugin {
         const blocks = toBlocks(tokens).map((block) =>
           block.kind === 'demo'
             ? { kind: 'demo' as const, code: block.code, html: codeBlock(block.code, 'html') }
-            : { kind: 'html' as const, html: renderTokens(block.tokens) },
+            : { kind: 'html' as const, html: renderTokens(block.tokens, base) },
         );
         return { doc: { ...meta, headings, blocks }, search: searchEntries(meta, tokens) };
       });
@@ -97,6 +98,9 @@ export function docsPlugin(contentDir: string): Plugin {
     enforce: 'pre',
     // Bundle the module into the SSR build instead of leaving a bare import for Node to resolve.
     config: () => ({ ssr: { noExternal: [VIRTUAL, SEARCH] } }),
+    configResolved: (config) => {
+      base = config.base;
+    },
     resolveId: (id) => (id === VIRTUAL ? RESOLVED : id === SEARCH ? SEARCH_RESOLVED : undefined),
     load(id) {
       if (id !== RESOLVED && id !== SEARCH_RESOLVED) return undefined;

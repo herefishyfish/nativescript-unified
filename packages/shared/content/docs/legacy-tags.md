@@ -33,10 +33,10 @@ Otherwise, use plain HTML. Each page in this section ends with an HTML-first equ
 ## What is in this section
 
 - **Layouts:** [StackLayout](/docs/stack-layout), [GridLayout](/docs/grid-layout), [FlexboxLayout](/docs/flexbox-layout), [WrapLayout](/docs/wrap-layout), [DockLayout](/docs/dock-layout) and [AbsoluteLayout](/docs/absolute-layout).
-- **Views:** [Label](/docs/label), [Image](/docs/image), [ScrollView](/docs/scroll-view), [ListView and Repeater](/docs/list-view), [Switch, Slider and pickers](/docs/controls), [Button and TextField](/docs/button-and-text-field), [ActivityIndicator and Progress](/docs/indicators) and [Navigation views](/docs/navigation-views).
+- **Views:** [Label](/docs/label), [Image](/docs/image), [ScrollView](/docs/scroll-view), [ListView and Repeater](/docs/list-view), [Switch, Slider and pickers](/docs/controls), [Button and TextField](/docs/button-and-text-field) and [ActivityIndicator and Progress](/docs/indicators).
 - **Limits:** [Polyfill limitations](/docs/polyfill-limitations).
 
-[SplitView](/docs/split-view) has a polyfill too, but it is not legacy. It is a native layout that apps keep using, so its page is under App structure.
+[SplitView](/docs/split-view) and [Navigation views](/docs/navigation-views) have polyfills too, but they are not legacy. Apps keep using those native views, so their pages are under App structure.
 
 ## Not custom elements
 

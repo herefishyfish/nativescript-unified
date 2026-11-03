@@ -41,7 +41,7 @@ Each push to `main` deploys the site to GitHub Pages through `.github/workflows/
 npx nx run native:android
 ```
 
-This runs `ns run android --no-hmr` with the `arm64-v8a` and `x86_64` ABIs. It builds the app and runs it on an Android emulator or device. It was checked on an emulator with API 36 (x86_64) and on a Pixel 7. The other native targets are `debug-android`, `build-android` and `clean`.
+This runs `ns run android --no-hmr` with the `arm64-v8a` and `x86_64` ABIs. It builds the app and runs it on an Android emulator or device. The other native targets are `debug-android`, `build-android` and `clean`.
 
 If you call `ns` yourself from PowerShell, quote the Gradle argument: `ns build android '--gradleArgs=-Pabis=arm64-v8a,x86_64'`. Without the quotes, PowerShell splits the value at the comma, and the APK ships without its native libraries. On Windows, a `before-prepare` hook (`apps/native/tools/gradle-env.mjs`) clears `NoDefaultCurrentDirectoryInExePath` so the CLI can run `gradlew.bat`.
 

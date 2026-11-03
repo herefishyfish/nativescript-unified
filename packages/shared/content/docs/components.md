@@ -55,7 +55,7 @@ Variants, such as `variant="outline"`, are inputs on the directive. Colours come
 
 ## Native status
 
-The native app renders these pages too, and compiles each demo on the device against the same helm components. This table records what each demo did on an Android emulator (API 36) on 29 October 2026. These results have not been checked on iOS yet.
+The native app renders these pages too, and compiles each demo on the device against the same helm components. This table records what each demo does there.
 
 | Component | Android | Notes |
 | --- | --- | --- |

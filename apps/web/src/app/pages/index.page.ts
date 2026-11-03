@@ -11,7 +11,6 @@ import {
   lucideCopy,
   lucideFileText,
   lucideGlobe,
-  lucideMonitor,
   lucidePalette,
   lucideRoute,
   lucideSmartphone,
@@ -51,7 +50,6 @@ cd apps/native && ns run ios    # the iOS app, on a Mac`;
       lucideCopy,
       lucideFileText,
       lucideGlobe,
-      lucideMonitor,
       lucidePalette,
       lucideRoute,
       lucideSmartphone,
@@ -243,7 +241,6 @@ export default class HomePage {
   protected readonly platforms = [
     { name: 'Web', main: true, icon: 'lucideGlobe', body: 'AnalogJS in the browser, prerendered to static HTML. This site is the web app.' },
     { name: 'iOS and Android', main: true, icon: 'lucideSmartphone', body: 'NativeScript with MasonKit: real native views, with these docs and their live demos on the device.' },
-    { name: 'macOS and Windows', main: false, icon: 'lucideMonitor', body: 'The same NativeScript app runs on the desktop too. Not the main focus yet.' },
   ];
 
   constructor() {

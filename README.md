@@ -11,7 +11,7 @@ apps/
 packages/
   shared/            HTML-first components, the 12 example screens and the docs Markdown, used by BOTH apps (no platform imports)
   ui/                Spartan: brain (headless) + helm (styled), ported to Angular 22, plus styles/ (tailwind preset, style-vega, tokens.css) and native/
-  web-polyfills/     Angular components so a legacy <StackLayout>/<GridLayout>/<Label> tree renders on the web
+  web-polyfills/     Angular components so NativeScript <StackLayout>, <GridLayout> and <Label> markup renders on the web
   analog-native/     File-based router + Markdown for NativeScript Angular (from nativescript-analog packages/analog)
 docs/design.md       analog-native design notes
 ```
@@ -32,10 +32,9 @@ cd apps/native && ns run ios      # needs a Mac with Xcode (no native:ios Nx tar
 
 ## Theme
 
-`packages/ui/styles/tokens.css` is the single source of colour tokens (shadcn-style names, plain hex), inspired by
-New Balance Numeric Jamie Foy 306 "Sea Salt / Vintage Teal": background `#F2EBDD`, foreground `#10302F`,
-primary `#27695F`, muted sand `#E3D9C4`. Dark mode (`.dark` on web, `.ns-dark` on native) flips to deep teal.
-Hex values are estimates, not sampled from the shoe.
+`packages/ui/styles/tokens.css` is the single source of colour tokens (shadcn-style names, plain hex): background
+`#F2EBDD`, foreground `#10302F`, primary `#27695F`, muted sand `#E3D9C4`. Dark mode (`.dark` on web, `.ns-dark` on
+native) flips to deep teal.
 - web: `apps/web/src/styles.css` imports `packages/ui/styles/index.css` (tailwind + Spartan preset + style-vega + tokens).
 - native: `apps/native/src/app.css` imports Tailwind (`@nativescript/tailwind`), the Spartan preset, style-vega and `tokens.css`.
 

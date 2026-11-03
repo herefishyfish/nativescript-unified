@@ -1,13 +1,12 @@
 /*
  * Shared colour tokens for web, native and ui.
- * Inspired by New Balance Numeric Jamie Foy 306 "Sea Salt / Vintage Teal".
- * Plain hex only (NativeScript CSS has no oklch). Dark mode is the same shoe at night: warm charcoal-green, cream text, softened vintage teal.
+ * Plain hex only (NativeScript CSS has no oklch). Dark mode: warm charcoal-green, cream text, softened teal.
  * Web toggles `.dark` on <html>; NativeScript sets `.ns-dark` on the root view.
  */
 :root,
 .ns-light {
   --radius: 0.625rem;
-  --background: #f2ebdd; /* sea salt */
+  --background: #f2ebdd; /* cream */
   --foreground: #10302f; /* deep teal-black */
   --card: #f7f2e7;
   --card-foreground: #10302f;
@@ -43,7 +42,7 @@
 .dark,
 .ns-dark {
   --background: #171a18; /* warm green-black */
-  --foreground: #f2ebdd; /* sea salt */
+  --foreground: #f2ebdd; /* cream */
   --card: #1f2320;
   --card-foreground: #f2ebdd;
   --popover: #1f2320;

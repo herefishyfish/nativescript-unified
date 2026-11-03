@@ -1,20 +1,45 @@
 ---
 title: Navigation views
-section: Legacy NativeScript tags
-order: 55
-description: ActionBar, NavigationButton, Tabs, Pager and Drawer, with iOS and Material approximations.
+section: App structure
+order: 18
+description: ActionBar, bottom navigation, tabs, Drawer and Pager, the native views that move between screens.
 ---
 
 # Navigation views
 
-> [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [helm tabs](/docs/ui-tabs) and [dialog](/docs/ui-dialog). See [Legacy NativeScript tags](/docs/legacy-tags).
+The bar across the top of a screen, the tabs along the bottom and the drawer at the side are native views on a device. They are app structure, not legacy markup, so an HTML-first app keeps them, and its HTML pages render inside them. On the web, the `web-polyfills` package draws approximations of the same tags, so a template that uses them still renders in a browser.
 
-These views are implemented by the polyfills. Four of them take `platform="ios"` or `platform="material"`, which restyles them as an approximation of the native look. The default is `default`.
+## On a device
 
-The demos on this page use the polyfills' own markup (`ns-tab`, `ns-page`, slots), not NativeScript's, so the native app shows their code only. On a device, NativeScript's `ActionBar`, `Tabs`, `Pager` and `Drawer` are page-level views with their own child elements.
+| View | Comes from | In this app |
+| --- | --- | --- |
+| `ActionBar`, `NavigationButton`, `ActionItem` | `@nativescript/core`, through `ActionBarComponent` from `@nativescript/angular` | Routed pages import `ActionBarComponent` to show their own title |
+| `BottomNavigation` | `@nativescript-community/ui-bottom-navigation` | The home screen's Guide, Components and UI tabs |
+| `Tabs` | `@nativescript-community/ui-tabs` | Registered, not used on a screen yet |
+| `Drawer` | `@nativescript-community/ui-drawer` | Wraps the app in `app.component.ts`. Side sheets open in it. |
+| `Pager` | A plugin such as `@nativescript-community/ui-pager` | Not installed |
 
-## ActionBar
+`apps/native/src/main.ts` registers the plugin views with `registerElement()`. The home screen, `apps/native/src/app/pages/index.page.ts`, is a `BottomNavigation` with one `TabStripItem` per tab and one `TabContentItem` per screen. Trimmed, it reads:
+
+```html
+<ActionBar title="NativeScript Unified" />
+<BottomNavigation selectedIndex="0">
+  <TabStrip>
+    <TabStripItem><Label text="Guide"></Label></TabStripItem>
+    <TabStripItem><Label text="Components"></Label></TabStripItem>
+    <TabStripItem><Label text="UI"></Label></TabStripItem>
+  </TabStrip>
+  <TabContentItem><guide-list kind="guide" /></TabContentItem>
+  <TabContentItem><guide-list kind="components" /></TabContentItem>
+  <TabContentItem><ui-demo /></TabContentItem>
+</BottomNavigation>
+```
+
+## On the web
+
+A browser has none of these views, so the polyfills draw them with CSS. The demos below use the polyfills' own markup (`ns-tab`, `ns-page`, slots) rather than the plugins' child elements, so the native app shows their code only. `ActionBar`, `Tabs`, `Pager` and `Drawer` take `platform="ios"` or `platform="material"`, which restyles them as an approximation of the native look. The default is `default`.
+
+### ActionBar
 
 `title` is the bar title. `<NavigationButton text="Back">` is the back control. Other children go in the `leading` or `trailing` slot. `large` turns on the iOS large title.
 
@@ -29,7 +54,7 @@ The demos on this page use the polyfills' own markup (`ns-tab`, `ns-page`, slots
 </StackLayout>
 ```
 
-## Tabs
+### Tabs
 
 Children are plain `<ns-tab label="...">` elements. `selectedIndex` picks the tab, and `segmented` makes the iOS look a segmented control.
 
@@ -41,7 +66,7 @@ Children are plain `<ns-tab label="...">` elements. `selectedIndex` picks the ta
 </Tabs>
 ```
 
-## Pager
+### Pager
 
 Children are `<ns-page>` elements. One shows at a time, with Prev and Next buttons and dots. There is no swipe or scroll snapping.
 
@@ -53,7 +78,7 @@ Children are `<ns-page>` elements. One shows at a time, with Prev and Next butto
 </Pager>
 ```
 
-## Drawer
+### Drawer
 
 The default content is the page, and `slot="drawer"` is the panel. `open` is a model, and `width` defaults to 280 pixels. The panel is positioned over the content, so give the drawer a height.
 
@@ -71,12 +96,10 @@ The default content is the page, and `slot="drawer"` is the panel. `open` is a m
 
 Tapping the scrim closes it too.
 
-## Looks per platform
+### Looks per platform
 
 On `ios`, `Tabs` becomes a bottom bar and `Pager` shows only dots. On `material`, `ActionBar` uses the primary colour and `Drawer` has rounded end corners. These are CSS approximations, as described in [Polyfill limitations](/docs/polyfill-limitations).
 
-## HTML-first equivalent
+## Inside a page
 
-For in-page tabs, use helm [Tabs](/docs/ui-tabs). For a side panel, use the [Sheet](/docs/ui-sheet), and for a bottom panel, the [Drawer](/docs/ui-drawer). The workspace also has helm `sidebar` and `navigation-menu` folders in `packages/ui/helm`, which have no pages here yet.
-
-On native, the example app uses the real `ActionBar` from `@nativescript/angular` and real bottom tabs from `@nativescript-community/ui-bottom-navigation`, so those are not things you replace there. See [Web vs native](/docs/web-vs-native).
+For tabs inside a page, use helm [Tabs](/docs/ui-tabs). For a side panel, use the [Sheet](/docs/ui-sheet), and for a bottom panel, the [Drawer](/docs/ui-drawer). The workspace also has helm `sidebar` and `navigation-menu` folders in `packages/ui/helm`, which have no pages here yet. The web app builds its own app-level navigation, such as this site's header and sidebar. See [Web vs native](/docs/web-vs-native).

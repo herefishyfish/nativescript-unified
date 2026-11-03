@@ -149,7 +149,9 @@ a {
 }
 
 .markdown pre code,
-.ns-dark .markdown pre code {
+.markdown .md-pre code,
+.ns-dark .markdown pre code,
+.ns-dark .markdown .md-pre code {
   background-color: transparent;
 }
 
@@ -242,7 +244,8 @@ a {
   padding: 16;
 }
 
-.live-demo pre {
+.live-demo pre,
+.live-demo .md-pre {
   margin: 0;
   padding: 12 16;
 }
@@ -313,7 +316,8 @@ BottomNavigation {
   background-color: var(--card);
 }
 
-.source-code pre {
+.source-code pre,
+.source-code .md-pre {
   margin: 0;
   padding: 16;
   font-family: monospace;

@@ -30,10 +30,21 @@ const RESOLVED = '\0' + VIRTUAL;
 const SEARCH = 'virtual:docs-search';
 const SEARCH_RESOLVED = '\0' + SEARCH;
 
+/** Markdown to plain text. Inline code keeps its angle brackets, so `<html>` reads as written instead of vanishing like a tag. */
 const plain = (text: string) =>
-  text.replace(/<[^>]+>/g, ' ').replace(/[`*_#>|]|\[([^\]]*)\]\([^)]*\)/g, '$1 ').replace(/\s+/g, ' ').trim();
+  text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[!\w+\]/g, ' ')
+    .split('`')
+    .map((part, i) => (i % 2 ? part : part.replace(/<[^>]+>/g, ' ').replace(/-{3,}|[*_#>|]/g, ' ')))
+    .join('')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-interface SearchEntry { slug: string; title: string; section: string; heading: string; id: string; text: string }
+/** The words in a code block, so tag and attribute names such as `hlmBtn` can be found. */
+const codeWords = (code: string) => code.replace(/[^\w-]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+interface SearchEntry { slug: string; title: string; section: string; heading: string; id: string; text: string; code: string }
 type Heading = { type: 'heading'; depth: number; text: string };
 const isHeading = (token: Token): token is Token & Heading => token.type === 'heading';
 
@@ -41,19 +52,21 @@ const isHeading = (token: Token): token is Token & Heading => token.type === 'he
 function searchEntries(meta: { slug: string; title: string; section: string; description: string }, tokens: Token[]): SearchEntry[] {
   const out: SearchEntry[] = [];
   const base = { slug: meta.slug, title: meta.title, section: meta.section };
-  let current = { heading: '', id: '', body: [meta.description] };
+  let current = { heading: '', id: '', body: [meta.description], code: [] as string[] };
   const push = () => {
     const text = plain(current.body.join(' '));
-    if (text || current.heading) out.push({ ...base, heading: current.heading, id: current.id, text });
+    if (text || current.heading) out.push({ ...base, heading: current.heading, id: current.id, text, code: codeWords(current.code.join(' ')) });
   };
   for (const token of tokens) {
     if (isHeading(token) && (token.depth === 2 || token.depth === 3)) {
       push();
-      current = { heading: plain(token.text), id: slugify(token.text), body: [] };
+      current = { heading: plain(token.text), id: slugify(token.text), body: [], code: [] };
     } else if (isHeading(token) && token.depth === 1) {
       continue;
+    } else if (token.type === 'code') {
+      current.code.push((token as { text: string }).text);
     } else {
-      current.body.push(token.type === 'code' ? (token as { text: string }).text : token.raw);
+      current.body.push(token.raw);
     }
   }
   push();

@@ -7,8 +7,6 @@ description: Collapsible sections with hlmAccordion.
 
 # Accordion
 
-## Basic
-
 `hlm-accordion` holds `hlm-accordion-item` elements. Each item has a trigger and content.
 
 ```html live

@@ -7,7 +7,7 @@ description: Write pages with plain HTML, CSS flex and grid, Tailwind classes an
 
 # HTML first
 
-The forward way to build in this project is plain HTML. A page is a template made of ordinary elements. Layout is CSS flex and grid, styling is Tailwind classes that read the shared theme tokens, and richer pieces are Spartan helm components.
+New UI in this project is plain HTML. A page is a template made of ordinary elements. Layout is CSS flex and grid, styling is Tailwind classes that read the shared theme tokens, and richer pieces are Spartan helm components.
 
 ```html live
 <section hlmCard class="max-w-md">
@@ -28,7 +28,7 @@ The forward way to build in this project is plain HTML. A page is a template mad
 
 ## The four layers
 
-1. **Elements.** `div`, `p`, `h1` to `h6`, `ul`, `li`, `a`, `span`, `img`, `button`. On the web they are the browser's own. On a device, [MasonKit](https://github.com/triniwiz/nativescript-mason) registers HTML-shaped native elements with `@nativescript/angular`, with browser-like defaults: headings and paragraphs get their usual margins and lists get markers.
+1. **Elements.** `div`, `p`, `h1` to `h6`, `ul`, `li`, `a`, `span`, `img`, `button`. On the web they are the browser's own. On a device, [MasonKit](https://github.com/triniwiz/nativescript-mason) registers native elements under the same tag names with `@nativescript/angular`.
 2. **Layout.** CSS flex and grid. See [Layout with flex and grid](/docs/html-layout).
 3. **Styling.** Tailwind utility classes using token names such as `bg-background`, `text-foreground` and `bg-primary text-primary-foreground`. See [Theming](/docs/theming).
 4. **Components.** Spartan helm, as attributes and small components. See [Components](/docs/components).
@@ -40,7 +40,7 @@ If you are coming from NativeScript tags, this is the HTML-first replacement for
 | NativeScript tag | HTML first |
 | --- | --- |
 | `StackLayout` | `div` with `flex flex-col` or `flex flex-row` |
-| `GridLayout` | `div` with `grid` and `grid-cols-*` / `grid-rows-*` |
+| `GridLayout` | `div` with `grid`, `grid-cols-*` and `grid-rows-*` |
 | `FlexboxLayout` | `div` with `flex` and the justify, items and order classes |
 | `WrapLayout` | `div` with `flex flex-wrap` |
 | `DockLayout` | a `grid` with an `auto 1fr auto` template |
@@ -56,4 +56,4 @@ If you are coming from NativeScript tags, this is the HTML-first replacement for
 Pages that use only plain elements, token classes and helm can live in `packages/shared` and render in both apps. See [Writing shared HTML features](/docs/shared-features). Anything that needs a platform API stays in `apps/web` or `apps/native`. See [Web vs native](/docs/web-vs-native).
 
 > [!NOTE]
-> `apps/native` uses `@nativescript/tailwind` and the same tokens, and on an Android emulator (API 36) it renders these pages and their live demos. A few utilities and helm components behave differently there. See [Known native limitations](/docs/web-vs-native#known-native-limitations) and [Native status](/docs/components#native-status).
+> `apps/native` uses `@nativescript/tailwind` and the same tokens, and it renders these pages and their live demos. A few utilities and helm components behave differently there. See [Known native limitations](/docs/web-vs-native#known-native-limitations) and [Native status](/docs/components#native-status).

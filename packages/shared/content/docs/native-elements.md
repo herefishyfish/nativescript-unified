@@ -7,7 +7,7 @@ description: Draw form controls, helm components and dialogs with platform widge
 
 # Native elements
 
-By default, MasonKit draws every HTML element on the device, including the form controls. `<input>` and `<textarea>` are MasonKit views, and helm's switch and checkbox are built from MasonKit boxes. The slider is the exception: spartan's slider measures its track and follows pointer events, which native views do not have, so it is always a shim: MasonKit's `<input type="range">` by default, and the Material slider below where you choose platform widgets. You can have chosen parts of an app draw platform widgets from `@nativescript-community` instead. The template stays the same, and the web still renders HTML.
+By default, MasonKit draws every HTML element on the device, including the form controls. `<input>` and `<textarea>` are MasonKit views, and helm's switch and checkbox are built from MasonKit boxes. The slider is the exception. Spartan's slider measures its track and follows pointer events, which native views do not have, so it always resolves to a shim. By default that is MasonKit's `<input type="range">`, and where you choose platform widgets it is the Material slider. You can have chosen parts of an app draw platform widgets from `@nativescript-community` instead. The template stays the same, and the web still renders HTML.
 
 This app keeps MasonKit everywhere except the example screens on the UI tab and the second demo below.
 
@@ -67,7 +67,7 @@ NativeScript core has its own controls, which need no package: `Switch`, `Slider
 
 ## Packages
 
-Install the package for each widget you use. The last column is the core view for the same control. It needs no package, but on Android it draws the older platform widget (a SeekBar, not the Material slider) and takes core's API instead of helm's.
+Install the package for each widget you use. The last column is the core view for the same control. A core view needs no package, but on Android it draws the older platform widget, such as a SeekBar where the package draws a Material slider, and it takes core's API instead of helm's.
 
 | Widget | Package | Android | iOS | Core view |
 | --- | --- | --- | --- | --- |
@@ -139,18 +139,20 @@ provideNativeElements({ select: MyPicker });
 
 ## Helm components
 
-The native switch, checkbox and slider are shims in `packages/ui/native/shims/helm-<name>.ts`. Each keeps helm's selector, inputs and outputs, so a template written for helm works with it unchanged. Which one a component gets depends on where it imports from:
+The platform-widget versions of the switch, checkbox and slider are shims in `packages/ui/native/shims/helm-<name>.ts`. Each keeps helm's selector, inputs and outputs, so a template written for helm works with it unchanged. Which version a component gets depends on where it imports from:
 
 - Native-only code imports the shim, as the native docs demo does: `import { HlmSwitchImports } from '.../packages/ui/native/shims/helm-switch'`.
-- Shared code imports `@spartan-ng/helm/<name>` as usual. The `native-helm` plugin in `apps/native/vite.config.mts` resolves that import to the shim for the files that `NATIVE_HELM_IMPORTERS` matches. In this app that is `packages/shared/src/lib/examples`. Every other file gets spartan's MasonKit component.
+- Shared code imports `@spartan-ng/helm/<name>` as usual. The `native-helm` plugin in `apps/native/vite.config.mts` resolves that import to the `helm-<name>` shim for the files that `NATIVE_HELM_IMPORTERS` matches. In this app that is `packages/shared/src/lib/examples`.
+- Every other file gets spartan's own component, except for the slider and the toaster. Spartan's versions of those measure elements and follow pointer events, so `ALWAYS_NATIVE_HELM` resolves them to `masonkit-slider.ts` and `helm-sonner.ts` everywhere else.
 
 ```ts
-const NATIVE_HELM = ['switch', 'checkbox', 'slider'];
+const NATIVE_HELM = ['switch', 'checkbox', 'slider', 'sonner'];
 const NATIVE_HELM_IMPORTERS = /\/packages\/shared\/src\/lib\/examples\//;
+const ALWAYS_NATIVE_HELM: Record<string, string> = { slider: 'masonkit-slider', sonner: 'helm-sonner' };
 ```
 
 - `hlm-switch` and `hlm-checkbox` keep `checked`, `(checkedChange)`, `disabled`, `aria-label`, `#ref.checked()` and `ngModel`.
-- `hlm-slider` keeps `value`, `min`, `max`, `step`, `disabled` and `(valueChange)`. The platform slider has one thumb, so a range (`[value]="[20, 70]"`) draws helm's track and thumbs, moved by touch. Every other file gets `shims/masonkit-slider.ts` (`ALWAYS_NATIVE_HELM` in `apps/native/vite.config.mts`): one value is MasonKit's `<input type="range">`, with the same range for two.
+- `hlm-slider` keeps `value`, `min`, `max`, `step`, `disabled` and `(valueChange)`. A platform slider has one thumb, so in both slider shims a range (`[value]="[20, 70]"`) draws helm's track and thumbs and moves them by touch.
 
 ## Browser dialogs
 
@@ -175,4 +177,4 @@ if (await confirm('Discard your changes?')) {
 ## Limits
 
 - Angular creates the view from the tag before it sets `type`, so a mapped `<input type="checkbox">` or `"radio"` is a text field too. That field takes no touches or focus, so spartan's radio still selects from its indicator. For a visible checkbox, use `hlm-checkbox`.
-- Results are from an Android emulator (API 36). They have not been checked on iOS yet.
+- The adapters have been checked on Android only, not on iOS.

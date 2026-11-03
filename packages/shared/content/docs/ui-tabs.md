@@ -37,4 +37,4 @@ description: Tabs built from hlmTabs, a list of triggers and matching content pa
 
 `hlmTabs` also takes `orientation` and `activationMode`, and emits `tabActivated`.
 
-For app-level navigation, see [Web vs native](/docs/web-vs-native).
+Tabs switch panels inside a page. App-level navigation, such as the native app's bottom tabs, belongs to each app. See [Web vs native](/docs/web-vs-native).

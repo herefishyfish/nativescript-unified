@@ -7,6 +7,8 @@ description: Input, label, textarea, checkbox, switch and radio group.
 
 # Form controls
 
+Helm styles the browser's own form elements with attributes, and adds checkbox, switch and radio group components.
+
 ## Input, label and textarea
 
 `hlmInput` and `hlmTextarea` are attributes on the native `<input>` and `<textarea>` elements. `hlmLabel` goes on a `<label>`.

@@ -29,4 +29,4 @@ description: A modal dialog with a trigger, header, footer and close buttons.
 </hlm-dialog>
 ```
 
-The dialog is built on the brain dialog and the Angular CDK overlay. It closes with Escape, with a `hlmDialogClose` button, or with the built-in close button.
+The dialog is built on the brain dialog. On the web it opens in an Angular CDK overlay, and in the native app it opens in a full-screen modal window. See [Spartan on native](/docs/web-vs-native#spartan-on-native). It closes with Escape, with a `hlmDialogClose` button, or with the built-in close button.

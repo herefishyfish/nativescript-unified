@@ -7,7 +7,7 @@ description: A slider with a track, range and thumbs, driven by the keyboard or 
 
 # Slider
 
-`hlm-slider` takes `value` as an array of numbers, one per thumb, plus `min`, `max` and `step`. It emits `valueChange`. Focus the thumb and use the arrow keys.
+`hlm-slider` takes `value` as an array of numbers, one per thumb, plus `min`, `max` and `step`. It emits `valueChange`. On the web, focus a thumb and use the arrow keys.
 
 ```html live
 <div class="flex max-w-sm flex-col gap-3">

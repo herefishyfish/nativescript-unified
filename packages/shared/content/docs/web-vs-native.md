@@ -70,8 +70,8 @@ That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders
 
 ## Where does new code go
 
-1. If it is plain HTML plus tokens and has no platform imports, put it in `packages/shared`. See [Writing shared HTML features](/docs/shared-features).
-2. If it needs a router service, a native API, or a Spartan component, put it in the app that uses it.
+1. If it is plain HTML, token classes and helm components, with no platform imports, put it in `packages/shared`. See [Writing shared HTML features](/docs/shared-features).
+2. If it needs a router service or a platform API, put it in the app that uses it.
 3. If a legacy NativeScript tag must render in a browser, it belongs in `packages/web-polyfills`. Native never imports that package, because on a device those tags are real views. See [Legacy NativeScript tags](/docs/legacy-tags).
 
 ## Spartan on native
@@ -84,15 +84,16 @@ That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders
 - A popover opens in an anchored window from `@nativescript-community/ui-popover`. Select, combobox, autocomplete and date picker use the same window.
 - A dropdown menu opens the platform menu from `@nativescript-community/ui-menu`. That is a Material 3 popup menu on Android and a `UIMenu` on iOS.
 
-[Native status](/docs/components#native-status) records what each component's demo did on an Android emulator (API 36, x86_64). These results have not been checked on iOS yet.
+[Native status](/docs/components#native-status) lists what each component does in the native app.
 
 ## Known native limitations
 
 These apply across components.
 
-- **Helm rules beat utilities on helm hosts.** helm's `.style-vega .spartan-*` rules have a specificity of 0,2,0 and sit outside any layer, so they override a Tailwind utility you put on the same element. For example, `h-12` or `rounded-full` on `hlmBtn`, or `gap-*` and `p-*` on `hlmCard`, have no effect. This happens on the web too. A fix is planned.
+- **Helm rules beat utilities on helm hosts.** helm's `.style-vega .spartan-*` rules have a specificity of 0,2,0 and sit outside any layer, so they override a Tailwind utility you put on the same element. For example, `h-12` or `rounded-full` on `hlmBtn`, or `gap-*` and `p-*` on `hlmCard`, have no effect. This happens on the web too.
 - **Opacity-modified token colours.** Classes such as `bg-input/80`, `bg-destructive/10` and `dark:bg-input/30` keep the plain light token colour on native, in every theme.
-- **Text layout in MasonKit.** A button does not always center its text on its first layout. An `inline-flex` box lays its children out as an inline text run, so `apps/native` overrides it for the progress bar and the calendar (`packages/ui/native/native-overrides.css`). A text element nested inside another text element drops the styling of its inline children. Text ignores `white-space: pre`, so code blocks render as plain text.
-- **Browser APIs in brain components.** MasonKit elements have no `getBoundingClientRect()` or pointer events, there is no `document.defaultView`, and the NativeScript document has no `createElement()` for a CDK overlay. Where brain needs these, it takes a no-DOM path: the select trigger measures itself on `layoutChanged`, and the tooltip and hover card open on a tap through the overlay host. The slider and the toaster are native shims (`packages/ui/native/shims`).
+- **Text layout in MasonKit.** A button does not always center its text on its first layout. An `inline-flex` box lays its children out as an inline text run, so `packages/ui/native/native-overrides.css` overrides it for the progress bar and the calendar. A text element nested inside another text element drops the styling of its inline children. Text ignores `white-space: pre`, so code blocks render as plain text.
+- **Block-backed tags.** Spartan styles `button`, `a`, `li`, `kbd`, `label` and the headings as flex boxes, so `registerSpartanNativeElements()` in `packages/ui/native/spartan-native.ts` backs them with block elements. A list item therefore draws no marker. The Markdown renderer draws its own.
+- **Browser APIs in brain components.** MasonKit elements have no `getBoundingClientRect()` or pointer events, there is no `document.defaultView`, and the NativeScript document has no `createElement()` for a CDK overlay. Where brain needs these, it takes a no-DOM path: the select trigger measures itself on `layoutChanged`, and the tooltip and hover card open through the overlay host. The slider and the toaster are native shims (`packages/ui/native/shims`).
 - **Media queries.** NativeScript drops media queries. `apps/native/src/app.css` overrides the `motion-safe` variant so that the spinner and skeleton animations run.
 - **Hover.** A touch screen has no hover, so the tooltip and the hover card open on a tap instead.

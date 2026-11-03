@@ -7,7 +7,7 @@ description: Spartan helm components with live examples, and how each one runs o
 
 # Components
 
-These pages show the [Spartan](https://spartan.ng) **helm** components that live in `packages/ui/helm`. They are the forward way to build UI in this project: plain HTML elements and attributes, styled with Tailwind classes and the shared theme tokens.
+These pages show the [Spartan](https://spartan.ng) **helm** components that live in `packages/ui/helm`. They are the way to build new UI in this project: plain HTML elements and attributes, styled with Tailwind classes and the shared theme tokens.
 
 Every example is a real Angular template. The code in the Code tab is the code that renders in the Preview tab, compiled at run time against the helm components in this workspace. That happens in your browser on the web, and on the device in the native app.
 

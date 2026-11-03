@@ -48,7 +48,7 @@ On MasonKit elements, yes: `px` is a CSS pixel, the same size as a NativeScript 
 
 ## How do I add a docs page?
 
-Add a `.md` file to `packages/shared/content/docs`. The slug is the file name. Front matter has `title`, `section`, `order` and `description`. Pages sort by `order`, then by title, and sections appear in the order of their first page. A fenced block tagged `html live` is both shown and rendered as a demo. Both apps pick the file up: the web prerenders it at `/docs/<slug>`, and the native app lists it on its Guide or Components tab.
+Add a `.md` file to `packages/shared/content/docs`. The slug is the file name. Front matter has `title`, `section`, `order` and `description`. Pages sort by `order`, then by title, and sections appear in the order of their first page. A fenced block tagged `html live` is both shown and rendered as a demo. Tag it `html live native` to preview it with platform widgets in the app, or `html live web` when it uses markup that only the web polyfills understand. See [Native elements](/docs/native-elements). Both apps pick the file up: the web prerenders it at `/docs/<slug>`, and the native app lists it on its Guide or Components tab.
 
 ## Is the site prerendered?
 

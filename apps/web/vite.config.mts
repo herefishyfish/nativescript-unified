@@ -15,6 +15,10 @@ const docSlugs = readdirSync(docsDir)
 
 const siteUrl = (process.env.VITE_SITE_URL || 'https://nativescript-unified.example').replace(/\/+$/, '');
 
+/** The path the site is served from. Set BASE_PATH, such as `nativescript-unified`, to serve it from a subpath, as GitHub Pages does. */
+const basePath = (process.env.BASE_PATH ?? '').replace(/^\/+|\/+$/g, '');
+const base = basePath ? `/${basePath}/` : '/';
+
 /** sitemap.xml and robots.txt for the prerendered public folder. */
 function writeSeoFiles(routes: string[]): void {
   const dir = resolve(import.meta.dirname, '../../dist/apps/web/analog/public');
@@ -26,10 +30,13 @@ function writeSeoFiles(routes: string[]): void {
 
 export default defineConfig(({ mode }) => ({
   root: import.meta.dirname,
+  base,
   publicDir: 'src/public',
   build: { outDir: '../../dist/apps/web/client', reportCompressedSize: true, emptyOutDir: true, target: ['es2020'] },
   resolve: { mainFields: ['module'] },
   plugins: [
+    // Angular's router resolves routes and routerLinks against <base href>, so it follows `base`.
+    { name: 'base-href', transformIndexHtml: (html: string) => html.replace('<base href="/" />', `<base href="${base}" />`) },
     docsPlugin(docsDir),
     highlightPlugin(),
     analog({

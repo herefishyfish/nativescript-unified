@@ -24,7 +24,7 @@ import { SiteHeader } from '../layout/site-header';
         <div class="p-4 md:ml-auto md:w-64 md:py-6">
           @for (section of nav; track section.title) {
             <div class="mb-6">
-              <h2 class="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ section.title }}</h2>
+              <h2 class="mb-2 px-2 text-xs font-medium text-muted-foreground">{{ section.title }}</h2>
               <ul class="flex flex-col gap-0.5">
                 @for (page of section.pages; track page.slug) {
                   <li>

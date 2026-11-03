@@ -214,20 +214,13 @@ export class BrnSonnerToaster {
 		afterNextRender(() => {
 			this._document.addEventListener('keydown', this.handleKeydown);
 
-			const window = this._window;
-			if (window) {
-				this._window
-					.matchMedia('(prefers-color-scheme: dark)')
-					.addEventListener('change', this.handleThemePreferenceChange);
-			}
+			// A prerender's window has no matchMedia. Removing the listener needs the same MediaQueryList it was added to.
+			const darkScheme = this._window?.matchMedia?.('(prefers-color-scheme: dark)');
+			darkScheme?.addEventListener('change', this.handleThemePreferenceChange);
 
 			destroyRef.onDestroy(() => {
 				this._document.removeEventListener('keydown', this.handleKeydown);
-				if (window) {
-					window
-						.matchMedia('(prefers-color-scheme: dark)')
-						.removeEventListener('change', this.handleThemePreferenceChange);
-				}
+				darkScheme?.removeEventListener('change', this.handleThemePreferenceChange);
 			});
 		});
 	}

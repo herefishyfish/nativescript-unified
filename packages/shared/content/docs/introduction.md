@@ -51,9 +51,9 @@ Web and native diverge often, so they are separate apps at the top of the worksp
 
 Short answers to common questions are in the [FAQ](/docs/faq).
 
-## Legacy NativeScript tags
+## NativeScript views
 
-NativeScript apps are often written with tags such as `<StackLayout>` and `<Label>`. The `web-polyfills` package implements those tags as Angular components so an existing NativeScript tree also renders in a browser. That is **legacy support**, kept for markup that already exists, not the way to write new code. It has its own section: [Legacy NativeScript tags](/docs/legacy-tags).
+NativeScript apps are often written with tags such as `<StackLayout>` and `<Label>`. The `web-polyfills` package implements those tags as Angular components so an existing NativeScript tree also renders in a browser. New pages are HTML first, and the tags have their own section: [NativeScript views](/docs/nativescript-views).
 
 ## Platforms
 

@@ -1,6 +1,6 @@
 ---
 title: Label and text runs
-section: Legacy NativeScript tags
+section: NativeScript views
 order: 48
 description: Label, FormattedString and Span.
 ---
@@ -8,7 +8,7 @@ description: Label, FormattedString and Span.
 # Label and text runs
 
 > [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [plain text elements](/docs/html-first). See [Legacy NativeScript tags](/docs/legacy-tags).
+> **A NativeScript view.** On a device this tag is NativeScript's own view, and in a browser the web polyfills draw it. For HTML-first pages, use [plain text elements](/docs/html-first). See [NativeScript views](/docs/nativescript-views).
 
 ## Label
 

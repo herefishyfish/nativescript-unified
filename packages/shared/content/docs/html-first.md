@@ -35,7 +35,7 @@ New UI in this project is plain HTML. A page is a template made of ordinary elem
 
 ## Which tag for which job
 
-If you are coming from NativeScript tags, this is the HTML-first replacement for each one. The links go to the legacy page, which shows the same mapping with a live example.
+If you are coming from NativeScript tags, this is the HTML-first replacement for each one. The links go to each tag's page, which shows the same mapping with a live example.
 
 | NativeScript tag | HTML first |
 | --- | --- |

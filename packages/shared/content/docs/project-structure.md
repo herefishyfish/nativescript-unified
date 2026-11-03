@@ -14,7 +14,7 @@ apps/
 packages/
   shared/              HTML-first components, example screens and the Markdown for these docs
   ui/                  Spartan brain + helm, styles/ (Tailwind preset, tokens) and native/ (NativeScript glue)
-  web-polyfills/       Angular components for legacy NativeScript tags on the web
+  web-polyfills/       Angular components for NativeScript view tags on the web
   analog-native/       File-based router and Markdown for NativeScript Angular
 tools/                 postinstall patches, the web audit and the contrast checker
 docs/
@@ -51,7 +51,7 @@ Spartan UI. `brain` is headless and `helm` is styled. They are consumed from sou
 
 ## packages/web-polyfills
 
-Legacy support: Angular components that implement NativeScript view tags on the web, so existing NativeScript markup renders in a browser. Native never imports it. See [Legacy NativeScript tags](/docs/legacy-tags) and [Polyfill limitations](/docs/polyfill-limitations).
+Angular components that implement NativeScript view tags on the web, so existing NativeScript markup renders in a browser. Native never imports it. See [NativeScript views](/docs/nativescript-views) and [Polyfill limitations](/docs/polyfill-limitations).
 
 ## packages/analog-native
 

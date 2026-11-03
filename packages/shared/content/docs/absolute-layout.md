@@ -1,6 +1,6 @@
 ---
 title: AbsoluteLayout
-section: Legacy NativeScript tags
+section: NativeScript views
 order: 46
 description: Children positioned by left and top.
 ---
@@ -8,7 +8,7 @@ description: Children positioned by left and top.
 # AbsoluteLayout
 
 > [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [relative and absolute positioning](/docs/html-layout). See [Legacy NativeScript tags](/docs/legacy-tags).
+> **A NativeScript view.** On a device this tag is NativeScript's own view, and in a browser the web polyfills draw it. For HTML-first pages, use [relative and absolute positioning](/docs/html-layout). See [NativeScript views](/docs/nativescript-views).
 
 `<AbsoluteLayout>` positions every child with `left` and `top`. The layout is `position: relative` and each child is `position: absolute`.
 

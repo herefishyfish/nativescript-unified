@@ -28,7 +28,7 @@ Keeping them as separate apps is a strength. Each app can design its pages and f
 | Dark mode | `dark` class on `<html>` | `ns-dark` class on the root view |
 | Styling | Tailwind and Spartan helm | Tailwind through `@nativescript/tailwind` and Spartan helm, with the same `tokens.css` |
 | CSS `px` | A CSS pixel | A CSS pixel on MasonKit elements, a device pixel on core NativeScript views |
-| Legacy NativeScript tags | Rendered by `web-polyfills`, for existing markup only | Real native views |
+| NativeScript view tags | Rendered by `web-polyfills` | Real native views |
 
 ## Pages
 
@@ -72,7 +72,7 @@ That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders
 
 1. If it is plain HTML, token classes and helm components, with no platform imports, put it in `packages/shared`. See [Writing shared HTML features](/docs/shared-features).
 2. If it needs a router service or a platform API, put it in the app that uses it.
-3. If a legacy NativeScript tag must render in a browser, it belongs in `packages/web-polyfills`. Native never imports that package, because on a device those tags are real views. See [Legacy NativeScript tags](/docs/legacy-tags).
+3. If a NativeScript view tag must render in a browser, it belongs in `packages/web-polyfills`. Native never imports that package, because on a device those tags are real views. See [NativeScript views](/docs/nativescript-views).
 
 ## Spartan on native
 

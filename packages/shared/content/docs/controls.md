@@ -1,6 +1,6 @@
 ---
 title: Switch, Slider and pickers
-section: Legacy NativeScript tags
+section: NativeScript views
 order: 52
 description: Switch, Slider, SearchBar, SegmentedBar, ListPicker, DatePicker and TimePicker.
 ---
@@ -8,7 +8,7 @@ description: Switch, Slider, SearchBar, SegmentedBar, ListPicker, DatePicker and
 # Switch, Slider and pickers
 
 > [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [Spartan helm form controls](/docs/ui-form-controls). See [Legacy NativeScript tags](/docs/legacy-tags).
+> **A NativeScript view.** On a device this tag is NativeScript's own view, and in a browser the web polyfills draw it. For HTML-first pages, use [Spartan helm form controls](/docs/ui-form-controls). See [NativeScript views](/docs/nativescript-views).
 
 | View | Inputs | Output |
 | --- | --- | --- |
@@ -67,7 +67,7 @@ description: Switch, Slider, SearchBar, SegmentedBar, ListPicker, DatePicker and
 
 Each of these has a Spartan helm counterpart with a live example:
 
-| Legacy view | HTML first |
+| NativeScript view | HTML first |
 | --- | --- |
 | `Switch` | `hlm-switch` on [Form controls](/docs/ui-form-controls) |
 | `Slider` | `hlm-slider` on [Slider](/docs/ui-slider) |

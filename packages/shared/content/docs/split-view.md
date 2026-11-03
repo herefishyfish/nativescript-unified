@@ -7,7 +7,7 @@ description: A sidebar and a detail column side by side, the layout of tablet ap
 
 # SplitView
 
-`<SplitView>` is NativeScript core's split layout: a sidebar beside a detail column, as in a tablet's mail or settings app. It is a native view, not legacy markup, so an HTML-first app keeps using it on a device. On iOS it is a `UISplitViewController`, which shows its columns side by side on a wide screen and collapses them into one column on a phone. On Android it is a plain container.
+`<SplitView>` is NativeScript core's split layout: a sidebar beside a detail column, as in a tablet's mail or settings app. It is a native view, so an HTML-first app keeps using it on a device. On iOS it is a `UISplitViewController`, which shows its columns side by side on a wide screen and collapses them into one column on a phone. On Android it is a plain container.
 
 Each child sets `splitRole` to say which column it fills:
 

@@ -1,6 +1,6 @@
 ---
 title: ScrollView
-section: Legacy NativeScript tags
+section: NativeScript views
 order: 50
 description: Vertical and horizontal scrolling.
 ---
@@ -8,7 +8,7 @@ description: Vertical and horizontal scrolling.
 # ScrollView
 
 > [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [an overflow container](/docs/html-first). See [Legacy NativeScript tags](/docs/legacy-tags).
+> **A NativeScript view.** On a device this tag is NativeScript's own view, and in a browser the web polyfills draw it. For HTML-first pages, use [an overflow container](/docs/html-first). See [NativeScript views](/docs/nativescript-views).
 
 `<ScrollView>` scrolls its content. `orientation` is `vertical` (the default) or `horizontal`. Give the view a bounded size, or there is nothing to scroll.
 

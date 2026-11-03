@@ -35,7 +35,7 @@ import { SiteLogo } from './site-logo';
           </nav>
         }
       </div>
-      <p class="border-t px-4 py-5 text-center text-xs text-muted-foreground">MIT licensed. Colours inspired by the New Balance Numeric 306 in Sea Salt and Vintage Teal.</p>
+      <p class="border-t px-4 py-5 text-center text-xs text-muted-foreground">MIT licensed.</p>
     </footer>
   `,
 })

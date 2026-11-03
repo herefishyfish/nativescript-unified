@@ -56,7 +56,7 @@ Yes. `nx build web` writes static HTML for the home page and every docs page. De
 
 ## Where do the colours come from?
 
-`packages/ui/styles/tokens.css`. The hex values are estimates inspired by a shoe, not sampled. See [Theming](/docs/theming).
+`packages/ui/styles/tokens.css`. See [Theming](/docs/theming).
 
 ## Can I rename the package scope?
 

@@ -1,6 +1,6 @@
 ---
 title: ActivityIndicator and Progress
-section: Legacy NativeScript tags
+section: NativeScript views
 order: 54
 description: Busy and progress indicators.
 ---
@@ -8,7 +8,7 @@ description: Busy and progress indicators.
 # ActivityIndicator and Progress
 
 > [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [helm progress and skeleton](/docs/ui-feedback). See [Legacy NativeScript tags](/docs/legacy-tags).
+> **A NativeScript view.** On a device this tag is NativeScript's own view, and in a browser the web polyfills draw it. For HTML-first pages, use [helm progress and skeleton](/docs/ui-feedback). See [NativeScript views](/docs/nativescript-views).
 
 ## ActivityIndicator
 

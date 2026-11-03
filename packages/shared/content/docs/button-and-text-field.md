@@ -1,6 +1,6 @@
 ---
 title: Button and TextField
-section: Legacy NativeScript tags
+section: NativeScript views
 order: 53
 description: What is not polyfilled, and the HTML-first alternative.
 ---
@@ -8,7 +8,7 @@ description: What is not polyfilled, and the HTML-first alternative.
 # Button and TextField
 
 > [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [helm buttons](/docs/ui-button) and [form controls](/docs/ui-form-controls). See [Legacy NativeScript tags](/docs/legacy-tags).
+> **NativeScript views.** On a device these tags are NativeScript's own views, and in a browser there is no polyfill for them. For HTML-first pages, use [helm buttons](/docs/ui-button) and [form controls](/docs/ui-form-controls). See [NativeScript views](/docs/nativescript-views).
 
 The `web-polyfills` package has **no** `<Button>` or `<TextField>` component. The full list of tags it implements is:
 

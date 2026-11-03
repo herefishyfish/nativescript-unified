@@ -60,4 +60,4 @@ Every [example screen](/docs/shared-features#larger-examples) in `packages/share
 
 ## Polyfill variables
 
-The legacy web polyfills read `--ns-*` variables (`--ns-foreground`, `--ns-primary`, `--ns-card`, `--ns-border`, `--ns-radius`, and so on). `tokens.css` maps them onto the theme tokens, so switching to dark mode restyles polyfilled views as well.
+The web polyfills read `--ns-*` variables (`--ns-foreground`, `--ns-primary`, `--ns-card`, `--ns-border`, `--ns-radius`, and so on). `tokens.css` maps them onto the theme tokens, so switching to dark mode restyles polyfilled views as well.

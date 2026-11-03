@@ -7,7 +7,7 @@ description: ActionBar, bottom navigation, tabs, Drawer and Pager, the native vi
 
 # Navigation views
 
-The bar across the top of a screen, the tabs along the bottom and the drawer at the side are native views on a device. They are app structure, not legacy markup, so an HTML-first app keeps them, and its HTML pages render inside them. On the web, the `web-polyfills` package draws approximations of the same tags, so a template that uses them still renders in a browser.
+The bar across the top of a screen, the tabs along the bottom and the drawer at the side are native views on a device. They are app structure, so an HTML-first app keeps them, and its HTML pages render inside them. On the web, the `web-polyfills` package draws approximations of the same tags, so a template that uses them still renders in a browser.
 
 ## On a device
 

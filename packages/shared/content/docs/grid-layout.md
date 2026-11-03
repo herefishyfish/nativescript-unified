@@ -1,6 +1,6 @@
 ---
 title: GridLayout
-section: Legacy NativeScript tags
+section: NativeScript views
 order: 42
 description: Rows and columns with row, col and span.
 ---
@@ -8,7 +8,7 @@ description: Rows and columns with row, col and span.
 # GridLayout
 
 > [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [CSS grid](/docs/html-layout). See [Legacy NativeScript tags](/docs/legacy-tags).
+> **A NativeScript view.** On a device this tag is NativeScript's own view, and in a browser the web polyfills draw it. For HTML-first pages, use [CSS grid](/docs/html-layout). See [NativeScript views](/docs/nativescript-views).
 
 `<GridLayout>` places children into a grid of rows and columns, and maps to CSS grid on the web.
 

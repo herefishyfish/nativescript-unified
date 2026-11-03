@@ -21,7 +21,7 @@ According to `docs/design.md`: the AnalogJS router calls plain `provideRouter`, 
 
 ## Can I write `<StackLayout>` on the web?
 
-Yes, if you import the component, but it is legacy support for existing NativeScript markup. New code should use HTML. See [HTML first](/docs/html-first), [StackLayout](/docs/stack-layout) and [Polyfill limitations](/docs/polyfill-limitations).
+Yes, if you import the component, and the web polyfills draw it. HTML-first pages use HTML instead. See [HTML first](/docs/html-first), [StackLayout](/docs/stack-layout) and [Polyfill limitations](/docs/polyfill-limitations).
 
 ## Why are the polyfills not custom elements?
 

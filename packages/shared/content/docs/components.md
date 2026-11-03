@@ -83,7 +83,7 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Separator, avatar, skeleton](/docs/ui-feedback) | Works | |
 | [Progress](/docs/ui-feedback) | Partial | The indicator is sized but its fill is not painted. |
 
-The pages under Legacy NativeScript tags are web polyfills of NativeScript's own views. On a device those tags are NativeScript's real views, and several demos there render differently or not at all (see `docs/native-parity-log.md` in the repository). Most of the remaining gaps come from a few causes that affect every component. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
+The pages under NativeScript views are web polyfills of NativeScript's own views. On a device those tags are NativeScript's real views, and several demos there render differently or not at all (see `docs/native-parity-log.md` in the repository). Most of the remaining gaps come from a few causes that affect every component. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
 
 ## More in the workspace
 

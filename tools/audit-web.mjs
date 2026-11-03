@@ -47,7 +47,7 @@ const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } })
 const page = await ctx.newPage();
 
 // 2. Pages: render, no console errors, screenshot.
-const pages = ['', 'docs/introduction', 'docs/project-structure', 'docs/file-routing', 'docs/stack-layout', 'docs/grid-layout', 'docs/flexbox-layout', 'docs/wrap-layout', 'docs/dock-layout', 'docs/absolute-layout', 'docs/label', 'docs/image', 'docs/scroll-view', 'docs/list-view', 'docs/controls', 'docs/indicators', 'docs/button-and-text-field', 'docs/theming', 'docs/installation', 'docs/web-vs-native', 'docs/shared-features', 'docs/markdown-on-native', 'docs/polyfill-limitations', 'docs/faq', 'docs/navigation-views', 'docs/split-view', 'docs/html-first', 'docs/html-layout', 'docs/legacy-tags', 'docs/components', 'docs/ui-button', 'docs/ui-badge', 'docs/ui-card', 'docs/ui-form-controls', 'docs/ui-tabs', 'docs/ui-accordion', 'docs/ui-dialog', 'docs/ui-alert', 'docs/ui-feedback', 'docs/ui-select', 'docs/ui-slider', 'docs/ui-popover', 'docs/ui-dropdown-menu', 'docs/ui-sheet', 'docs/ui-drawer', 'docs/ui-table', 'docs/ui-calendar', 'docs/ui-tooltip', 'docs/ui-more'];
+const pages = ['', 'docs/introduction', 'docs/project-structure', 'docs/file-routing', 'docs/stack-layout', 'docs/grid-layout', 'docs/flexbox-layout', 'docs/wrap-layout', 'docs/dock-layout', 'docs/absolute-layout', 'docs/label', 'docs/image', 'docs/scroll-view', 'docs/list-view', 'docs/controls', 'docs/indicators', 'docs/button-and-text-field', 'docs/theming', 'docs/installation', 'docs/web-vs-native', 'docs/shared-features', 'docs/markdown-on-native', 'docs/polyfill-limitations', 'docs/faq', 'docs/navigation-views', 'docs/split-view', 'docs/html-first', 'docs/html-layout', 'docs/nativescript-views', 'docs/components', 'docs/ui-button', 'docs/ui-badge', 'docs/ui-card', 'docs/ui-form-controls', 'docs/ui-tabs', 'docs/ui-accordion', 'docs/ui-dialog', 'docs/ui-alert', 'docs/ui-feedback', 'docs/ui-select', 'docs/ui-slider', 'docs/ui-popover', 'docs/ui-dropdown-menu', 'docs/ui-sheet', 'docs/ui-drawer', 'docs/ui-table', 'docs/ui-calendar', 'docs/ui-tooltip', 'docs/ui-more'];
 for (const p of pages) {
   const errors = await open(page, '/' + p);
   const h1 = await page.locator('h1').first().innerText();
@@ -465,21 +465,21 @@ const slugs = pages.filter((p) => p.startsWith('docs/')).map((p) => p.slice(5));
   await nm.close();
 }
 
-// 11b. Forward-first structure: sidebar groups, legacy banners, live helm components.
+// 11b. Forward-first structure: sidebar groups, NativeScript view notes, live helm components.
 {
-  const legacySlugs = ['stack-layout', 'grid-layout', 'flexbox-layout', 'wrap-layout', 'dock-layout', 'absolute-layout', 'split-view', 'label', 'image', 'scroll-view', 'list-view', 'controls', 'button-and-text-field', 'indicators', 'navigation-views', 'polyfill-limitations'];
+  const legacySlugs = ['stack-layout', 'grid-layout', 'flexbox-layout', 'wrap-layout', 'dock-layout', 'absolute-layout', 'label', 'image', 'scroll-view', 'list-view', 'controls', 'button-and-text-field', 'indicators', 'polyfill-limitations'];
   await open(page, '/docs/introduction');
   const groups = await page.locator('[data-testid=sidebar] h2').allInnerTexts();
-  check('sidebar groups lead with HTML first and Components, then Legacy NativeScript tags', JSON.stringify(groups.map((g) => g.toLowerCase())) === JSON.stringify(['getting started', 'html first', 'routing and content', 'components', 'legacy nativescript tags']), groups.join(' | '));
-  const legacyLinks = await page.locator('[data-testid=sidebar] h2:has-text("Legacy") + ul a').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
-  check('Legacy group lists the overview plus all 16 legacy pages', legacyLinks.length === 17 && legacySlugs.every((s) => legacyLinks.includes('/docs/' + s)) && legacyLinks.includes('/docs/legacy-tags'), legacyLinks.join(','));
+  check('sidebar groups lead with HTML first and Components, then NativeScript views', JSON.stringify(groups.map((g) => g.toLowerCase())) === JSON.stringify(['getting started', 'html first', 'routing and content', 'app structure', 'components', 'nativescript views']), groups.join(' | '));
+  const legacyLinks = await page.locator('[data-testid=sidebar] h2:has-text("NativeScript views") + ul a').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+  check('NativeScript views group lists the overview plus its 14 pages', legacyLinks.length === 15 && legacySlugs.every((s) => legacyLinks.includes('/docs/' + s)) && legacyLinks.includes('/docs/nativescript-views'), legacyLinks.join(','));
   const noBanner = [];
   for (const slug of legacySlugs) {
     await open(page, '/docs/' + slug);
     const text = await page.locator('[data-testid=doc] .docs-callout').first().innerText().catch(() => '');
-    if (!/legacy support/i.test(text)) noBanner.push(slug);
+    if (!/nativescript view/i.test(text)) noBanner.push(slug);
   }
-  check('every legacy page opens with a legacy-support callout', noBanner.length === 0, noBanner.join(','));
+  check('every NativeScript view page opens with its callout', noBanner.length === 0, noBanner.join(','));
   const noHint = [];
   for (const slug of legacySlugs.filter((s) => s !== 'polyfill-limitations')) {
     await open(page, '/docs/' + slug);

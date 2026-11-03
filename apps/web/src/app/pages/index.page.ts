@@ -30,7 +30,7 @@ const FEATURE_ICONS: Record<string, string> = {
   'file-routing': 'lucideRoute',
   theming: 'lucidePalette',
   'markdown-on-native': 'lucideFileText',
-  'legacy-tags': 'lucideArchive',
+  'nativescript-views': 'lucideArchive',
 };
 
 const QUICK_START = `npm install

@@ -12,5 +12,5 @@ export const FEATURES: readonly Feature[] = [
   { title: 'File based routing', body: 'Drop a *.page.ts into src/app/pages. The same convention works in AnalogJS and in @nativescript-unified/analog-native.', docs: 'file-routing' },
   { title: 'One theme', body: 'Colour tokens live in one file. Both apps import it, and dark mode follows the same tokens on web and native.', docs: 'theming' },
   { title: 'Markdown with live demos', body: 'Docs are Markdown in packages/shared. Fenced html live blocks compile into running demos, in the browser and on the device.', docs: 'markdown-on-native' },
-  { title: 'Legacy tags on the web', body: 'Existing StackLayout, GridLayout and Label markup still renders in a browser through the web polyfills.', docs: 'legacy-tags' },
+  { title: 'NativeScript views on the web', body: 'Existing StackLayout, GridLayout and Label markup still renders in a browser through the web polyfills.', docs: 'nativescript-views' },
 ];

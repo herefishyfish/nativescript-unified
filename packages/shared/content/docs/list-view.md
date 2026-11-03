@@ -1,6 +1,6 @@
 ---
 title: ListView and Repeater
-section: Legacy NativeScript tags
+section: NativeScript views
 order: 51
 description: Lists of items from a comma-separated string or an array.
 ---
@@ -8,7 +8,7 @@ description: Lists of items from a comma-separated string or an array.
 # ListView and Repeater
 
 > [!NOTE]
-> **Legacy support.** This page documents a NativeScript tag that the web polyfills implement so existing NativeScript markup renders in a browser. For new code, use [a `@for` loop over a list](/docs/html-first). See [Legacy NativeScript tags](/docs/legacy-tags).
+> **A NativeScript view.** On a device this tag is NativeScript's own view, and in a browser the web polyfills draw it. For HTML-first pages, use [a `@for` loop over a list](/docs/html-first). See [NativeScript views](/docs/nativescript-views).
 
 Both take `items` as a comma-separated string or an array, and show each item as text.
 

@@ -20,8 +20,6 @@ nativescript-unified is an Nx workspace. Everything below comes from the root `p
 npm install
 ```
 
-`postinstall` runs two scripts. `tools/apply-native-patches.mjs` applies the patches in `tools/native-patches` to `@nativescript/tailwind`, `@nativescript/core`, `@nativescript/angular`, `@nativescript/vite` and MasonKit. Some come from Spartan's native demo, and the rest fix bugs found in this workspace. The script records each patch's hash in a marker file, so a second run skips the patches already in place and applies a patch file that changed. `tools/patch-nativescript-vite.mjs` then fixes `@nativescript/vite` HMR dev mode for a hoisted monorepo on Windows. Builds with `--no-hmr`, such as `native:android`, do not need that fix.
-
 ## Run the web docs
 
 ```bash

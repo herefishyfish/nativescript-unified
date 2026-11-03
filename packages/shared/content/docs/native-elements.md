@@ -177,4 +177,3 @@ if (await confirm('Discard your changes?')) {
 ## Limits
 
 - Angular creates the view from the tag before it sets `type`, so a mapped `<input type="checkbox">` or `"radio"` is a text field too. That field takes no touches or focus, so spartan's radio still selects from its indicator. For a visible checkbox, use `hlm-checkbox`.
-- The adapters have been checked on Android only, not on iOS.

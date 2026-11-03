@@ -33,6 +33,8 @@ npm run audit:web         # headless Edge checks against the preview
 
 `nx build web` prerenders `/` and every `/docs/:slug`, and writes the result to `dist/apps/web/analog/public`. `web:preview` depends on the build and serves that folder.
 
+Each push to `main` deploys the site to GitHub Pages through `.github/workflows/pages.yml`. GitHub Pages serves a repository's site from a subpath such as `/nativescript-unified/`, so the workflow sets `BASE_PATH` and the build prefixes links and assets with it. To make the same build locally, run `BASE_PATH=nativescript-unified npx nx build web`.
+
 ## Run native
 
 ```bash

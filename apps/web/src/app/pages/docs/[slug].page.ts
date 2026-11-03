@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
@@ -55,6 +56,7 @@ export default class DocPage {
 
   private readonly sanitizer = inject(DomSanitizer);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
   protected readonly doc = computed(() => findDoc(this.slug()));
   protected readonly toc = computed(() => { return this.doc()?.headings ?? []; });
   protected readonly around = computed(() => neighbours(this.slug()));
@@ -92,6 +94,7 @@ export default class DocPage {
     const href = link?.getAttribute('href');
     if (!href || !href.startsWith('/') || href.startsWith('//') || event.metaKey || event.ctrlKey) return;
     event.preventDefault();
-    void this.router.navigateByUrl(href);
+    // Markdown links carry the base path. A demo's own links may not, and normalize() leaves those as they are.
+    void this.router.navigateByUrl(this.location.normalize(href));
   }
 }

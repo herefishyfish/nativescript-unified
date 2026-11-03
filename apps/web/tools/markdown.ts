@@ -24,8 +24,15 @@ export function slugify(text: string): string {
 /** GitHub-style alerts: a blockquote starting with [!NOTE], [!TIP] or [!WARNING] becomes a callout. */
 const CALLOUTS: Record<string, string> = { NOTE: 'note', TIP: 'tip', WARNING: 'warning', IMPORTANT: 'warning', CAUTION: 'warning' };
 
+/** The site's base path. Root-relative links in the Markdown, such as `/docs/theming`, get it as their prefix. */
+let linkBase = '/';
+
 const marked = new Marked({
   renderer: {
+    link(token) {
+      if (token.href.startsWith('/') && !token.href.startsWith('//')) token.href = linkBase + token.href.slice(1);
+      return false;
+    },
     heading({ tokens, depth, text }) {
       return `<h${depth} id="${slugify(text)}">${this.parser.parseInline(tokens)}</h${depth}>\n`;
     },
@@ -48,6 +55,7 @@ const marked = new Marked({
   },
 });
 
-export function renderTokens(tokens: TokensList): string {
+export function renderTokens(tokens: TokensList, base = '/'): string {
+  linkBase = base;
   return marked.parser(tokens);
 }

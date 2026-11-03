@@ -60,7 +60,7 @@ A `.md` file inside `pages/` is a route. `apps/native/src/app/pages/docs/index.m
 | Table | A CSS grid of cells. MasonKit has no table elements. |
 | Bold, italic, strike, code, link | `strong`, `em`, `del`, `code`, `a` |
 
-Text elements nest, so a paragraph with bold and a link is one native text run. This is the same structure shown in a browser through `HtmlView`. It is only an approximation of the structure, not MasonKit output:
+Text elements nest, so a paragraph with bold text and a link is one native text run. The demo shows that structure in a browser through `HtmlView`. It approximates the structure and is not MasonKit's output:
 
 ```html live
 <HtmlView html="<h3>A heading</h3><p>Text with <strong>bold</strong>, <em>italic</em> and <code>code</code> in one paragraph.</p><ul><li>First</li><li>Second</li></ul>"></HtmlView>
@@ -72,6 +72,6 @@ Text elements nest, so a paragraph with bold and a link is one native text run. 
 - Links to app paths use the router. Full URLs open the browser.
 - Styling comes from `markdown.css`, scoped under `.markdown`. Override it in your own CSS after the import.
 
-## This site is separate
+## How this site renders these pages
 
-The pages you are reading are Markdown in `packages/shared/content/docs`. The web app parses them with its own build-time plugin in `apps/web/tools`, and renders `html live` blocks as demos. The native app reads the same files: its docs pages render them with `<analog-markdown>`, and every `html live` block becomes Preview / Code tabs where the Preview tab compiles the block's HTML against the registered native elements and helm, the same way the web demos work.
+The pages you are reading are Markdown in `packages/shared/content/docs`. The web app parses them with its own build-time plugin in `apps/web/tools` and renders each `html live` block as a demo. The native app reads the same files and renders them with `<analog-markdown>`. Each `html live` block gets Preview and Code tabs, and the Preview tab compiles the block's HTML on the device against the registered native elements and helm.

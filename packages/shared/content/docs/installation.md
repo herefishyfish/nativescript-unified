@@ -20,7 +20,7 @@ nativescript-unified is an Nx workspace. Everything below comes from the root `p
 npm install
 ```
 
-`postinstall` runs two scripts. `tools/apply-native-patches.mjs` applies the NativeScript fixes that Spartan's native demo carries (to `@nativescript/tailwind`, `@nativescript/core`, `@nativescript/angular`, `@nativescript/vite` and MasonKit). It records a marker file, so running it again does nothing. `tools/patch-nativescript-vite.mjs` then fixes `@nativescript/vite` HMR dev mode for a hoisted monorepo on Windows. Builds with `--no-hmr`, such as `native:android`, do not need that fix.
+`postinstall` runs two scripts. `tools/apply-native-patches.mjs` applies the patches in `tools/native-patches` to `@nativescript/tailwind`, `@nativescript/core`, `@nativescript/angular`, `@nativescript/vite` and MasonKit. Some come from Spartan's native demo, and the rest fix bugs found in this workspace. The script records each patch's hash in a marker file, so a second run skips the patches already in place and applies a patch file that changed. `tools/patch-nativescript-vite.mjs` then fixes `@nativescript/vite` HMR dev mode for a hoisted monorepo on Windows. Builds with `--no-hmr`, such as `native:android`, do not need that fix.
 
 ## Run the web docs
 
@@ -39,7 +39,7 @@ npm run audit:web         # headless Edge checks against the preview
 npx nx run native:android
 ```
 
-This runs `ns run android --no-hmr` with the `arm64-v8a` and `x86_64` ABIs. It builds the app and runs it on an Android emulator or device. It was checked on an emulator with API 36 (x86_64). The other native targets are `debug-android`, `build-android` and `clean`.
+This runs `ns run android --no-hmr` with the `arm64-v8a` and `x86_64` ABIs. It builds the app and runs it on an Android emulator or device. It was checked on an emulator with API 36 (x86_64) and on a Pixel 7. The other native targets are `debug-android`, `build-android` and `clean`.
 
 If you call `ns` yourself from PowerShell, quote the Gradle argument: `ns build android '--gradleArgs=-Pabis=arm64-v8a,x86_64'`. Without the quotes, PowerShell splits the value at the comma, and the APK ships without its native libraries. On Windows, a `before-prepare` hook (`apps/native/tools/gradle-env.mjs`) clears `NoDefaultCurrentDirectoryInExePath` so the CLI can run `gradlew.bat`.
 

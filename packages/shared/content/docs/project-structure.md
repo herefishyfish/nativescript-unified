@@ -17,7 +17,9 @@ packages/
   web-polyfills/       Angular components for legacy NativeScript tags on the web
   analog-native/       File-based router and Markdown for NativeScript Angular
 tools/                 postinstall patches, the web audit and the contrast checker
-docs/design.md         analog-native design notes
+docs/
+  design.md            analog-native design notes
+  native-parity-log.md where the native app still differs from these docs
 ```
 
 `docs/design.md` calls the router package `@nativescript/analog`. In this workspace it is `@nativescript-unified/analog-native`.
@@ -45,7 +47,7 @@ Templates use plain HTML elements, Tailwind classes and helm only, with no platf
 Spartan UI. `brain` is headless and `helm` is styled. They are consumed from source through `tsconfig.base.json` paths, with the import names `@spartan-ng/brain/*` and `@spartan-ng/helm/*`.
 
 - `styles/` holds the Tailwind preset, `style-vega.css` and `tokens.css`, the single source of colour tokens. See [Theming](/docs/theming).
-- `native/` is the NativeScript side of Spartan: the CDK shims, the element registrations, the native overlay host behind the dialog, sheet, popover and menu, and CSS overrides. `provideSpartanNativeScript()` installs it.
+- `native/` is the NativeScript side of Spartan: the CDK shims, the element registrations, the native overlay and menu hosts behind the dialog, sheet, popover and dropdown menu, native stand-ins for some helm components (`native/shims`), and CSS overrides. `provideSpartanNativeScript()` installs it.
 
 ## packages/web-polyfills
 

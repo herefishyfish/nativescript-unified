@@ -76,4 +76,4 @@ Each of these has a Spartan helm counterpart with a live example:
 | `ListPicker` | `hlm-select` on [Select](/docs/ui-select) |
 | `DatePicker` | `hlm-calendar` on [Calendar](/docs/ui-calendar) |
 
-A `TimePicker` has no helm counterpart. The workspace also has a helm `date-picker` folder under `packages/ui/helm`, which has no page here yet. Check the [Native status](/docs/components#native-status) table before you rely on the slider, select or calendar in the native app.
+A `TimePicker` has no helm counterpart. The workspace also has a helm `date-picker` folder under `packages/ui/helm`, which has no page here yet.

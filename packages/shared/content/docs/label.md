@@ -34,11 +34,9 @@ On a device MasonKit owns the `span` and `Span` tags, so NativeScript's own Span
 </Label>
 ```
 
-In the HTML-first design you can also write ordinary text elements (`<p>`, `<strong>`, `<em>`). On a device MasonKit nests them into a single native text run. The polyfills exist for code that already uses the NativeScript tags.
-
 ## HTML-first equivalent
 
-Write ordinary text elements. `<Label text="...">` is a `<p>` or `<span>`, and `<FormattedString>` with `<NSpan>` children is inline markup:
+Write ordinary text elements. `<Label text="...">` is a `<p>` or `<span>`, and `<FormattedString>` with `<NSpan>` children is inline markup. On a device, MasonKit nests them into one native text run:
 
 ```html live
 <p>

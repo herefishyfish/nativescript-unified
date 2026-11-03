@@ -16,11 +16,11 @@ The `web-polyfills` package has **no** `<Button>` or `<TextField>` component. Th
 
 In an HTML-first app you use the HTML elements for those two, styled with Spartan helm. See the HTML-first equivalent below.
 
-On a device, MasonKit renders `<button>` and `<input>` as native views. On an Android emulator (API 36), `button hlmBtn` and `input hlmInput` render, taps fire `(click)`, and the input takes typed text. See [Native status](/docs/components#native-status) for the gaps that remain. These results have not been checked on iOS yet.
+On a device, MasonKit renders `<button>` and `<input>` as native views. Taps fire `(click)`, and the input takes typed text. [Native status](/docs/components#native-status) lists the remaining gaps.
 
 ## HtmlView and ContentView
 
-`<HtmlView html="...">` renders an HTML string through `[innerHTML]`, and `selectable` allows text selection. `<ContentView>` projects its content into a column. `Page` and `Frame` are not registered; see [Polyfill limitations](/docs/polyfill-limitations).
+`<HtmlView html="...">` renders an HTML string through `[innerHTML]`, and `selectable` allows text selection. `<ContentView>` projects its content into a column. `Page` and `Frame` are not registered. See [Polyfill limitations](/docs/polyfill-limitations).
 
 ```html live
 <HtmlView html="<b>Bold</b> and <i>italic</i> from an HTML string"></HtmlView>

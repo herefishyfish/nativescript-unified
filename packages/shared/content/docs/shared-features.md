@@ -28,7 +28,7 @@ Its data comes from `packages/shared/src/lib/content.ts`, which is plain TypeScr
 
 ## Rules
 
-- Use plain HTML elements: `div`, `p`, `h1` to `h6`, `ul`, `li`, `a`, `span`, `img`.
+- Use plain HTML elements (`div`, `p`, `h1` to `h6`, `ul`, `li`, `a`, `span`, `img`) and Spartan helm components.
 - Import nothing from `@analogjs/*` or `@nativescript/*` in `packages/shared`. Those belong to an app.
 - Style with the token classes (`bg-background`, `text-foreground`, `bg-card`, `text-muted-foreground`). The tokens come from `packages/ui/styles/tokens.css`.
 - Put loose text that sits beside elements inside `@for` or `@if` in a `<span>`. MasonKit places dynamically inserted text nodes after their element siblings, according to `analog-native`'s README.
@@ -60,4 +60,4 @@ On web, import the component in a page and use its selector. On native, do the s
 
 ## Tailwind on native
 
-`apps/native` lists `@nativescript/tailwind` and `tailwindcss`, and its `app.css` imports Tailwind and the shared tokens, so the same classes style native. This was checked on an Android emulator (API 36). Two gaps remain. Opacity-modified token colours such as `bg-destructive/10` keep the plain light token colour, and helm's own rules can override a utility you put on a helm host. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
+`apps/native` lists `@nativescript/tailwind` and `tailwindcss`. Its `app.css` imports Tailwind and the shared tokens, and scans `packages/shared/src` for class names, so the same classes style native. Two gaps remain. Opacity-modified token colours such as `bg-destructive/10` keep the plain light token colour, and helm's own rules can override a utility you put on a helm host. See [Known native limitations](/docs/web-vs-native#known-native-limitations).

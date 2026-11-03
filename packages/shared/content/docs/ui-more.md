@@ -1,15 +1,17 @@
 ---
 title: More components
 section: Components
-order: 39
+order: 40
 description: Toggle, toggle group, collapsible, hover card, kbd, spinner, breadcrumb, native select and alert dialog.
 ---
 
 # More components
 
-Smaller helm components that render on the web in this workspace.
+Smaller helm components, one demo each. They all work in the native app too. See [Native status](/docs/components#native-status).
 
 ## Toggle and toggle group
+
+`hlmToggle` is a button with an on and off `state`. `hlmToggleGroup` holds `hlmToggleGroupItem` buttons and takes `type` (`single` or `multiple`) and `value`.
 
 ```html live
 <div class="flex flex-col gap-3">
@@ -35,6 +37,8 @@ Smaller helm components that render on the web in this workspace.
 
 ## Hover card
 
+`hlmHoverCard` opens its content while the pointer is over the trigger or the trigger has focus. `showDelay` and `hideDelay` on the trigger are in milliseconds. In the native app, a tap opens it.
+
 ```html live
 <div hlmHoverCard>
   <button hlmBtn variant="link" hlmHoverCardTrigger [showDelay]="0">@nativescript</button>
@@ -46,6 +50,8 @@ Smaller helm components that render on the web in this workspace.
 
 ## Kbd and spinner
 
+`hlmKbd` styles a key. `hlm-spinner` is a loading indicator.
+
 ```html live
 <div class="flex items-center gap-4">
   <span class="text-sm">Press <kbd hlmKbd>Ctrl</kbd> + <kbd hlmKbd>K</kbd></span>
@@ -54,6 +60,8 @@ Smaller helm components that render on the web in this workspace.
 ```
 
 ## Breadcrumb
+
+The breadcrumb parts are attributes on `nav`, `ol` and `li`. `hlmBreadcrumbLink` marks a link, and `hlmBreadcrumbPage` marks the current page.
 
 ```html live
 <nav hlmBreadcrumb>
@@ -82,6 +90,8 @@ Smaller helm components that render on the web in this workspace.
 ```
 
 ## Alert dialog
+
+`hlm-alert-dialog` asks the user to confirm an action. It has the `alertdialog` role, and a click outside does not close it.
 
 ```html live
 <hlm-alert-dialog>

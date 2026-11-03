@@ -8,7 +8,7 @@ import type { TocItem } from '../docs/content';
   template: `
     @if (items().length) {
       <nav aria-label="On this page" data-testid="toc" class="sticky top-20 hidden max-h-[calc(100vh-6rem)] w-52 shrink-0 self-start overflow-y-auto text-sm lg:block">
-        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">On this page</p>
+        <p class="mb-2 text-xs font-medium text-muted-foreground">On this page</p>
         <ul class="flex flex-col gap-1 border-l">
           @for (item of items(); track item.id) {
             <li>

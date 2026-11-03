@@ -65,12 +65,11 @@ cd apps/native && ns run ios    # the iOS app, on a Mac`;
       <section class="home-hero" data-testid="hero">
         <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-12 md:px-8 md:pt-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:pb-24">
           <div>
-            <a routerLink="/docs/introduction" fragment="platforms" class="home-pill" data-testid="status-pill">
-              <span class="home-pill-dot" aria-hidden="true"></span>
+            <a routerLink="/docs/introduction" fragment="platforms" class="home-intro-link" data-testid="status-pill">
               Web, iOS and Android from one codebase
               <ng-icon name="lucideArrowRight" size="14" aria-hidden="true" />
             </a>
-            <h1 class="home-title">One HTML template. <span class="block text-primary">Web and native.</span></h1>
+            <h1 class="home-title">One HTML template <span class="block text-primary">Web and native</span></h1>
             <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
               Build NativeScript Angular apps HTML first: plain elements, CSS flex and grid, Tailwind classes and Spartan components.
               The browser renders them on the web, and MasonKit draws the same template as real native views on iOS and Android.
@@ -79,7 +78,7 @@ cd apps/native && ns run ios    # the iOS app, on a Mac`;
               <a hlmBtn size="lg" routerLink="/docs/introduction" data-testid="read-docs">Get started <ng-icon name="lucideArrowRight" size="16" aria-hidden="true" /></a>
               <a hlmBtn size="lg" variant="outline" routerLink="/docs/components">Browse components</a>
             </div>
-            <p class="mt-10 text-xs font-medium uppercase tracking-wider text-muted-foreground">Built on</p>
+            <p class="mt-10 text-sm text-muted-foreground">Built on</p>
             <ul class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-foreground/80" aria-label="Built on">
               @for (tech of stack; track tech) {
                 <li>{{ tech }}</li>
@@ -91,7 +90,7 @@ cd apps/native && ns run ios    # the iOS app, on a Mac`;
             <div class="home-window-bar">
               <span class="home-window-dots" aria-hidden="true"><span></span><span></span><span></span></span>
               <span class="font-mono text-xs text-muted-foreground">hero-card.html</span>
-              <span class="home-live"><span class="home-pill-dot" aria-hidden="true"></span>Live</span>
+              <span class="home-live"><span class="home-live-dot" aria-hidden="true"></span>Live</span>
             </div>
             <div class="home-window-preview">
               <web-hero-card data-testid="home-card" />
@@ -105,12 +104,12 @@ cd apps/native && ns run ios    # the iOS app, on a Mac`;
       <!-- How it works -->
       <section class="mx-auto max-w-6xl px-4 py-20 md:px-8" aria-labelledby="how-it-works" data-testid="how-it-works">
         <p class="docs-eyebrow text-center">How it works</p>
-        <h2 id="how-it-works" class="home-h2 text-center">Write it once. Render it twice.</h2>
+        <h2 id="how-it-works" class="home-h2 text-center">Write it once, render it twice</h2>
         <p class="home-lead mx-auto text-center">A page is an Angular template made of ordinary elements. Each app turns it into its own platform's views, so web and native share the template and keep their own core.</p>
 
         <div class="mx-auto mt-12 max-w-4xl">
           <div class="home-flow-source">
-            <span class="home-flow-icon"><ng-icon name="lucideCode" size="20" aria-hidden="true" /></span>
+            <span class="home-flow-icon"><ng-icon name="lucideCode" size="18" aria-hidden="true" /></span>
             <div>
               <h3 class="font-semibold">Your template</h3>
               <p class="mt-1 text-sm text-muted-foreground">
@@ -125,7 +124,7 @@ cd apps/native && ns run ios    # the iOS app, on a Mac`;
             @for (target of targets; track target.title) {
               <div class="home-card">
                 <div class="flex items-center gap-3">
-                  <span class="home-flow-icon"><ng-icon [name]="target.icon" size="20" aria-hidden="true" /></span>
+                  <span class="home-flow-icon"><ng-icon [name]="target.icon" size="18" aria-hidden="true" /></span>
                   <h3 class="font-semibold">{{ target.title }}</h3>
                 </div>
                 <p class="mt-3 text-sm text-muted-foreground">{{ target.body }}</p>
@@ -170,7 +169,7 @@ cd apps/native && ns run ios    # the iOS app, on a Mac`;
         <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           @for (feature of features; track feature.title) {
             <a [routerLink]="['/docs', feature.docs]" class="home-card home-link group" data-testid="feature-card">
-              <span class="home-flow-icon"><ng-icon [name]="featureIcon(feature.docs)" size="20" aria-hidden="true" /></span>
+              <span class="home-flow-icon"><ng-icon [name]="featureIcon(feature.docs)" size="18" aria-hidden="true" /></span>
               <span class="mt-4 block font-semibold">{{ feature.title }}</span>
               <span class="mt-1.5 block text-sm text-muted-foreground">{{ feature.body }}</span>
               <span class="home-arrow-link mt-4 text-sm">Read more <ng-icon name="lucideArrowRight" size="14" aria-hidden="true" /></span>

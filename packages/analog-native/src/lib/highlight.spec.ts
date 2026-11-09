@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { highlightRuns, type CodeRun } from './highlight';
+import { highlightLines, highlightRuns, type CodeRun } from './highlight';
 
 const joined = (runs: CodeRun[]) => runs.map((run) => run.text).join('');
 const classesOf = (runs: CodeRun[], text: string) => runs.filter((run) => run.text === text).map((run) => run.classes);
@@ -57,5 +57,20 @@ describe('highlightRuns', () => {
     expect(highlightRuns('x  = 1', 'cobol')).toEqual([{ text: 'x  = 1', classes: '' }]);
     expect(highlightRuns('x', undefined)).toEqual([{ text: 'x', classes: '' }]);
     expect(highlightRuns('', 'ts')).toEqual([]);
+  });
+});
+
+describe('highlightLines', () => {
+  const NBSP = ' ';
+  const text = (lines: CodeRun[][]) => lines.map((line) => line.map((run) => run.text).join('').replace(/​/g, ''));
+
+  it('splits into lines and keeps every space as a no-break space', () => {
+    const lines = highlightLines('npx nx serve web          # dev\n\n  npm run web\n', 'bash');
+    expect(text(lines)).toEqual([`npx${NBSP}nx${NBSP}serve${NBSP}web${NBSP.repeat(10)}#${NBSP}dev`, NBSP, `${NBSP}${NBSP}npm${NBSP}run${NBSP}web`]);
+  });
+
+  it('keeps token classes on runs that span a line break', () => {
+    const lines = highlightLines('/* a\nb */', 'css');
+    expect(lines.map((line) => line.map((run) => run.classes))).toEqual([['token comment'], ['token comment']]);
   });
 });

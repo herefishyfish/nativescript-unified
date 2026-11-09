@@ -83,3 +83,23 @@ export function highlightRuns(code: string, lang: string | null | undefined): Co
   flatten(Prism.tokenize(code, grammar), [], runs);
   return runs;
 }
+
+/**
+ * {@link highlightRuns} split into lines, with each space as a no-break space and each tab as two.
+ * MasonKit ignores `white-space: pre`, so a renderer draws every line as its own block. It also trims
+ * `\s` from each element's edges, no-break spaces included, so a run that starts or ends with a space
+ * gets a zero-width space there, which `\s` does not match. An empty line holds one no-break space to
+ * keep its height.
+ */
+export function highlightLines(code: string, lang: string | null | undefined): CodeRun[][] {
+  const lines: CodeRun[][] = [[]];
+  for (const run of highlightRuns(code.replace(/\n$/, ''), lang)) {
+    run.text.split('\n').forEach((part, i) => {
+      if (i) lines.push([]);
+      if (!part) return;
+      const text = part.replace(/\t/g, '  ').replace(/ /g, ' ').replace(/^ /, '​ ').replace(/ $/, ' ​');
+      lines[lines.length - 1].push({ text, classes: run.classes });
+    });
+  }
+  return lines.map((line) => (line.length ? line : [{ text: ' ', classes: '' }]));
+}

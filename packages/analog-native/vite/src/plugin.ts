@@ -53,11 +53,11 @@ export function nativescriptAnalog(options: NativescriptAnalogOptions = {}): Plu
     // No enforce: @analogjs/vite-plugin-angular emits .ts output from its own compilation and
     // drops earlier transforms, so the markers are rewritten after it and before vite:import-glob.
     config(config) {
-      // MasonKit reads __WINDOWS__, which @nativescript/vite does not define for android/ios.
-      if (config.define?.['__WINDOWS__'] === undefined) {
-        return { define: { __WINDOWS__: 'false' } };
-      }
-      return undefined;
+      // MasonKit reads __WINDOWS__ and __LINUX__, which @nativescript/vite does not define for android/ios.
+      const define = Object.fromEntries(
+        ['__WINDOWS__', '__LINUX__'].filter((flag) => config.define?.[flag] === undefined).map((flag) => [flag, 'false']),
+      );
+      return Object.keys(define).length ? { define } : undefined;
     },
     configResolved(config) {
       root = config.root;

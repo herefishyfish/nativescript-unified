@@ -182,7 +182,7 @@ export default class OverlaysPage {
   }
 
   protected openFromService(): void {
-    const ref = this._dialogs.open<string>(OverlaysGreeting, { context: { name: 'Dylan' } });
+    const ref = this._dialogs.open<string>(OverlaysGreeting, { context: { name: 'Sam' } });
     ref.closed$.subscribe((result) => this.lastResult.set('service: ' + result));
   }
 }

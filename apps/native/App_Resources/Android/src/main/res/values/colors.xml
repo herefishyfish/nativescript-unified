@@ -16,6 +16,9 @@
     <color name="ns_brand_primary">#27695f</color>
     <color name="ns_secondary_container">#cfe2dd</color>
     <color name="ns_surface_container">#f7f2e7</color>
+    <!-- foreground and muted-foreground, for dialog text. -->
+    <color name="ns_foreground">#10302f</color>
+    <color name="ns_muted_foreground">#46605c</color>
 
     <!-- this is unused in the default themes, so we might want to remove it? -->
     <!-- <color name="ns_blue">#272734</color> -->

@@ -19,20 +19,20 @@ const rootDependencies = Object.keys(
 // web workspace (zone.js, platform-server, ...). The device only gets this app's dependencies.
 process.env['NS_VENDOR_EXCLUDE'] = rootDependencies.filter((name) => !appDependencies.includes(name)).join(',');
 
-// The example screens draw these helm components with @nativescript-community widgets (docs/native-elements); every
-// other file keeps spartan's MasonKit components. Each shim, packages/ui/native/shims/helm-<name>.ts, needs its package.
-const NATIVE_HELM = ['switch', 'checkbox', 'slider', 'sonner'];
-const NATIVE_HELM_IMPORTERS = /\/packages\/shared\/src\/lib\/examples\//;
-// Spartan's slider and toaster measure elements and follow pointer events, which native views have neither of, so
-// every other file gets these shims (slider: MasonKit's range input, or a touch-driven range; toaster: a stack of toasts).
-const ALWAYS_NATIVE_HELM: Record<string, string> = { slider: 'masonkit-slider', sonner: 'helm-sonner' };
+// Every file draws these helm components with the shim in packages/ui/native/shims (docs/native-elements): the
+// @nativescript-community widget, or below provideMasonElements() spartan's MasonKit component. Spartan's slider and
+// toaster measure elements and follow pointer events, which native views have neither of, so their MasonKit
+// versions are shims too. The shims import the real helm components.
+const NATIVE_HELM: Record<string, string> = {
+  switch: 'helm-switch',
+  checkbox: 'helm-checkbox',
+  slider: 'helm-slider',
+  sonner: 'helm-sonner',
+};
+const SHIMS = normalizePath(join(workspaceRoot, 'packages/ui/native/shims/'));
 
-/**
- * Resolves `@spartan-ng/helm/<name>` in NATIVE_HELM to its native shim, for the files NATIVE_HELM_IMPORTERS matches,
- * and in ALWAYS_NATIVE_HELM to its shim for every other file.
- */
+/** Resolves `@spartan-ng/helm/<name>` in NATIVE_HELM to its shim, for every file but the shims. */
 function nativeHelm(): Plugin {
-  const shim = (file: string) => join(workspaceRoot, `packages/ui/native/shims/${file}.ts`);
   return {
     name: 'native-helm',
     enforce: 'pre',
@@ -41,9 +41,8 @@ function nativeHelm(): Plugin {
       order: 'pre',
       handler(source, importer) {
         const name = source.startsWith('@spartan-ng/helm/') ? source.slice('@spartan-ng/helm/'.length) : null;
-        if (!name || !importer) return null;
-        if (NATIVE_HELM.includes(name) && NATIVE_HELM_IMPORTERS.test(normalizePath(importer))) return shim(`helm-${name}`);
-        return name in ALWAYS_NATIVE_HELM ? shim(ALWAYS_NATIVE_HELM[name]) : null;
+        if (!name || !importer || !(name in NATIVE_HELM) || normalizePath(importer).startsWith(SHIMS)) return null;
+        return join(SHIMS, `${NATIVE_HELM[name]}.ts`);
       },
     },
   };

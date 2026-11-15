@@ -17,7 +17,10 @@ import { NsLiveDemo } from './app/markdown/live-demo';
 import { provideSpartanNativeScript, registerSpartanNativeElements } from '../../../packages/ui/native/spartan-native';
 import { registerCommaSeparatedItems, registerCoreElementAliases } from '../../../packages/ui/native/core-elements';
 import { installTouchFeedback } from '../../../packages/ui/native/touch-feedback';
+import { registerNativeElements } from '../../../packages/ui/native/native-elements';
 import { installNativeDialogs } from '../../../packages/ui/native/native-elements/dialogs';
+import { NativeTextField } from '../../../packages/ui/native/native-elements/text-field';
+import { NativeTextView } from '../../../packages/ui/native/native-elements/text-view';
 import { View } from '@triniwiz/nativescript-masonkit';
 
 View.preflight = true;
@@ -32,6 +35,8 @@ installMasonKit({
   },
 });
 registerSpartanNativeElements();
+// Platform text fields everywhere; provideMasonElements() brings back MasonKit's in a scope. See docs/native-elements.
+registerNativeElements({ input: NativeTextField, textarea: NativeTextView });
 // Material alert(), confirm() and prompt() instead of core's; see docs/native-elements.
 installNativeDialogs();
 registerElement('BottomNavigation', () => BottomNavigation);

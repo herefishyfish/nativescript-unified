@@ -5,7 +5,7 @@ import type { MarkdownToken } from './types';
 /**
  * Standalone component rendered in place of a fenced code block tagged `html live`.
  * The component must have a `code` string input and an `info` string input, the block's
- * info string (`html live` and any words after it, such as `html live native`); it
+ * info string (`html live` and any words after it, such as `html live mason`); it
  * typically pairs the live view with the source, for example Preview / Code tabs (see the
  * web docs' demo frame).
  * When no component is provided, a live block falls back to `pre > code` like any block.

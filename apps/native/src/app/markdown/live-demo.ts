@@ -49,20 +49,19 @@ import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 import { HlmTooltipImports } from '@spartan-ng/helm/tooltip';
 import { HlmToasterImports } from '@spartan-ng/helm/sonner';
 import { toast } from '@spartan-ng/brain/sonner';
-import { HlmCheckboxImports as NativeCheckboxImports } from '../../../../../packages/ui/native/shims/helm-checkbox';
-// Spartan's slider measures its track and follows pointer events, which native views have neither of.
-import { HlmSliderImports as NativeSliderImports } from '../../../../../packages/ui/native/shims/helm-slider';
-import { HlmSliderImports as MasonKitSliderImports } from '../../../../../packages/ui/native/shims/masonkit-slider';
-import { HlmSwitchImports as NativeSwitchImports } from '../../../../../packages/ui/native/shims/helm-switch';
-import { NATIVE_ELEMENTS } from '../native-elements';
+import { HlmSliderImports } from '@spartan-ng/helm/slider';
+import { provideMasonElements } from '../../../../../packages/ui/native/native-elements';
 
 /**
  * Helm pieces a docs `html live` block can use, mirroring the web demo's import list
  * (apps/web/src/app/docs/demo.ts). Elements a demo does not use are never instantiated;
  * helm tags without native glue degrade to empty containers through NO_ERRORS_SCHEMA.
- * The checkbox, switch and slider are added per demo: spartan's, or the native ones.
+ * vite.config.mts resolves the checkbox, switch and slider to the native shims.
  */
-const SHARED_IMPORTS = [
+const DEMO_IMPORTS = [
+  HlmCheckbox,
+  ...HlmSwitchImports,
+  ...HlmSliderImports,
   HrefDirective,
   HlmButton,
   HlmBadge,
@@ -99,11 +98,6 @@ const SHARED_IMPORTS = [
   ...HlmToasterImports,
 ];
 
-const DEMO_IMPORTS = [...SHARED_IMPORTS, HlmCheckbox, ...HlmSwitchImports, ...MasonKitSliderImports];
-
-/** For `html live native` blocks: the platform checkbox, switch and slider (docs/native-elements). */
-const NATIVE_DEMO_IMPORTS = [...SHARED_IMPORTS, ...NativeCheckboxImports, ...NativeSwitchImports, ...NativeSliderImports];
-
 /**
  * The Angular JIT compiler loads on demand (`@nativescript/vite` code-splits the import and
  * its dynamic-import plugin maps the chunk onto the device file system). The bundler drops
@@ -118,9 +112,8 @@ const loadCompiler = () =>
 const cache = new Map<string, Type<unknown>>();
 
 /** Compiles the template string in a docs code block into a standalone component (Angular JIT). The code on the page is the code that runs. */
-function demoComponent(template: string, native: boolean): Type<unknown> {
-  const key = `${native}:${template}`;
-  let cmp = cache.get(key);
+function demoComponent(template: string): Type<unknown> {
+  let cmp = cache.get(template);
   if (!cmp) {
     class Demo {
       /** brain's toast(), so a demo can show one from a click. */
@@ -128,13 +121,13 @@ function demoComponent(template: string, native: boolean): Type<unknown> {
     }
     Component({
       selector: 'ns-live-demo-view',
-      imports: native ? NATIVE_DEMO_IMPORTS : DEMO_IMPORTS,
+      imports: DEMO_IMPORTS,
       schemas: [NO_ERRORS_SCHEMA],
       changeDetection: ChangeDetectionStrategy.OnPush,
       template,
     })(Demo);
     cmp = Demo;
-    cache.set(key, cmp);
+    cache.set(template, cmp);
   }
   return cmp;
 }
@@ -150,8 +143,8 @@ function demoComponent(template: string, native: boolean): Type<unknown> {
  * preview keeps its state when the user switches tabs (same as the web frame's two panels
  * staying in the DOM); the inactive one is collapsed, so the frame fits the active pane.
  *
- * A block tagged `html live native` previews with platform widgets: NATIVE_ELEMENTS for its
- * `input` and `textarea`, and the native checkbox, switch and slider.
+ * A block tagged `html live mason` previews with MasonKit's form controls in place of the platform
+ * widgets (provideMasonElements).
  *
  * A block tagged `html live web` demonstrates a web polyfill's own API (`<ns-tab>`, `<ns-page>`, a
  * `Drawer` with an `open` signal), which has no NativeScript view behind it. The app shows its code
@@ -193,20 +186,19 @@ export class NsLiveDemo {
   private readonly injector = inject(Injector);
   protected readonly tab = signal<'preview' | 'code'>('preview');
   protected readonly demo = signal<Type<unknown> | null>(null);
-  private readonly native = computed(() => this.info().split(/\s+/).includes('native'));
+  private readonly mason = computed(() => this.info().split(/\s+/).includes('mason'));
   protected readonly webOnly = computed(() => this.info().split(/\s+/).includes('web'));
   protected readonly demoInjector = computed(() =>
-    this.native() ? Injector.create({ providers: [NATIVE_ELEMENTS], parent: this.injector }) : undefined,
+    this.mason() ? Injector.create({ providers: provideMasonElements(), parent: this.injector }) : undefined,
   );
 
   constructor() {
     effect(() => {
       const code = this.code();
-      const native = this.native();
       if (this.webOnly()) return;
       void this.tasks.run(async () => {
         await loadCompiler();
-        this.demo.set(demoComponent(code, native));
+        this.demo.set(demoComponent(code));
       });
     });
   }

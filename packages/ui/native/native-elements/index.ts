@@ -1,53 +1,68 @@
 import {
 	booleanAttribute,
 	inject,
+	InjectionToken,
 	type Provider,
 	type Renderer2,
 	RendererFactory2,
 	type RendererType2,
 } from '@angular/core';
-import { registerElement } from '@nativescript/angular';
+import { getViewClass, getViewMeta, registerElement } from '@nativescript/angular';
 import type { EditableTextBase, EventData, View } from '@nativescript/core';
 
 /** A view a template tag can create. */
 export type NativeElementClass = new () => View;
 
-const registeredTags = new Map<NativeElementClass, string>();
-
-/** A tag of its own that creates `view`, so a scope can use it while the web tag stays MasonKit's everywhere else. */
-function tagFor(view: NativeElementClass): string {
-	let tag = registeredTags.get(view);
-	if (tag === undefined) {
-		tag = `native-element-${registeredTags.size}`;
-		registerElement(tag, () => view);
-		registeredTags.set(view, tag);
-	}
-	return tag;
-}
+/** Each tag registerNativeElements() took over, and the tag MasonKit's view for it stays reachable under. */
+const masonTags = new Map<string, string>();
 
 /**
- * Draws template tags with platform views in one part of the app, where MasonKit draws them everywhere else.
+ * Makes template tags create platform views across the app, in place of the MasonKit views `installMasonKit()`
+ * registered for them. Call after `installMasonKit()`, before bootstrap.
  *
- * Keys are tags (`input`, `textarea`, `button`), values the view each creates. Put the provider on the component that
- * hosts the part: components Angular creates below it through `ngComponentOutlet` or `createComponent` build those
- * tags with these views, all the way down. The host's own template keeps MasonKit. The adapters in this folder keep
- * the web contract the shared templates rely on, so `<input hlmInput [value] (input)>` works unchanged:
+ * Keys are tags (`input`, `textarea`), values the view each creates. The adapters in this folder keep the web contract
+ * the shared templates rely on, so `<input hlmInput [value] (input)>` works unchanged:
  *
  * ```ts
- * providers: [provideNativeElements({ input: NativeTextField, textarea: NativeTextView })]
+ * registerNativeElements({ input: NativeTextField, textarea: NativeTextView });
  * ```
  *
- * Each adapter imports only its own package, so an app installs just the ones it maps.
+ * Each adapter imports only its own package, so an app installs just the ones it maps. MasonKit's views stay
+ * reachable through provideMasonElements().
  */
-export function provideNativeElements(elements: Readonly<Record<string, NativeElementClass>>): Provider {
-	const tags = new Map(Object.entries(elements).map(([tag, view]) => [tag, tagFor(view)]));
-	return {
-		provide: RendererFactory2,
-		useFactory: () => scopedRendererFactory(inject(RendererFactory2, { skipSelf: true }), tags),
-	};
+export function registerNativeElements(elements: Readonly<Record<string, NativeElementClass>>): void {
+	for (const [tag, view] of Object.entries(elements)) {
+		if (!masonTags.has(tag)) {
+			const masonTag = `mason-${tag}`;
+			const masonView = getViewClass(tag);
+			registerElement(masonTag, () => masonView, getViewMeta(tag));
+			masonTags.set(tag, masonTag);
+		}
+		registerElement(tag, () => view);
+	}
 }
 
-/** `factory`, with every renderer creating each mapped tag under the tag of its native view. */
+/** True below a provideMasonElements() scope, where the helm shims draw spartan's MasonKit components. */
+export const MASON_ELEMENTS = new InjectionToken<boolean>('MASON_ELEMENTS', { factory: () => false });
+
+/**
+ * Draws one part of the app with MasonKit where the rest draws platform widgets: the tags registerNativeElements()
+ * took over create MasonKit's views again, and helm's switch, checkbox and slider render spartan's components.
+ *
+ * Put it on the component that hosts the part: components Angular creates below it through `ngComponentOutlet` or
+ * `createComponent` build those tags with MasonKit, all the way down. The host's own template keeps the platform views.
+ */
+export function provideMasonElements(): Provider[] {
+	return [
+		{
+			provide: RendererFactory2,
+			useFactory: () => scopedRendererFactory(inject(RendererFactory2, { skipSelf: true }), masonTags),
+		},
+		{ provide: MASON_ELEMENTS, useValue: true },
+	];
+}
+
+/** `factory`, with every renderer creating each tag in `tags` under the tag it maps to. */
 function scopedRendererFactory(factory: RendererFactory2, tags: ReadonlyMap<string, string>): RendererFactory2 {
 	const scoped = new WeakMap<Renderer2, Renderer2>();
 	return Object.assign(Object.create(factory) as RendererFactory2, {

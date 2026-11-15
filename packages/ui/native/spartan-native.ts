@@ -6,7 +6,7 @@ import {
 	makeEnvironmentProviders,
 	provideEnvironmentInitializer,
 } from '@angular/core';
-import { registerElement } from '@nativescript/angular';
+import { ModalDialogService, registerElement } from '@nativescript/angular';
 import { Canvas } from '@nativescript/canvas';
 import { CSSType, ViewBase } from '@nativescript/core';
 import { masonMeta } from '@triniwiz/nativescript-masonkit/angular';
@@ -15,8 +15,10 @@ import { OptionElement, SelectElement } from './select-element';
 import { BrnMenuHost } from '@spartan-ng/brain/core';
 import { BrnDialogHost } from '@spartan-ng/brain/dialog';
 import { BrnOverlayHost } from '@spartan-ng/brain/overlay';
+import { HlmPickerHost } from '@spartan-ng/helm/picker';
 import { NativeScriptMenuHost } from './ui/menu-host';
 import { NativeScriptOverlayHost } from './ui/overlay-host';
+import { NativeScriptPickerHost } from './ui/picker-host';
 
 /**
  * CDK reads `isBrowser` from PLATFORM_ID, which NativeScript reports as 'browser', and then reaches for `window`
@@ -47,6 +49,10 @@ export function provideSpartanNativeScript(): EnvironmentProviders {
 		{ provide: BrnOverlayHost, useExisting: NativeScriptOverlayHost },
 		// CDK's menu trigger opens an overlay pane under document.body too.
 		{ provide: BrnMenuHost, useExisting: NativeScriptMenuHost },
+		// hlm-picker's list as a full-screen modal screen, not a dialog. NativeScriptCommonModule would provide the modal
+		// service; standalone apps do not import it.
+		ModalDialogService,
+		{ provide: HlmPickerHost, useExisting: NativeScriptPickerHost },
 		provideEnvironmentInitializer(() => {
 			// brain looks labels up with document.querySelector; NativeScript's DOCUMENT has no queries.
 			const document = inject(DOCUMENT) as Partial<Document>;

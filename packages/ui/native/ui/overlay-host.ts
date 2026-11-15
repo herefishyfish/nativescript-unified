@@ -536,7 +536,7 @@ function anchorView(origin: FlexibleConnectedPositionStrategyOrigin): View | nul
  * A native window's content is not under the page, so it carries the page's theme scope itself: `style-vega` for
  * helm's rules and the root view's light/dark class for the color tokens.
  */
-function themeClasses(): string[] {
+export function themeClasses(): string[] {
 	const dark = Application.getRootView()?.cssClasses.has('ns-dark') ?? false;
 	return ['style-vega', dark ? 'ns-dark' : 'ns-light'];
 }

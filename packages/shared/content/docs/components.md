@@ -41,6 +41,7 @@ Variants, such as `variant="outline"`, are inputs on the directive. Colours come
 | [Dialog](/docs/ui-dialog) | `hlm-dialog` and its parts |
 | [Alert](/docs/ui-alert) | `hlmAlert` |
 | [Progress, skeleton, avatar and separator](/docs/ui-feedback) | `hlm-progress`, `hlmSkeleton`, `hlm-avatar`, `hlmSeparator` |
+| [Picker](/docs/ui-picker) | `hlm-picker` |
 | [Select](/docs/ui-select) | `hlm-select` and its parts |
 | [Slider](/docs/ui-slider) | `hlm-slider` |
 | [Popover](/docs/ui-popover) | `hlm-popover` and its parts |
@@ -67,6 +68,7 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Accordion](/docs/ui-accordion) | Works | |
 | [Dialog](/docs/ui-dialog) | Works | Opens as the platform's dialog. See [Native elements](/docs/native-elements#dialogs). |
 | [Alert](/docs/ui-alert) | Works | |
+| [Picker](/docs/ui-picker) | Works | Opens full screen with `ModalDialogService`. The list scrolls under the search field. |
 | [Select](/docs/ui-select) | Works | Opens in a native popover window. The list does not scroll, so a long list runs to the window's edge. |
 | [Slider](/docs/ui-slider) | Works | One value is Material's slider (UISlider on iOS). A range is helm's track and thumbs, moved by touch. Keyboard steps are web only. |
 | [Popover](/docs/ui-popover) | Works | Opens in a native popover window. |

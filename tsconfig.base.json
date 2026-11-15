@@ -267,6 +267,9 @@
                                           "@spartan-ng/helm/pagination":  [
                                                                               "./packages/ui/helm/pagination/src/index.ts"
                                                                           ],
+                                          "@spartan-ng/helm/picker":  [
+                                                                          "./packages/ui/helm/picker/src/index.ts"
+                                                                      ],
                                           "@spartan-ng/helm/popover":  [
                                                                            "./packages/ui/helm/popover/src/index.ts"
                                                                        ],

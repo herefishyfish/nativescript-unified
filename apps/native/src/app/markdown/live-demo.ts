@@ -35,6 +35,7 @@ import { HlmNativeSelectImports } from '@spartan-ng/helm/native-select';
 import { HlmPopoverImports } from '@spartan-ng/helm/popover';
 import { HlmProgressImports } from '@spartan-ng/helm/progress';
 import { HlmRadioGroupImports } from '@spartan-ng/helm/radio-group';
+import { HlmPickerImports } from '@spartan-ng/helm/picker';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { HlmSeparator } from '@spartan-ng/helm/separator';
 import { HlmSheetImports } from '@spartan-ng/helm/sheet';
@@ -88,6 +89,7 @@ const DEMO_IMPORTS = [
   ...HlmKbdImports,
   ...HlmNativeSelectImports,
   ...HlmPopoverImports,
+  ...HlmPickerImports,
   ...HlmSelectImports,
   ...HlmSheetImports,
   HlmSpinner,

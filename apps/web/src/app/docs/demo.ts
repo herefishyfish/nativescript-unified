@@ -27,6 +27,7 @@ import { HlmHoverCardImports } from '@spartan-ng/helm/hover-card';
 import { HlmKbdImports } from '@spartan-ng/helm/kbd';
 import { HlmNativeSelectImports } from '@spartan-ng/helm/native-select';
 import { HlmPopoverImports } from '@spartan-ng/helm/popover';
+import { HlmPickerImports } from '@spartan-ng/helm/picker';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { HlmSheetImports } from '@spartan-ng/helm/sheet';
 import { HlmSliderImports } from '@spartan-ng/helm/slider';
@@ -68,6 +69,7 @@ const HELM_IMPORTS = [
   ...HlmKbdImports,
   ...HlmNativeSelectImports,
   ...HlmPopoverImports,
+  ...HlmPickerImports,
   ...HlmSelectImports,
   ...HlmSheetImports,
   ...HlmSliderImports,

@@ -19,7 +19,7 @@ description: A panel that slides in from an edge of the screen.
     </div>
     <div class="flex flex-col gap-1.5 px-4">
       <label hlmLabel for="sheet-name">Name</label>
-      <input hlmInput id="sheet-name" placeholder="Dylan" />
+      <input hlmInput id="sheet-name" placeholder="Sam Rivera" />
     </div>
     <div hlmSheetFooter>
       <button hlmBtn hlmSheetClose>Save changes</button>

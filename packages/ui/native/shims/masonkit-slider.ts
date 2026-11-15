@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import type { EventData, View } from '@nativescript/core';
-import { HlmSliderBase, RANGE_TEMPLATE } from './helm-slider';
+import { HlmSliderBase, RANGE_TEMPLATE } from './slider-base';
 
 type RangeInput = View & { value: string };
 
@@ -16,13 +16,13 @@ function seekBarOf(input: RangeInput): android.widget.SeekBar | null {
 }
 
 /**
- * Stands in for `@spartan-ng/helm/slider` everywhere but the native-widget screens: one value draws MasonKit's
+ * Helm's slider in MasonKit, which helm-slider.ts renders below provideMasonElements(): one value draws MasonKit's
  * `<input type="range">`, the platform SeekBar on Android. That input has no `min`, `max` or `step`, so its progress
  * counts steps from `min`: on Android the SeekBar's max is set to the number of steps; elsewhere progress is a
  * percentage, rounded to a step.
  */
 @Component({
-	selector: 'hlm-slider',
+	selector: 'masonkit-slider',
 	schemas: [NO_ERRORS_SCHEMA],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: { 'data-slot': 'slider', class: 'flex w-full' },
@@ -42,7 +42,7 @@ function seekBarOf(input: RangeInput): android.widget.SeekBar | null {
 		}
 	`,
 })
-export class HlmSlider extends HlmSliderBase {
+export class MasonKitSlider extends HlmSliderBase {
 	private _input?: RangeInput;
 	/** The input's progress at its max: the step count once the SeekBar takes it. */
 	private readonly _scale = signal(100);
@@ -78,5 +78,3 @@ export class HlmSlider extends HlmSliderBase {
 		this._setValue([value]);
 	}
 }
-
-export const HlmSliderImports = [HlmSlider] as const;

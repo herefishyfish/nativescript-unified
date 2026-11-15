@@ -78,7 +78,7 @@ That is `apps/native/src/app/pages/shared.page.ts`. The `HomeFeature` it renders
 
 `packages/ui/native` holds the glue helm needs on NativeScript, and `provideSpartanNativeScript()` installs it. The native app renders these docs pages, and each `html live` demo is compiled on the device against the same helm components the web uses. Overlays open in native windows instead of a CDK overlay:
 
-- A dialog or alert dialog opens in a full-screen, transparent modal window. On iOS it uses the `overFullScreen` presentation.
+- A dialog or alert dialog opens as the platform's dialog. See [Native elements](/docs/native-elements#dialogs). Content the platform dialog cannot hold opens in a full-screen, transparent modal window, which uses the `overFullScreen` presentation on iOS.
 - A sheet or drawer on the bottom edge opens in a native bottom sheet from `@nativescript-community/ui-bottomsheet`, sized to its content.
 - A sheet or drawer on the left, right or top edge docks to that edge in the app's `Drawer` from `@nativescript-community/ui-drawer`.
 - A popover opens in an anchored window from `@nativescript-community/ui-popover`. Select, combobox, autocomplete and date picker use the same window.
@@ -94,6 +94,6 @@ These apply across components.
 - **Opacity-modified token colours.** Classes such as `bg-input/80`, `bg-destructive/10` and `dark:bg-input/30` keep the plain light token colour on native, in every theme.
 - **Text layout in MasonKit.** A button does not always center its text on its first layout. An `inline-flex` box lays its children out as an inline text run, so `packages/ui/native/native-overrides.css` overrides it for the progress bar and the calendar. Text ignores `white-space: pre`, so `<analog-code>` draws each line as its own block with no-break spaces.
 - **Block-backed tags.** Spartan styles `button`, `a`, `li`, `kbd`, `label` and the headings as flex boxes, so `registerSpartanNativeElements()` in `packages/ui/native/spartan-native.ts` backs them with block elements. A list item therefore draws no marker. The Markdown renderer draws its own.
-- **Browser APIs in brain components.** MasonKit elements have no `getBoundingClientRect()` or pointer events, there is no `document.defaultView`, and the NativeScript document has no `createElement()` for a CDK overlay. Where brain needs these, it takes a no-DOM path: the select trigger measures itself on `layoutChanged`, and the tooltip and hover card open through the overlay host. The slider and the toaster are native shims (`packages/ui/native/shims`).
+- **Browser APIs in brain components.** MasonKit elements have no `getBoundingClientRect()` or pointer events, there is no `document.defaultView`, and the NativeScript document has no `createElement()` for a CDK overlay. Where brain needs these, it takes a no-DOM path: the select trigger measures itself on `layoutChanged`, and the tooltip and hover card open through the overlay host. The switch, checkbox, slider and toaster are native shims (`packages/ui/native/shims`).
 - **Media queries.** NativeScript drops media queries. `apps/native/src/app.css` overrides the `motion-safe` variant so that the spinner and skeleton animations run.
 - **Hover.** A touch screen has no hover, so the tooltip and the hover card open on a tap instead.

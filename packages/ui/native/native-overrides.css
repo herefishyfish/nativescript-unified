@@ -1,5 +1,11 @@
 /* Pixel stand-ins for spartan rules that have no NativeScript equivalent. Name the rule each one replaces. */
 
+/* The browser's default stylesheet centres a button's text. MasonKit's block-backed button (spartan-native.ts) starts
+   it at the left, so a plain <button>Monthly</button> sits off centre. A text-* class still overrides this. */
+button {
+	text-align: center;
+}
+
 /* .spartan-switch-thumb data-checked:translate-x-[calc(100%-2px)]: transforms take no percentages, so the track
    places a checked thumb at its end instead. */
 .style-vega .group\/switch[data-state='checked'] {

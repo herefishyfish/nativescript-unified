@@ -65,10 +65,10 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Form controls](/docs/ui-form-controls) | Works | A radio's text does not select it, on the web either, because the demo does not wrap it in a `label`. |
 | [Tabs](/docs/ui-tabs) | Works | |
 | [Accordion](/docs/ui-accordion) | Works | |
-| [Dialog](/docs/ui-dialog) | Works | Opens in a native modal window. A tap on the scrim closes it. |
+| [Dialog](/docs/ui-dialog) | Works | Opens as the platform's dialog. See [Native elements](/docs/native-elements#dialogs). |
 | [Alert](/docs/ui-alert) | Works | |
 | [Select](/docs/ui-select) | Works | Opens in a native popover window. The list does not scroll, so a long list runs to the window's edge. |
-| [Slider](/docs/ui-slider) | Works | One value is MasonKit's range input (a SeekBar on Android). A range is helm's track and thumbs, moved by touch. Keyboard steps are web only. |
+| [Slider](/docs/ui-slider) | Works | One value is Material's slider (UISlider on iOS). A range is helm's track and thumbs, moved by touch. Keyboard steps are web only. |
 | [Popover](/docs/ui-popover) | Works | Opens in a native popover window. |
 | [Dropdown menu](/docs/ui-dropdown-menu) | Works | Opens the platform menu, with labels, separators, shortcuts and submenus. |
 | [Sheet](/docs/ui-sheet) | Works | Bottom sheets open in a native bottom sheet, other sides in a side drawer. |
@@ -77,7 +77,7 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Calendar](/docs/ui-calendar) | Works | |
 | [Tooltip](/docs/ui-tooltip) | Works | Opens on a tap or long press and closes itself. There is no arrow. |
 | [Toast](/docs/ui-sonner) | Works | A native toaster draws the toasts where it sits in the layout. |
-| [Toggle, toggle group, collapsible, breadcrumb, alert dialog, kbd, spinner](/docs/ui-more) | Works | |
+| [Toggle, toggle group, collapsible, breadcrumb, alert dialog, kbd, spinner](/docs/ui-more) | Works | The alert dialog opens as the platform's dialog. See [Native elements](/docs/native-elements#dialogs). |
 | [Hover card](/docs/ui-more) | Works | Opens on a tap instead of a hover. |
 | [Native select](/docs/ui-more) | Works | Opens the platform menu. |
 | [Separator, avatar, skeleton](/docs/ui-feedback) | Works | |

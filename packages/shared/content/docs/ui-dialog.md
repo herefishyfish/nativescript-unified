@@ -19,7 +19,7 @@ description: A modal dialog with a trigger, header, footer and close buttons.
     </hlm-dialog-header>
     <div class="flex flex-col gap-1.5 py-2">
       <label hlmLabel for="dialog-name">Name</label>
-      <input hlmInput id="dialog-name" placeholder="Dylan" />
+      <input hlmInput id="dialog-name" placeholder="Sam Rivera" />
     </div>
     <hlm-dialog-footer>
       <button hlmBtn variant="outline" hlmDialogClose>Cancel</button>
@@ -29,4 +29,4 @@ description: A modal dialog with a trigger, header, footer and close buttons.
 </hlm-dialog>
 ```
 
-The dialog is built on the brain dialog. On the web it opens in an Angular CDK overlay, and in the native app it opens in a full-screen modal window. See [Spartan on native](/docs/web-vs-native#spartan-on-native). It closes with Escape, with a `hlmDialogClose` button, or with the built-in close button.
+The dialog is built on the brain dialog. On the web it opens in an Angular CDK overlay, and in the native app it opens as the platform's dialog, with the name field inside it. See [Native elements](/docs/native-elements#dialogs). It closes with Escape, with a `hlmDialogClose` button, or with the built-in close button.

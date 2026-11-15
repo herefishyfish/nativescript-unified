@@ -13,6 +13,7 @@ import {
 	type ViewRef,
 } from '@angular/core';
 import type { ViewWithBottomSheetBase } from '@nativescript-community/ui-bottomsheet';
+import { confirm } from '@nativescript-community/ui-dialogs';
 import { Drawer, type DrawerEventData } from '@nativescript-community/ui-drawer';
 import { HorizontalPosition, showPopover, VerticalPosition } from '@nativescript-community/ui-popover';
 import {
@@ -22,6 +23,7 @@ import {
 	Frame,
 	Utils,
 	View,
+	type ViewBase,
 } from '@nativescript/core';
 import type {
 	BrnOverlayDismissal,
@@ -33,14 +35,16 @@ import { BrnOverlaySurface } from '@spartan-ng/brain/core';
 import type { BrnDialogHost, BrnDialogRequest } from '@spartan-ng/brain/dialog';
 import type { BrnOverlayHost, BrnOverlayHostRequest } from '@spartan-ng/brain/overlay';
 import { Subject } from 'rxjs';
+import { MASON_ELEMENTS } from '../native-elements';
 
 type CloseWindow = () => void;
 
 /**
- * Opens spartan's dialogs and overlays in native windows: centered dialogs in a modal dialog, bottom drawers and
- * sheets in a material bottom sheet, left, right and top sheets in a side of the app's `Drawer`, anchored overlays
- * in a popover. The content is the helm markup, rendered into a MasonKit root that carries the theme scope the page
- * would have given it.
+ * Opens spartan's dialogs and overlays in native windows: alert dialogs as the platform's alert, other centered
+ * dialogs in a modal dialog, bottom drawers and sheets in a material bottom sheet, left, right and top sheets in a
+ * side of the app's `Drawer`, anchored overlays in a popover. The content is the helm markup, rendered into a MasonKit
+ * root that carries the theme scope the page would have given it. Below provideMasonElements(), alert dialogs open in
+ * the modal dialog too.
  */
 @Injectable({ providedIn: 'root' })
 export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
@@ -54,12 +58,17 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 	private _drawerSurface: NativeScriptSurface | null = null;
 
 	public open(request: BrnDialogRequest | BrnOverlayHostRequest): BrnOverlaySurface {
+		const parent = request.viewContainerRef?.injector ?? this._injector;
+		if (isDialog(request) && !parent.get(MASON_ELEMENTS)) {
+			const dialog = this._openPlatformDialog(request, parent);
+			if (dialog) return dialog;
+		}
 		const window = nativeWindow(request.placement);
 		const views = this._createViews(window.kind);
 		const theme = window.kind === 'drawer' ? [...themeClasses(), DRAWER_SLOT_BACKGROUND] : themeClasses();
 		const surface = new NativeScriptSurface(views, theme, request.panelClass, request.backdropClass);
 		const injector = Injector.create({
-			parent: request.viewContainerRef?.injector ?? this._injector,
+			parent,
 			providers: request.providers(surface),
 		});
 		const view = this._render(request, injector, views.pane);
@@ -82,6 +91,60 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 				surface.show(this._showDrawer(views.pane, surface, window.drawer, window.side));
 				break;
 		}
+		return surface;
+	}
+
+	/**
+	 * Shows helm dialog and alert-dialog content in the platform's dialog: Material's on Android, UIAlertController on
+	 * iOS. The header gives its title and message and the footer its buttons; anything between them, such as form
+	 * fields, stays in the dialog as its content. Choosing a button clicks the helm button, so its `(click)` and
+	 * `hlmDialogClose` run as on the web; the back button or a tap outside chooses the negative button. Content the
+	 * platform dialog cannot hold (no title, no button, or more than three) returns null and opens in the modal window.
+	 */
+	private _openPlatformDialog(request: BrnDialogRequest, parent: Injector): BrnOverlaySurface | null {
+		const pane = this._renderer.createElement('div') as View;
+		const surface = new NativeScriptSurface({ root: pane, pane, backdrop: null }, themeClasses(), [], []);
+		const view = this._render(request, Injector.create({ parent, providers: request.providers(surface) }), pane);
+		surface.onTeardown(() => {
+			this._appRef.detachView(view);
+			view.destroy();
+		});
+		const dialog = platformDialog(pane, request.role);
+		if (!dialog) {
+			surface.windowClosed();
+			return null;
+		}
+		const { negative, neutral, positive } = dialog.buttons;
+		if (dialog.body) {
+			for (const part of dialog.body.hidden) part.visibility = 'collapse';
+			// The platform dialog draws the card; helm's content keeps its side padding and the gaps between fields.
+			for (const [style, value] of [
+				['background', 'transparent'],
+				['borderWidth', '0'],
+				['boxShadow', 'none'],
+				['paddingTop', '0'],
+				['paddingBottom', '0'],
+			]) {
+				this._renderer.setStyle(dialog.body.content, style, value);
+			}
+		}
+		surface.show(() => surface.windowClosed());
+		void confirm({
+			title: dialog.title,
+			message: dialog.message,
+			view: dialog.body ? pane : undefined,
+			okButtonText: textOf(positive),
+			cancelButtonText: negative && textOf(negative),
+			neutralButtonText: neutral && textOf(neutral),
+			cancelable: !request.disableClose,
+		}).then((result: boolean | undefined) => {
+			const button = result === true ? positive : result === undefined ? neutral : negative;
+			if (button) click(button);
+			else surface.dismiss('escape');
+			// The platform dialog is gone whichever way it closed. A helm close waits for its exit (a promise), so a
+			// result the button gave lands first; a button that does not close the dialog still ends it here.
+			setTimeout(() => surface.windowClosed());
+		});
 		return surface;
 	}
 
@@ -476,4 +539,163 @@ function anchorView(origin: FlexibleConnectedPositionStrategyOrigin): View | nul
 function themeClasses(): string[] {
 	const dark = Application.getRootView()?.cssClasses.has('ns-dark') ?? false;
 	return ['style-vega', dark ? 'ns-dark' : 'ns-light'];
+}
+
+/** Helm dialog content as the platform dialog shows it. */
+interface PlatformDialog {
+	readonly title: string;
+	readonly message: string | undefined;
+	readonly buttons: DialogButtons;
+	/** Set when the content has more than a header and footer: the content view and the parts the dialog draws itself. */
+	readonly body: { readonly content: View; readonly hidden: readonly View[] } | null;
+}
+
+/** Helm buttons in the platform dialog's places for them. */
+interface DialogButtons {
+	readonly negative?: ViewBase;
+	readonly neutral?: ViewBase;
+	readonly positive: ViewBase;
+}
+
+/** Slots the platform dialog draws itself, so they are hidden in a body it shows. */
+const DIALOG_CHROME = /^(alert-)?dialog-(header|footer|close)$/;
+
+/** Rendered dialog or alert-dialog content as a platform dialog, found by helm's `data-slot`, or null if it does not fit one. */
+function platformDialog(root: View, role: BrnDialogRequest['role']): PlatformDialog | null {
+	const slots = new Map<string, View[]>();
+	const visit = (view: View) => {
+		const slot = slotOf(view);
+		if (slot) slots.set(slot, [...(slots.get(slot) ?? []), view]);
+		view.eachChildView((child) => {
+			visit(child);
+			return true;
+		});
+	};
+	visit(root);
+	const prefix = role === 'alertdialog' ? 'alert-dialog' : 'dialog';
+	const title = slots.get(`${prefix}-title`)?.[0];
+	const buttons = role === 'alertdialog' ? alertButtons(slots) : footerButtons(slots.get('dialog-footer')?.[0]);
+	if (!title || !buttons) return null;
+	const description = slots.get(`${prefix}-description`)?.[0];
+	const content = slots.get(`${prefix}-content`)?.[0];
+	const hidden = [...slots].flatMap(([slot, views]) => (DIALOG_CHROME.test(slot) ? views : []));
+	return {
+		title: textOf(title),
+		message: description && textOf(description),
+		buttons,
+		body: content && hasBody(content, new Set(hidden)) ? { content, hidden } : null,
+	};
+}
+
+/**
+ * Whether `view` holds anything besides the chrome the platform dialog draws. A view that only wraps chrome, such
+ * as the host of a component that HlmDialogService opened, does not count.
+ */
+function hasBody(view: View, chrome: ReadonlySet<View>): boolean {
+	let found = false;
+	view.eachChildView((child) => {
+		if (!chrome.has(child) && (!wrapsChrome(child, chrome) || hasBody(child, chrome))) found = true;
+		return !found;
+	});
+	return found;
+}
+
+function wrapsChrome(view: View, chrome: ReadonlySet<View>): boolean {
+	let wraps = false;
+	view.eachChildView((child) => {
+		wraps = chrome.has(child) || wrapsChrome(child, chrome);
+		return !wraps;
+	});
+	return wraps;
+}
+
+/** An alert dialog's cancel button is negative; its last action is positive and an action before it neutral. */
+function alertButtons(slots: ReadonlyMap<string, View[]>): DialogButtons | null {
+	const actions = slots.get('alert-dialog-action') ?? [];
+	if (actions.length === 0 || actions.length > 2) return null;
+	const negative = slots.get('alert-dialog-cancel')?.[0];
+	return actions.length === 2 ? { negative, neutral: actions[0], positive: actions[1] } : { negative, positive: actions[0] };
+}
+
+/** A dialog footer's buttons, in order: the last is positive, the first negative and a middle one neutral. */
+function footerButtons(footer: View | undefined): DialogButtons | null {
+	const buttons: View[] = [];
+	const visit = (view: View) =>
+		view.eachChildView((child) => {
+			if (child.cssType?.toLowerCase() === 'button') buttons.push(child);
+			else visit(child);
+			return true;
+		});
+	if (footer) visit(footer);
+	switch (buttons.length) {
+		case 1:
+			return { positive: buttons[0] };
+		case 2:
+			return { negative: buttons[0], positive: buttons[1] };
+		case 3:
+			return { negative: buttons[0], neutral: buttons[1], positive: buttons[2] };
+		default:
+			return null;
+	}
+}
+
+function slotOf(view: View): string | undefined {
+	const slot = (view as unknown as Record<string, unknown>)['data-slot'];
+	return typeof slot === 'string' ? slot : undefined;
+}
+
+/** What MasonKit keeps of an element's text: its own `text`, or its children, which include DOM text nodes. */
+interface MasonNode {
+	readonly nodeType?: number;
+	readonly data?: unknown;
+	readonly text?: unknown;
+	readonly _children?: readonly MasonNode[];
+}
+
+/** The text an element and its children draw. */
+function textOf(view: ViewBase): string {
+	const collect = (node: MasonNode): string => {
+		if (node.nodeType === 3) return String(node.data ?? '');
+		if (typeof node.text === 'string' && node.text.trim()) return node.text;
+		return (node._children ?? []).map(collect).join(' ');
+	};
+	return collect(view as unknown as MasonNode)
+		.replace(/\s+/g, ' ')
+		.trim();
+}
+
+/**
+ * Runs a helm button's click handlers, as a tap on it would. MasonKit registers `(click)` on the native view, which
+ * dispatches it from its click listener on Android and through `mason_dispatch` on iOS. Content the dialog does not
+ * show never gets native views, so MasonKit still holds those listeners as pending registrations.
+ */
+function click(view: ViewBase): void {
+	if (!view.nativeViewProtected) {
+		const pending = (view as unknown as { _pendingEventsRegistration?: PendingListener[] })._pendingEventsRegistration;
+		const event = { type: 'click', target: view, currentTarget: view, preventDefault() {}, stopPropagation() {} };
+		for (const { arg, callback, thisArg } of pending ?? []) {
+			if (arg === 'click') callback.call(thisArg ?? view, event);
+		}
+		return;
+	}
+	if (__ANDROID__) (view.nativeViewProtected as android.view.View).performClick();
+	if (__APPLE__) {
+		const native = view.nativeViewProtected as { mason_dispatch?: (event: unknown) => void } | undefined;
+		native?.mason_dispatch?.(MasonEvent.alloc().initWithTypeBubblesCancelableOptions('click', false, true, null));
+	}
+}
+
+interface PendingListener {
+	readonly arg: string;
+	readonly callback: (event: unknown) => void;
+	readonly thisArg: unknown;
+}
+
+declare const MasonEvent: {
+	alloc(): { initWithTypeBubblesCancelableOptions(type: string, bubbles: boolean, cancelable: boolean, options: null): unknown };
+};
+
+/** A centered helm dialog or alert dialog; sheets and drawers share the dialog request but open at an edge. */
+function isDialog(request: BrnDialogRequest | BrnOverlayHostRequest): request is BrnDialogRequest {
+	return 'role' in request && request.placement.kind === 'center';
 }

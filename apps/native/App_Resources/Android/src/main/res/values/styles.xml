@@ -32,6 +32,28 @@
         <!-- Day/night window background, so page transitions and modals never flash Material's default surface. -->
         <item name="android:windowBackground">@color/ns_background</item>
         <item name="android:colorBackground">@color/ns_background</item>
+        <!-- Dialogs (ui-dialogs and helm dialogs opened as platform dialogs) in helm's dialog card colours. -->
+        <item name="materialAlertDialogTheme">@style/AppAlertDialog</item>
+    </style>
+
+    <!-- helm's dialog: bg-popover, rounded-xl (14px), a text-lg font-medium title and muted description text. -->
+    <style name="AppAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorSurfaceContainerHigh">@color/ns_surface_container</item>
+        <item name="colorOnSurface">@color/ns_foreground</item>
+        <item name="colorOnSurfaceVariant">@color/ns_muted_foreground</item>
+        <item name="colorPrimary">@color/ns_brand_primary</item>
+        <item name="shapeAppearanceOverlay">@style/AppAlertDialogShape</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/AppAlertDialogTitle</item>
+    </style>
+
+    <style name="AppAlertDialogShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">14dp</item>
+    </style>
+
+    <style name="AppAlertDialogTitle" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="AppTheme" parent="AppThemeBase">

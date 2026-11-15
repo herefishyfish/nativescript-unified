@@ -7,4 +7,6 @@
     <color name="ns_brand_primary">#5ea396</color>
     <color name="ns_secondary_container">#27403b</color>
     <color name="ns_surface_container">#1f2320</color>
+    <color name="ns_foreground">#f2ebdd</color>
+    <color name="ns_muted_foreground">#b5ab97</color>
 </resources>

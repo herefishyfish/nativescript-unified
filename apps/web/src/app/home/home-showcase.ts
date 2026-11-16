@@ -7,6 +7,7 @@ import {
   lucideChartColumn,
   lucideChartLine,
   lucideChartScatter,
+  lucideLayers,
   lucideLogIn,
   lucideMusic,
   lucideNewspaper,
@@ -28,7 +29,7 @@ const iconName = (icon: string) => 'lucide' + icon.replace(/(^|-)(\w)/g, (_, __,
 
 /**
  * The shared example screens (packages/shared/src/lib/examples), rendered live in a phone frame.
- * Loaded with @defer from the home page, so the twelve components and their sources stay out of the first bundle.
+ * Loaded with @defer from the home page, so the example components and their sources stay out of the first bundle.
  */
 @Component({
   selector: 'web-home-showcase',
@@ -47,6 +48,7 @@ const iconName = (icon: string) => 'lucide' + icon.replace(/(^|-)(\w)/g, (_, __,
       lucideNewspaper,
       lucideChartLine,
       lucideChartScatter,
+      lucideLayers,
       lucideApple,
       lucidePlay,
       lucideZap,

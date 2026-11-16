@@ -1,0 +1,81 @@
+/*
+ * Overlays example, theme "Harbor". Every rule is scoped under .example-overlays, which the screen and each overlay's
+ * content carry: dialogs, sheets, drawers and popovers render outside the screen, so they take the palette from it.
+ */
+.example-overlays {
+  --background: #f1f7fb;
+  --foreground: #0f2433;
+  --card: #ffffff;
+  --card-foreground: #0f2433;
+  --popover: #ffffff;
+  --popover-foreground: #0f2433;
+  --primary: #0b6fa4;
+  --primary-foreground: #ffffff;
+  --secondary: #dcedf7;
+  --secondary-foreground: #0d4462;
+  --muted: #e5f0f6;
+  --muted-foreground: #4b6577;
+  --accent: #d2e9f5;
+  --accent-foreground: #0d3a54;
+  --destructive: #c0392b;
+  --border: #d3e4ee;
+  --input: #9cc1d6;
+  --ring: #1e90c8;
+  --chart-1: #0b6fa4;
+  --chart-2: #22b8cf;
+  --chart-3: #f59f00;
+  --chart-4: #7c5cff;
+  --chart-5: #0f2433;
+}
+
+.ns-dark .example-overlays,
+.dark .example-overlays {
+  --background: #0b1720;
+  --foreground: #e3f1f9;
+  --card: #12222e;
+  --card-foreground: #e3f1f9;
+  --popover: #12222e;
+  --popover-foreground: #e3f1f9;
+  --primary: #4cb6e8;
+  --primary-foreground: #04131c;
+  --secondary: #1b3242;
+  --secondary-foreground: #e3f1f9;
+  --muted: #172a37;
+  --muted-foreground: #9db8c9;
+  --accent: #1e3a4d;
+  --accent-foreground: #e3f1f9;
+  --destructive: #ff7a6b;
+  --border: #213847;
+  --input: #3d5d71;
+  --ring: #4cb6e8;
+  --chart-1: #4cb6e8;
+  --chart-2: #3bd1e3;
+  --chart-3: #ffc04d;
+  --chart-4: #a08bff;
+  --chart-5: #e3f1f9;
+}
+
+.example-overlays .hero { background: linear-gradient(135deg, #0a3d62, #0b6fa4 50%, #22b8cf); }
+.ns-dark .example-overlays .hero,
+.dark .example-overlays .hero { background: linear-gradient(135deg, #072b45, #0a5580 55%, #168ea3); }
+.example-overlays .hero-ink { color: #ffffff; }
+.example-overlays .hero-soft { color: rgba(255, 255, 255, 0.82); }
+.example-overlays .hero-chip { background-color: rgba(255, 255, 255, 0.18); }
+.example-overlays .hero-track { background-color: rgba(255, 255, 255, 0.25); }
+.example-overlays .hero-fill { background-color: #ffffff; }
+
+.example-overlays .avatar { border-width: 2; border-color: rgba(255, 255, 255, 0.9); }
+.example-overlays .avatar-ink { color: #ffffff; }
+.example-overlays .tone-1 { background-color: #f76707; }
+.example-overlays .tone-2 { background-color: #7c5cff; }
+.example-overlays .tone-3 { background-color: #12b886; }
+.example-overlays .tone-4 { background-color: #e64980; }
+
+.example-overlays .check { border-width: 2; border-color: var(--muted-foreground); background-color: transparent; }
+.example-overlays .check.checked { border-color: var(--primary); background-color: var(--primary); }
+.example-overlays .check-ink { color: var(--primary-foreground); }
+
+.example-overlays .unread-dot { background-color: var(--chart-2); }
+.example-overlays .unread-dot.read { background-color: var(--border); }
+
+.example-overlays .activity-dot { background-color: #22b8cf; }

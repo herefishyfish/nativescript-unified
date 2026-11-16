@@ -1,15 +1,15 @@
+<!-- The Tideline mark (docs/brand/tideline-logo.svg), scaled into the adaptive icon's 66dp safe zone. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-  <group android:scaleX="0.07382812"
-      android:scaleY="0.07382812"
-      android:translateX="16.2"
-      android:translateY="16.2">
-    <path
-        android:pathData="M843,511.86L843,512.96C843,513.22 842.8,513.43 842.55,513.46C809.18,516.58 783.07,543.69 783.07,577.86L783.07,714.8C783.07,724.37 781.06,733.6 777.43,742.03C767.08,766.1 743.59,783.6 716.27,783.6L647.07,783.6L646.59,783L377.41,445.68L377.41,783.6L307.73,783.6C270.84,783.6 240.93,753.7 240.93,716.8L240.93,577.86C240.93,543.69 214.82,516.58 181.45,513.46C181.2,513.43 181,513.22 181,512.96L181,511.86C181,511.61 181.19,511.4 181.45,511.37C214.69,508.14 240.67,480.35 240.67,446.26L240.67,307.2C240.67,297.91 242.57,289.05 246,281.01C256.18,257.14 279.87,240.39 307.47,240.39L377.13,240.39L377.41,240.74L646.59,578.07L646.59,240.39L716.53,240.39C753.42,240.39 783.33,270.3 783.33,307.2L783.33,446.26C783.33,480.35 809.31,508.14 842.55,511.37C842.81,511.4 843,511.61 843,511.86"
-        android:fillColor="#65ADF1"
-        android:fillType="nonZero"/>
-  </group>
+    <group android:scaleX="0.0543" android:scaleY="0.0543" android:translateX="17.65" android:translateY="17.7">
+        <path android:fillColor="#27695F" android:pathData="M553,153L182,325L216,877Z M787,153L1157,325L1122,877Z M669,429L802,751L537,751Z"/>
+        <group>
+            <clip-path android:pathData="M466,915Q567,875 669,915T873,915L923,1040L669,1184L415,1040Z"/>
+            <path android:fillColor="#1B4A44" android:pathData="M100,800L100,992L380,992Q550,947 669,992T960,992L1240,992L1240,800Z"/>
+            <path android:fillColor="#1B4A44" android:pathData="M100,1008L380,1008Q550,963 669,1008T960,1008L1240,1008L1240,1250L100,1250Z"/>
+        </group>
+    </group>
 </vector>

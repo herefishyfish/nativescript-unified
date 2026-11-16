@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="124 123 1092 1092" role="img" aria-label="Tideline">
+  <defs>
+    <mask id="tideline-wave" maskUnits="userSpaceOnUse" x="124" y="123" width="1092" height="1092">
+      <rect x="124" y="123" width="1092" height="1092" fill="#fff"/>
+      <path d="M380 1000 Q550 955 669 1000 T960 1000" stroke="#000" stroke-width="16" fill="none"/>
+    </mask>
+  </defs>
+  <path fill="#27695F" d="M553 153 182 325 216 877Z M787 153 1157 325 1122 877Z M669 429 802 751 537 751Z"/>
+  <path fill="#1B4A44" mask="url(#tideline-wave)" d="M466 915Q567 875 669 915T873 915L923 1040 669 1184 415 1040Z"/>
+</svg>

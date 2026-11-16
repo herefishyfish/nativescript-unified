@@ -1,0 +1,15 @@
+<!-- The Tideline mark (docs/brand/tideline-logo.svg) for the splash screen; colours follow day/night. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="1092"
+    android:viewportHeight="1092">
+    <group android:translateX="-124" android:translateY="-123">
+        <path android:fillColor="@color/tideline_primary" android:pathData="M553,153L182,325L216,877Z M787,153L1157,325L1122,877Z M669,429L802,751L537,751Z"/>
+        <group>
+            <clip-path android:pathData="M466,915Q567,875 669,915T873,915L923,1040L669,1184L415,1040Z"/>
+            <path android:fillColor="@color/tideline_deep" android:pathData="M100,800L100,992L380,992Q550,947 669,992T960,992L1240,992L1240,800Z"/>
+            <path android:fillColor="@color/tideline_deep" android:pathData="M100,1008L380,1008Q550,963 669,1008T960,1008L1240,1008L1240,1250L100,1250Z"/>
+        </group>
+    </group>
+</vector>

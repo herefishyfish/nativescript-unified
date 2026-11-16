@@ -1,7 +1,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="fill">
     <!-- A day/night color rather than the background bitmap, which has no night variant. -->
     <item android:drawable="@color/ns_background" />
-    <item>
-        <bitmap android:gravity="center" android:src="@drawable/logo" />
-    </item>
+    <item android:drawable="@drawable/logo" android:gravity="center" android:width="120dp" android:height="120dp" />
 </layer-list>

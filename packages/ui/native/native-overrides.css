@@ -69,6 +69,18 @@ button {
 	animation: none;
 }
 
+/* The web inherits text-foreground from <body>. A native modal, sheet, drawer or popover window has no parent to inherit
+   from, so text without its own color class (a value, an outline button's label) drew black on a dark surface. */
+.style-vega .spartan-dialog-content,
+.style-vega .spartan-alert-dialog-content,
+.style-vega .spartan-sheet-content,
+.style-vega .spartan-drawer-content {
+	color: var(--foreground);
+}
+.style-vega .spartan-popover-content {
+	color: var(--popover-foreground);
+}
+
 /* table, tr, td, th (helm table, calendar): MasonKit has no table layout, so the tags are block boxes
    (registerSpartanNativeElements). A row lays its cells out side by side, each taking an equal share, as a table
    with even content does. */

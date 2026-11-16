@@ -3,13 +3,6 @@ import { HrefDirective } from '@nativescript-unified/analog-native';
 import { EXAMPLES } from '@nativescript-unified/shared';
 import { FontIconModule } from 'nativescript-fonticon/angular';
 
-type Tile = { readonly slug: string; readonly title: string; readonly blurb: string; readonly icon: string };
-
-/** Native-only screens listed beside the shared examples; their pages live under pages/examples/. */
-const NATIVE_TILES: readonly Tile[] = [
-  { slug: 'overlays', title: 'Overlays', blurb: 'Dialogs, sheets, drawers and popovers in native windows.', icon: 'layers' },
-];
-
 /** The UI tab: a gallery of example screens. Each tile opens /examples/<slug>. */
 @Component({
   selector: 'ui-demo',
@@ -39,5 +32,5 @@ const NATIVE_TILES: readonly Tile[] = [
   `,
 })
 export class UiDemo {
-  protected readonly tiles: readonly Tile[] = [...EXAMPLES, ...NATIVE_TILES];
+  protected readonly tiles = EXAMPLES;
 }

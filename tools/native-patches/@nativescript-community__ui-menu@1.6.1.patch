@@ -12,10 +12,10 @@ index 73b2f37..1d1a937 100644
      return new Promise((resolve) => {
          const anchor = options.anchor?.nativeViewProtected;
 diff --git a/menu-popup.android.js b/menu-popup.android.js
-index 731762a..6d351d3 100644
+index 731762a..cde71ec 100644
 --- a/menu-popup.android.js
 +++ b/menu-popup.android.js
-@@ -33,10 +33,14 @@ function resolveColors(context) {
+@@ -33,10 +33,18 @@ function resolveColors(context) {
      return result;
  }
  const dp = (value) => Math.round(Utils.layout.toDevicePixels(value));
@@ -23,23 +23,27 @@ index 731762a..6d351d3 100644
 -const INNER_RADIUS = 6;
 -const CONTAINER_RADIUS = 28;
 -const ROW_HEIGHT = 48;
-+// helm's dropdown menu (spartan-dropdown-menu-*): a rounded-md container with p-1 and a foreground/10 ring, rounded-sm
-+// rows of px-2 py-1.5 text-sm that turn bg-accent when pressed, a trailing check for a checked item, and a border line
-+// between sections.
++// helm's dropdown menu (spartan-dropdown-menu-*): a rounded container with p-1 and a foreground/10 ring, rounded rows
++// that turn bg-accent when pressed, a trailing check for a checked item, and a border line between sections. helm sizes
++// its rows for a pointer (py-1.5 text-sm, 32px); on a touch screen rows are 40dp with 15sp text, which a finger can hit
++// without the menu crowding the screen, and the corners and padding grow with them.
 +const ROW_RADIUS = 6;
-+const CONTAINER_RADIUS = 8;
++const CONTAINER_RADIUS = 10;
 +const CONTAINER_PADDING = 4;
-+const ROW_HEIGHT = 32;
-+const MIN_WIDTH = 128;
++const ROW_HEIGHT = 40;
++const ROW_PADDING = 10;
++const ICON_SIZE = 18;
++const TEXT_SIZE = 15;
++const MIN_WIDTH = 160;
  function roundedDrawable(color, radii, strokeColor, strokeWidth) {
      const drawable = new android.graphics.drawable.GradientDrawable();
      drawable.setColor(color);
-@@ -91,30 +95,26 @@ function createLabel(context, text, color, first) {
+@@ -91,30 +99,26 @@ function createLabel(context, text, color, first) {
      label.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12);
      label.setTextColor(color);
      label.setTypeface(android.graphics.Typeface.create('sans-serif-medium', android.graphics.Typeface.NORMAL));
 -    label.setPadding(dp(12), dp(first ? 8 : 12), dp(12), dp(6));
-+    label.setPadding(dp(8), dp(6), dp(8), dp(6));
++    label.setPadding(dp(ROW_PADDING), dp(6), dp(ROW_PADDING), dp(4));
      return label;
  }
  function createRow(context, { item, position, count, colors, onTap, onTrailingTap, leadingBack }, getIcon) {
@@ -56,7 +60,7 @@ index 731762a..6d351d3 100644
      row.setMinimumHeight(dp(ROW_HEIGHT));
 -    row.setPadding(dp(16), 0, dp(16), 0);
 -    const background = roundedDrawable(selected ? colors.selected : colors.row, radii);
-+    row.setPadding(dp(8), 0, dp(8), 0);
++    row.setPadding(dp(ROW_PADDING), 0, dp(ROW_PADDING), 0);
      const mask = roundedDrawable(android.graphics.Color.WHITE, radii);
 -    row.setBackground(new android.graphics.drawable.RippleDrawable(android.content.res.ColorStateList.valueOf(withAlpha(contentColor, 0.12)), background, mask));
 -    const params = new android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -67,52 +71,48 @@ index 731762a..6d351d3 100644
 +    row.setLayoutParams(new android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
      if (leadingBack) {
 -        const back = createIcon(context, resourceDrawable(context, 'ns_menu_chevron', contentColor), 20);
-+        const back = createIcon(context, resourceDrawable(context, 'ns_menu_chevron', contentColor), 16);
++        const back = createIcon(context, resourceDrawable(context, 'ns_menu_chevron', contentColor), ICON_SIZE);
          back.setRotation(180);
 -        back.getLayoutParams().setMargins(0, 0, dp(12), 0);
-+        back.getLayoutParams().setMargins(0, 0, dp(8), 0);
++        back.getLayoutParams().setMargins(0, 0, dp(10), 0);
          row.addView(back);
      }
      else {
-@@ -123,13 +123,14 @@ function createRow(context, { item, position, count, colors, onTap, onTrailingTa
+@@ -123,13 +127,14 @@ function createRow(context, { item, position, count, colors, onTap, onTrailingTa
              if (typeof item.icon === 'string') {
                  icon.mutate().setTint(contentColor);
              }
 -            const view = createIcon(context, icon, 20);
 -            view.getLayoutParams().setMargins(0, 0, dp(12), 0);
-+            const view = createIcon(context, icon, 16);
-+            view.getLayoutParams().setMargins(0, 0, dp(8), 0);
++            const view = createIcon(context, icon, ICON_SIZE);
++            view.getLayoutParams().setMargins(0, 0, dp(10), 0);
              row.addView(view);
          }
      }
      const text = new android.widget.TextView(context);
 -    text.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 16);
-+    text.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 14);
++    text.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE);
 +    text.setPadding(0, dp(6), 0, dp(6));
      text.setTextColor(contentColor);
      text.setMaxLines(item.subtitle ? 2 : 1);
      text.setEllipsize(android.text.TextUtils.TruncateAt.END);
-@@ -147,16 +148,16 @@ function createRow(context, { item, position, count, colors, onTap, onTrailingTa
+@@ -147,13 +152,13 @@ function createRow(context, { item, position, count, colors, onTap, onTrailingTa
      row.addView(text);
      let trailing;
      if (item.items?.length) {
 -        trailing = createIcon(context, resourceDrawable(context, 'ns_menu_chevron', colors.onSurfaceVariant), 20);
-+        trailing = createIcon(context, resourceDrawable(context, 'ns_menu_chevron', colors.onSurfaceVariant), 16);
++        trailing = createIcon(context, resourceDrawable(context, 'ns_menu_chevron', colors.onSurfaceVariant), ICON_SIZE);
      }
      else if (item.toggle) {
          trailing = createSwitch(context, !!item.checked, colors);
      }
      else if (selected) {
 -        trailing = createIcon(context, resourceDrawable(context, 'ns_menu_check', colors.onSelected), 20);
-+        trailing = createIcon(context, resourceDrawable(context, 'ns_menu_check', contentColor), 16);
++        trailing = createIcon(context, resourceDrawable(context, 'ns_menu_check', contentColor), ICON_SIZE);
      }
      if (trailing) {
--        trailing.getLayoutParams().setMargins(dp(12), 0, 0, 0);
-+        trailing.getLayoutParams().setMargins(dp(8), 0, 0, 0);
-         row.addView(trailing);
-     }
-     const action = item.trailingAction;
-@@ -181,7 +182,7 @@ function createRow(context, { item, position, count, colors, onTap, onTrailingTa
+         trailing.getLayoutParams().setMargins(dp(12), 0, 0, 0);
+@@ -181,7 +186,7 @@ function createRow(context, { item, position, count, colors, onTap, onTrailingTa
          row.addView(button);
      }
      if (item.disabled) {
@@ -121,7 +121,7 @@ index 731762a..6d351d3 100644
      }
      else {
          row.setOnClickListener(new android.view.View.OnClickListener({ onClick: onTap }));
-@@ -199,15 +200,15 @@ export function showPopup({ anchor, items, placement, getIcon, onSelect, onDismi
+@@ -199,15 +204,15 @@ export function showPopup({ anchor, items, placement, getIcon, onSelect, onDismi
      const margin = dp(8);
      const content = new android.widget.LinearLayout(context);
      content.setOrientation(android.widget.LinearLayout.VERTICAL);
@@ -140,7 +140,7 @@ index 731762a..6d351d3 100644
      popup.setOutsideTouchable(true);
      const horizontal = placement?.horizontal === 'end' ? 'end' : 'start';
      const maxWidth = Math.min(dp(360), screen.widthPixels - 2 * margin);
-@@ -220,7 +221,7 @@ export function showPopup({ anchor, items, placement, getIcon, onSelect, onDismi
+@@ -220,7 +225,7 @@ export function showPopup({ anchor, items, placement, getIcon, onSelect, onDismi
              row.measure(android.view.View.MeasureSpec.makeMeasureSpec(0, android.view.View.MeasureSpec.UNSPECIFIED), android.view.View.MeasureSpec.makeMeasureSpec(0, android.view.View.MeasureSpec.UNSPECIFIED));
              natural = Math.max(natural, row.getMeasuredWidth());
          }
@@ -149,7 +149,7 @@ index 731762a..6d351d3 100644
          scroll.measure(android.view.View.MeasureSpec.makeMeasureSpec(width, android.view.View.MeasureSpec.EXACTLY), android.view.View.MeasureSpec.makeMeasureSpec(screen.heightPixels - 2 * margin, android.view.View.MeasureSpec.AT_MOST));
          const fullHeight = scroll.getMeasuredHeight();
          const spaceBelow = screen.heightPixels - (anchorLocation[1] + anchor.getHeight()) - margin;
-@@ -241,14 +242,17 @@ export function showPopup({ anchor, items, placement, getIcon, onSelect, onDismi
+@@ -241,14 +246,17 @@ export function showPopup({ anchor, items, placement, getIcon, onSelect, onDismi
              content.addView(createRow(context, { item: { title: parent.title }, position: 0, count: 1, colors, onTap: parent.back, leadingBack: true }, getIcon));
          }
          getSections(entries).forEach((section, index) => {

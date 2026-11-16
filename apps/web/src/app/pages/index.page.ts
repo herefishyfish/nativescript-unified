@@ -67,9 +67,9 @@ cd apps/native && ns run ios    # the iOS app, on a Mac`;
               Web, iOS and Android from one codebase
               <ng-icon name="lucideArrowRight" size="14" aria-hidden="true" />
             </a>
-            <h1 class="home-title">One HTML template <span class="block text-primary">Web and native</span></h1>
+            <h1 class="home-title">One HTML template <span class="block text-primary">Web and mobile</span></h1>
             <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Build NativeScript Angular apps HTML first: plain elements, CSS flex and grid, Tailwind classes and Spartan components.
+              Build cross-platform Angular apps HTML first: plain elements, CSS flex and grid, Tailwind classes and Spartan components.
               The browser renders them on the web, and MasonKit draws the same template as real native views on iOS and Android.
             </p>
             <div class="mt-8 flex flex-wrap gap-3">

@@ -203,3 +203,18 @@ index 1682ffc..e88c9c0 100644
          }
      }
      [rowsProperty.setNative](value) {
+diff --git a/angular/fesm2022/triniwiz-nativescript-masonkit-angular.mjs b/angular/fesm2022/triniwiz-nativescript-masonkit-angular.mjs
+index d443133..4562c4b 100644
+--- a/angular/fesm2022/triniwiz-nativescript-masonkit-angular.mjs
++++ b/angular/fesm2022/triniwiz-nativescript-masonkit-angular.mjs
+@@ -422,7 +422,9 @@ function enableMasonComponentHosts(options = {}) {
+         // Angular's `rootElement.tagName.toLowerCase()` bootstrap check.
+         host.nodeName = name;
+         host.tagName = name;
+-        host.cssType = name;
++        // Core's CSS parser drops the first hyphen of a type selector (`my-card` matches cssType 'mycard'), so the
++        // host's type follows the same rule or no stylesheet rule could select a hyphenated component tag.
++        host.cssType = name.replace('-', '');
+         host.customCSSName = name;
+         host.masonHostElementName = name;
+         return host;

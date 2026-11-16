@@ -16,7 +16,7 @@ import { AppComponent } from './app/app.component';
 import { NsLiveDemo } from './app/markdown/live-demo';
 import { provideSpartanNativeScript, registerSpartanNativeElements } from '../../../packages/ui/native/spartan-native';
 import { registerCommaSeparatedItems, registerCoreElementAliases } from '../../../packages/ui/native/core-elements';
-import { installTouchFeedback } from '../../../packages/ui/native/touch-feedback';
+import { installSelectionHaptics } from '../../../packages/ui/native/selection-haptics';
 import { registerNativeElements } from '../../../packages/ui/native/native-elements';
 import { installNativeDialogs } from '../../../packages/ui/native/native-elements/dialogs';
 import { NativeTextField } from '../../../packages/ui/native/native-elements/text-field';
@@ -46,7 +46,7 @@ registerElement('TabStripItem', () => TabStripItem);
 registerElement('TabContentItem', () => TabContentItem);
 installDrawer();
 installBottomSheet();
-installTouchFeedback();
+installSelectionHaptics();
 
 runNativeScriptAngularApp({
   appModuleBootstrap: () =>

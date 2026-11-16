@@ -233,10 +233,8 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 			surface.dismiss('escape');
 		});
 		// A touch the pane does not consume falls through to the backdrop under it, so the pane takes its own taps.
-		pane.ignoreTouchAnimation = true;
 		pane.on('tap', () => undefined);
 		if (backdrop) {
-			backdrop.ignoreTouchAnimation = true;
 			backdrop.on('tap', () => surface.dismiss('backdrop'));
 		}
 		// A full-screen transparent window, so helm's backdrop and content are the only chrome, as on the web. The
@@ -311,7 +309,6 @@ export class NativeScriptOverlayHost implements BrnDialogHost, BrnOverlayHost {
 		const insets = systemBarInsets(drawer);
 		this._renderer.setStyle(pane, 'paddingTop', `${insets.top}px`);
 		if (side !== 'top') this._renderer.setStyle(pane, 'paddingBottom', `${insets.bottom}px`);
-		pane.ignoreTouchAnimation = true;
 		pane.on('tap', () => undefined);
 		const backdrop = drawer.backDrop;
 		const onBackdropTap = () => surface.dismiss('backdrop');

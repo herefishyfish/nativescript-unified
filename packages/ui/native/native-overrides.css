@@ -18,6 +18,18 @@ button {
 	display: flex;
 }
 
+/* hlm-dialog, hlm-sheet and the other overlay roots are block boxes around an inline-flex trigger button. MasonKit
+   lays that button out in an inline text run and draws its label up and to the left of its box. A flex box makes the
+   button a flex item, as the web blockifies the host inside a flex column. */
+.style-vega hlm-dialog,
+.style-vega hlm-alert-dialog,
+.style-vega hlm-drawer,
+.style-vega hlm-sheet,
+.style-vega hlm-popover,
+.style-vega hlm-hover-card {
+	display: flex;
+}
+
 /* .spartan-accordion-content data-[state=closed]:h-0: MasonKit keeps a zero-height panel at its content height, and
    without the measured --brn-accordion-content-height there is no height animation to preserve. */
 .style-vega .spartan-accordion-content[data-state='closed'] {

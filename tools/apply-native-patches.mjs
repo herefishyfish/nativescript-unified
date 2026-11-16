@@ -1,4 +1,4 @@
-// Applies the NativeScript fixes in tools/native-patches (tailwind, core, angular, vite, masonkit, ui-core-tabs) to
+// Applies the NativeScript fixes in tools/native-patches (tailwind, core, angular, vite, masonkit, ui-core-tabs, ui-menu) to
 // node_modules. Each file is named for the version it was made against. Every hunk is applied on its own: skipped
 // when it is already in place, applied whitespace-insensitively, or with fuzz if the installed version drifted. The
 // outcome and the patch's hash are recorded in a marker file, so the script is idempotent and an edited patch file
@@ -19,6 +19,7 @@ const packages = {
   '@nativescript__vite': '@nativescript/vite',
   '@triniwiz__nativescript-masonkit': '@triniwiz/nativescript-masonkit',
   '@nativescript-community__ui-core-tabs': '@nativescript-community/ui-core-tabs',
+  '@nativescript-community__ui-menu': '@nativescript-community/ui-menu',
 };
 const gitPatch = ['C:/Program Files/Git/usr/bin/patch.exe', 'patch'].find((p) => p === 'patch' || existsSync(p));
 const scratch = mkdtempSync(join(tmpdir(), 'ns-unified-patches-'));

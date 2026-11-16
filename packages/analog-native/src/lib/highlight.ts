@@ -1,7 +1,4 @@
-/// <reference path="./prism-core.d.ts" />
-// Prism's core alone, not the `prismjs` bundle: the bundle adds the file-highlight plugin. With no
-// `window` (NativeScript, Node) the core skips its auto-highlight and never touches `document`.
-import Prism from 'prismjs/components/prism-core';
+import Prism from './prism';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-clike';

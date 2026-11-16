@@ -48,8 +48,22 @@ function nativeHelm(): Plugin {
   };
 }
 
+/**
+ * @nativescript/vite puts every other node_modules file in vendor.mjs, which evaluates before the app's code. Prism's
+ * language files read a global `Prism` that analog-native's prism.ts sets up, so prismjs stays in the main bundle,
+ * where the files run in import order.
+ */
+function keepPrismInMainBundle(config: UserConfig): UserConfig {
+  const output = config.build?.rolldownOptions?.output;
+  const chunks = output && !Array.isArray(output) ? output.manualChunks : undefined;
+  if (typeof chunks === 'function') {
+    output.manualChunks = (id, meta) => (/[\\/]node_modules[\\/]prismjs[\\/]/.test(id) ? undefined : chunks(id, meta));
+  }
+  return config;
+}
+
 export default defineConfig(({ mode }): UserConfig =>
-  mergeConfig(angularConfig({ mode }), {
+  mergeConfig(keepPrismInMainBundle(angularConfig({ mode })), {
     resolve: {
       // Shared packages live outside this app; their bare imports must reach this app's (patched) copies.
       dedupe: ['@nativescript/angular', '@nativescript/core', '@triniwiz/nativescript-masonkit'],

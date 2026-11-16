@@ -4,3 +4,15 @@
 @import './tokens.css';
 @import './ns-polyfill.css';
 @source '../helm';
+/* ng-icon's component style puts display: inline-block on its host. Component styles are unlayered, so they beat every
+   Tailwind display utility on an <ng-icon> (hidden, flex, inline): helm's accordion drew both of its chevrons, and a
+   breadcrumb separator's icon ignored [&>ng-icon]:flex. The host's display goes back to the layers, where the default
+   sits in base and a utility overrides it. `:root ng-icon` outranks the component's [_nghost-*] selector. */
+:root ng-icon {
+	display: revert-layer;
+}
+@layer base {
+	ng-icon {
+		display: inline-block;
+	}
+}

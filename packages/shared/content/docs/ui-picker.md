@@ -7,7 +7,7 @@ description: A form field that opens a searchable list of options, for one value
 
 # Picker
 
-`hlm-picker` is a form field styled like the select trigger. A tap opens a list with a search field, so it suits long lists that a select or a dropdown would make the user scroll through. Give it a `title`, which heads the list, and `options`, each a `value` and a `label`.
+`hlm-picker` is a form field styled like the select trigger. It opens a list with a search field, so it suits long lists that a select or a dropdown would make the user scroll through. Give it a `title`, which heads the list, and `options`, each a `value` and a `label`.
 
 ```html live
 <div class="flex max-w-sm flex-col gap-2">
@@ -54,7 +54,7 @@ One choice closes the list. The list moves the selected options to the top when 
 
 ## Several values
 
-With `multiple`, a tap toggles an option, and Done saves the choice. The value is an array, and the field lists the labels.
+With `multiple`, choosing an option toggles it. On the web each toggle applies at once, as in a select; in the native app, Done saves the choice. The value is an array, and the field lists the labels.
 
 ```html live
 <div class="flex max-w-sm flex-col gap-2">
@@ -111,6 +111,6 @@ With `allowAdd`, the list ends in an "Add new" button. It asks for a name, start
 
 `valueChange` emits the new value, and `added` emits the name typed into the "Add new" form.
 
-On the web, the list opens in a dialog. In the native app, it opens full screen with `ModalDialogService`, and the Android back button cancels it. Both show the same helm markup.
+On the web, the list drops down from the field like a select. Focus moves to the search line, the arrow keys move the highlight, Enter chooses, and Escape or a click outside closes the list. ArrowDown on the field opens it. In the native app, the list opens full screen with `ModalDialogService`, with a title row and Cancel, and the Android back button cancels it.
 
-`HlmPickerHost` decides how the list opens. Its web default uses `HlmDialogService`. `provideSpartanNativeScript()` replaces it with `NativeScriptPickerHost` (`packages/ui/native/ui/picker-host.ts`). To open the list another way, provide your own `HlmPickerHost` at the root.
+`HlmPickerHost` decides how the list opens. Its web default, `HlmPickerDropdownHost`, anchors the list to the field with `BrnOverlayService`. `provideSpartanNativeScript()` replaces it with `NativeScriptPickerHost` (`packages/ui/native/ui/picker-host.ts`). To open the list another way, provide your own `HlmPickerHost` at the root.

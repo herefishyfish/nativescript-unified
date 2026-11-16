@@ -20,6 +20,10 @@
     <color name="ns_foreground">#10302f</color>
     <color name="ns_muted_foreground">#46605c</color>
 
+    <!-- The Tideline mark on the splash screen (drawable/logo.xml). -->
+    <color name="tideline_primary">#27695f</color>
+    <color name="tideline_deep">#1b4a44</color>
+
     <!-- this is unused in the default themes, so we might want to remove it? -->
     <!-- <color name="ns_blue">#272734</color> -->
 </resources>

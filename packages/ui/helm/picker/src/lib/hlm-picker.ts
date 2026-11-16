@@ -8,6 +8,7 @@ import {
 	input,
 	linkedSignal,
 	output,
+	signal,
 	ViewContainerRef,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -42,8 +43,10 @@ export type HlmPickerValue = string | readonly string[] | null;
 			[disabled]="_disabled()"
 			[attr.data-placeholder]="_label() ? null : ''"
 			[attr.aria-label]="title()"
-			aria-haspopup="dialog"
+			aria-haspopup="listbox"
+			[attr.aria-expanded]="_open()"
 			(click)="open()"
+			(keydown)="_openOnArrow($event)"
 		>
 			<span class="line-clamp-1 flex-1 text-left">{{ _label() || placeholder() }}</span>
 			<ng-icon name="lucideChevronDown" class="spartan-select-trigger-icon" aria-hidden="true" />
@@ -73,7 +76,7 @@ export class HlmPicker implements ControlValueAccessor {
 	/** The current value, as `#picker.value()` reads it. */
 	public readonly value = linkedSignal(this.valueInput);
 	protected readonly _disabled = linkedSignal(this.disabled);
-	private _open = false;
+	protected readonly _open = signal(false);
 	private _onChange?: (value: HlmPickerValue) => void;
 	private _onTouched?: () => void;
 
@@ -93,8 +96,8 @@ export class HlmPicker implements ControlValueAccessor {
 	);
 
 	public open(): void {
-		if (this._disabled() || this._open) return;
-		this._open = true;
+		if (this._disabled() || this._open()) return;
+		this._open.set(true);
 		const request: HlmPickerRequest = {
 			title: this.title(),
 			options: this.options(),
@@ -103,12 +106,18 @@ export class HlmPicker implements ControlValueAccessor {
 			allowAdd: this.allowAdd(),
 			preserveOrder: this.preserveOrder(),
 		};
-		void this._host.open(request, this._viewContainerRef).then((result) => {
-			this._open = false;
+		void this._host.open(request, this._viewContainerRef, (values) => this._select(values)).then((result) => {
+			this._open.set(false);
 			this._onTouched?.();
 			if (result?.kind === 'added') this.added.emit(result.name);
 			if (result?.kind === 'selected') this._select(result.values);
 		});
+	}
+
+	protected _openOnArrow(event: KeyboardEvent): void {
+		if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+		event.preventDefault();
+		this.open();
 	}
 
 	private _select(values: readonly string[]): void {

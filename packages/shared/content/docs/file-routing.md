@@ -2,12 +2,14 @@
 title: File-based routing
 section: Routing and content
 order: 15
-description: One pages/ convention on web and native.
+description: An optional pages/ convention for routes, on web and native.
 ---
 
 # File-based routing
 
-Both apps use the [AnalogJS](https://analogjs.org/docs/features/routing/overview) file conventions. A page is a file in `src/app/pages` named `*.page.ts` whose default export is a component.
+Routing is Angular's router on both platforms. File-based routing builds its route table from files, and it is optional. Both apps in this workspace use it, but an app can pass its own `Routes` array instead, or keep one it already has. See [Without file-based routing](#without-file-based-routing).
+
+The conventions are [AnalogJS](https://analogjs.org/docs/features/routing/overview)'s. A page is a file in `src/app/pages` named `*.page.ts` whose default export is a component.
 
 | File | Route |
 | --- | --- |
@@ -48,8 +50,45 @@ Differences you should know about:
 - `analog-native` also accepts `.md` files in `pages/` as Markdown routes.
 - Optional catch-all routes (`[[...slug]]`) and Analog server features (`.server.ts`, `load`) are not supported on native.
 - A routed page that shows an `<ActionBar>` imports `ActionBarComponent` from `@nativescript/angular`, or the bar keeps the app name.
-- Navigating between child routes of a layout does not add a back-stack entry on native.
+- Navigating between child routes of a layout does not add a back-stack entry on native. See [Navigation](/docs/navigation).
 - Front matter parsing and Markdown lexing happen at build time, so the device bundle contains neither `marked` nor a YAML parser.
 - Links to app paths (`/about`) navigate with the router. Full URLs open in the browser.
 
 Details are in `docs/design.md` at the repository root. To write Markdown routes and content, see [Markdown content on native](/docs/markdown-on-native).
+
+## Without file-based routing
+
+Pass a `Routes` array to the router provider instead of calling `provideFileRouter`. Pages are then ordinary components, and nothing reads `src/app/pages`.
+
+On the web, use Angular's `provideRouter`:
+
+```ts
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(
+      [
+        { path: '', component: HomePage },
+        { path: 'products/:id', component: ProductPage },
+      ],
+      withComponentInputBinding(),
+    ),
+  ],
+};
+```
+
+On native, use `provideNativeScriptRouter` from `@nativescript/angular`. It takes the same arguments and adds the NativeScript location strategy and `RouterExtensions`, which `page-router-outlet` needs:
+
+```ts
+import { provideNativeScriptRouter } from '@nativescript/angular';
+
+runNativeScriptAngularApp({
+  appModuleBootstrap: () =>
+    bootstrapApplication(AppComponent, {
+      providers: [provideNativeScriptRouter(routes)],
+    }),
+});
+```
+
+Both providers take Angular's `Routes`, so the two apps can share one route list from a shared package if their pages match. Markdown routes and the `.md` page files are a feature of `analog-native`'s `provideFileRouter`. Without it, render Markdown with the `analog-markdown` component from [Markdown content on native](/docs/markdown-on-native).

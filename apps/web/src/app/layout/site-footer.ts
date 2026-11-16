@@ -57,6 +57,7 @@ export class SiteFooter {
         { label: 'Components', href: '/docs/components' },
         { label: 'Theming', href: '/docs/theming' },
         { label: 'File-based routing', href: '/docs/file-routing' },
+        { label: 'Navigation', href: '/docs/navigation' },
       ],
     },
     {

@@ -7,7 +7,7 @@ description: Spartan helm components with live examples, and how each one runs o
 
 # Components
 
-These pages show the [Spartan](https://spartan.ng) **helm** components that live in `packages/ui/helm`. They are the way to build new UI in this project: plain HTML elements and attributes, styled with Tailwind classes and the shared theme tokens.
+These pages show the [Spartan](https://spartan.ng) **helm** components that live in `packages/ui/helm`. Build new UI with them. They are plain HTML elements and attributes, styled with Tailwind classes and the shared theme tokens.
 
 Every example is a real Angular template. The code in the Code tab is the code that renders in the Preview tab, compiled at run time against the helm components in this workspace. That happens in your browser on the web, and on the device in the native app.
 
@@ -63,7 +63,7 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Button](/docs/ui-button) | Works | A link styled as a button navigates. |
 | [Badge](/docs/ui-badge) | Works | |
 | [Card](/docs/ui-card) | Works | Ring and shadow are drawn. |
-| [Form controls](/docs/ui-form-controls) | Works | A radio's text does not select it, on the web either, because the demo does not wrap it in a `label`. |
+| [Form controls](/docs/ui-form-controls) | Works | |
 | [Tabs](/docs/ui-tabs) | Works | |
 | [Accordion](/docs/ui-accordion) | Works | |
 | [Dialog](/docs/ui-dialog) | Works | Opens as the platform's dialog. See [Native elements](/docs/native-elements#dialogs). |
@@ -85,11 +85,11 @@ The native app renders these pages too, and compiles each demo on the device aga
 | [Separator, avatar, skeleton](/docs/ui-feedback) | Works | |
 | [Progress](/docs/ui-feedback) | Partial | The indicator is sized but its fill is not painted. |
 
-The pages under NativeScript views are web polyfills of NativeScript's own views. On a device those tags are NativeScript's real views, and several demos there render differently or not at all (see `docs/native-parity-log.md` in the repository). Most of the remaining gaps come from a few causes that affect every component. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
+The pages under NativeScript views are web polyfills of NativeScript's own views. On a device those tags are NativeScript's real views, so their demos can look different there, and a demo written in markup only the polyfills understand shows its code only. A few causes affect every component on native. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
 
 ## More in the workspace
 
-`packages/ui/helm` holds further components, for example `carousel`, `chart`, `command`, `combobox`, `context-menu`, `date-picker`, `menubar` and `sidebar`. They have no page here yet. Pages are added only for components that have been rendered in this workspace. The `chart` component is used by the Charts and Chart gallery [examples](/docs/shared-features#larger-examples).
+`packages/ui/helm` holds more components than these pages cover, for example `carousel`, `chart`, `command`, `combobox`, `context-menu`, `date-picker`, `menubar` and `sidebar`. The [Spartan docs](https://spartan.ng) describe them. The Charts and Chart gallery [examples](/docs/shared-features#larger-examples) use `chart`.
 
 ## Imports in your own code
 

@@ -2,7 +2,7 @@
 title: FAQ
 section: Getting started
 order: 5
-description: Short answers, each checked against the workspace.
+description: Short answers to common questions about the workspace.
 ---
 
 # FAQ
@@ -17,7 +17,7 @@ Web and native run on different form factors and handle flows and interactions d
 
 ## Why not use the AnalogJS packages on native?
 
-According to `docs/design.md`: the AnalogJS router calls plain `provideRouter`, so it misses the NativeScript location strategy and `RouterExtensions`. AnalogJS content renders to an HTML string that a native view cannot show. And adding `@analogjs/platform` would register the Angular compiler twice and pull in Nitro and SSR. Native keeps Analog's file conventions with its own implementation.
+The AnalogJS router calls plain `provideRouter`, so it misses the NativeScript location strategy and `RouterExtensions`. AnalogJS content renders to an HTML string that a native view cannot show. And adding `@analogjs/platform` would register the Angular compiler twice and pull in Nitro and SSR. Native keeps Analog's file conventions with its own implementation.
 
 ## Can I write `<StackLayout>` on the web?
 

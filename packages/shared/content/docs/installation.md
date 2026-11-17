@@ -7,7 +7,7 @@ description: Install the workspace, run the web docs, and run the native app on 
 
 # Installation
 
-nativescript-unified is an Nx workspace. Everything below comes from the root `package.json` and the `project.json` file of each app.
+nativescript-unified is an Nx workspace. Run the commands below from its root.
 
 ## Requirements
 
@@ -39,11 +39,11 @@ Each push to `main` deploys the site to GitHub Pages through `.github/workflows/
 npx nx run native:android
 ```
 
-This runs `ns run android --no-hmr` with the `arm64-v8a` and `x86_64` ABIs. It builds the app and runs it on an Android emulator or device. The other native targets are `debug-android`, `build-android` and `clean`.
+This runs `ns run android --no-hmr` with the `arm64-v8a` and `x86_64` ABIs. It builds the app and runs it on an Android emulator or device. The other native targets are `ios`, `debug-android`, `build-android` and `clean`.
 
 If you call `ns` yourself from PowerShell, quote the Gradle argument: `ns build android '--gradleArgs=-Pabis=arm64-v8a,x86_64'`. Without the quotes, PowerShell splits the value at the comma, and the APK ships without its native libraries. On Windows, a `before-prepare` hook (`apps/native/tools/gradle-env.mjs`) clears `NoDefaultCurrentDirectoryInExePath` so the CLI can run `gradlew.bat`.
 
-For iOS, run `ns run ios` from `apps/native` on a Mac with Xcode. There is no `native:ios` Nx target in `apps/native/project.json` yet, so the root `ios` script, which names one, does not work.
+For iOS, run `npx nx run native:ios` on a Mac with Xcode. It runs `ns run ios --no-hmr`.
 
 ## Check your work
 

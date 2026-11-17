@@ -11,11 +11,11 @@ The bar across the top of a screen, the tabs along the bottom and the drawer at 
 
 ## On a device
 
-| View | Comes from | In this app |
+| View | Comes from | In the native app |
 | --- | --- | --- |
 | `ActionBar`, `NavigationButton`, `ActionItem` | `@nativescript/core`, through `ActionBarComponent` from `@nativescript/angular` | Routed pages import `ActionBarComponent` to show their own title |
 | `BottomNavigation` | `@nativescript-community/ui-bottom-navigation` | The home screen's Guide, Components and UI tabs |
-| `Tabs` | `@nativescript-community/ui-tabs` | Registered, not used on a screen yet |
+| `Tabs` | `@nativescript-community/ui-tabs` | Registered, not used on a screen |
 | `Drawer` | `@nativescript-community/ui-drawer` | Wraps the app in `app.component.ts`. Side sheets open in it. |
 | `Pager` | A plugin such as `@nativescript-community/ui-pager` | Not installed |
 
@@ -102,4 +102,4 @@ On `ios`, `Tabs` becomes a bottom bar and `Pager` shows only dots. On `material`
 
 ## Inside a page
 
-For tabs inside a page, use helm [Tabs](/docs/ui-tabs). For a side panel, use the [Sheet](/docs/ui-sheet), and for a bottom panel, the [Drawer](/docs/ui-drawer). The workspace also has helm `sidebar` and `navigation-menu` folders in `packages/ui/helm`, which have no pages here yet. The web app builds its own app-level navigation, such as this site's header and sidebar. See [Web vs native](/docs/web-vs-native).
+For tabs inside a page, use helm [Tabs](/docs/ui-tabs). For a side panel, use the [Sheet](/docs/ui-sheet), and for a bottom panel, the [Drawer](/docs/ui-drawer). `packages/ui/helm` also has `sidebar` and `navigation-menu`, which these pages do not cover. The web app builds its own app-level navigation, such as this site's header and sidebar. See [Web vs native](/docs/web-vs-native).

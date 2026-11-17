@@ -11,6 +11,12 @@
         "cwd": "apps/native"
       }
     },
+    "ios": {
+      "command": "ns run ios --no-hmr",
+      "options": {
+        "cwd": "apps/native"
+      }
+    },
     "debug-android": {
       "command": "ns debug android --no-hmr --gradleArgs=-Pabis=arm64-v8a,x86_64",
       "options": {

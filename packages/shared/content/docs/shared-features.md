@@ -31,7 +31,7 @@ Its data comes from `packages/shared/src/lib/content.ts`, which is plain TypeScr
 - Use plain HTML elements (`div`, `p`, `h1` to `h6`, `ul`, `li`, `a`, `span`, `img`) and Spartan helm components.
 - Import nothing from `@analogjs/*` or `@nativescript/*` in `packages/shared`. Those belong to an app.
 - Style with the token classes (`bg-background`, `text-foreground`, `bg-card`, `text-muted-foreground`). The tokens come from `packages/ui/styles/tokens.css`.
-- Put loose text that sits beside elements inside `@for` or `@if` in a `<span>`. MasonKit places dynamically inserted text nodes after their element siblings, according to `analog-native`'s README.
+- Put loose text that sits beside elements inside `@for` or `@if` in a `<span>`. MasonKit places dynamically inserted text nodes after their element siblings.
 - Prefer Tailwind classes for lengths. In a stylesheet, remember that `px` is a CSS pixel on MasonKit elements but a device pixel on core NativeScript views such as `Label` or `ActionBar`. The example stylesheets keep lengths out of CSS for that reason and hold only colours, gradients and weights.
 - Prefer `OnPush` and signals. Both apps run zoneless.
 
@@ -56,8 +56,8 @@ On web, import the component in a page and use its selector. On native, do the s
 
 ## Larger examples
 
-`packages/shared/src/lib/examples` holds twelve full screens built the same way: pricing, checkout, profile, analytics, settings, events, ratings, sign in, music player, article and two chart screens. Each is one component plus one stylesheet that sets its own palette (see [Scoped palettes](/docs/theming#scoped-palettes)). The [home page](/) of this site renders them live, and the native app opens them from its UI tab with Code and Styles tabs beside the preview.
+`packages/shared/src/lib/examples` holds thirteen full screens built the same way: pricing, checkout, profile, analytics, settings, events, ratings, sign in, music player, article, two chart screens and a sprint board that opens each kind of overlay. Each is one component plus one stylesheet that sets its own palette (see [Scoped palettes](/docs/theming#scoped-palettes)). The [home page](/) of this site renders them live, and the native app opens them from its UI tab with Code and Styles tabs beside the preview.
 
 ## Tailwind on native
 
-`apps/native` lists `@nativescript/tailwind` and `tailwindcss`. Its `app.css` imports Tailwind and the shared tokens, and scans `packages/shared/src` for class names, so the same classes style native. Two gaps remain. Opacity-modified token colours such as `bg-destructive/10` keep the plain light token colour, and helm's own rules can override a utility you put on a helm host. See [Known native limitations](/docs/web-vs-native#known-native-limitations).
+`apps/native` runs `tailwindcss` through `@nativescript/tailwind`. Its `app.css` imports Tailwind and the shared tokens, and scans `packages/shared/src` for class names, so the same classes style native. Two cases differ from the web. Opacity-modified token colours such as `bg-destructive/10` keep the plain light token colour, and helm's own rules can override a utility you put on a helm host. See [Known native limitations](/docs/web-vs-native#known-native-limitations).

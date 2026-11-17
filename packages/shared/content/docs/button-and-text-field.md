@@ -16,7 +16,7 @@ The `web-polyfills` package has **no** `<Button>` or `<TextField>` component. Th
 
 In an HTML-first app you use the HTML elements for those two, styled with Spartan helm. See the HTML-first equivalent below.
 
-On a device, MasonKit renders `<button>` and `<input>` as native views. Taps fire `(click)`, and the input takes typed text. [Native status](/docs/components#native-status) lists the remaining gaps.
+On a device, `<button>` and `<input>` are native views. Taps fire `(click)`, and the input takes typed text. [Native status](/docs/components#native-status) lists the remaining gaps.
 
 ## HtmlView and ContentView
 

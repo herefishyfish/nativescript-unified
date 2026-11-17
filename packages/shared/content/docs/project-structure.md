@@ -19,10 +19,7 @@ packages/
 tools/                 postinstall patches, the web audit and the contrast checker
 docs/
   design.md            analog-native design notes
-  native-parity-log.md where the native app still differs from these docs
 ```
-
-`docs/design.md` calls the router package `@nativescript/analog`. In this workspace it is `@nativescript-unified/analog-native`.
 
 ## apps/web
 
@@ -37,7 +34,7 @@ A NativeScript Angular app built with `@nativescript/vite`. File routes live in 
 Everything both apps render:
 
 - `src/lib/home`: a small shared feature, `HomeFeature`, with its data in `src/lib/content.ts`.
-- `src/lib/examples`: twelve example screens (pricing, checkout, analytics, music player and more). Each one is HTML, Tailwind and helm with its own palette. The home page of this site shows them live, and so does the native app's UI tab.
+- `src/lib/examples`: thirteen example screens (pricing, checkout, analytics, music player, overlays and more). Each one is HTML, Tailwind and helm with its own palette. The home page of this site shows them live, and so does the native app's UI tab.
 - `content/docs`: the Markdown for these docs.
 
 Templates use plain HTML elements, Tailwind classes and helm only, with no platform imports. See [Writing shared HTML features](/docs/shared-features).

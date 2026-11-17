@@ -7,7 +7,7 @@ description: Write pages with plain HTML, CSS flex and grid, Tailwind classes an
 
 # HTML first
 
-New UI in this project is plain HTML. A page is a template made of ordinary elements. Layout is CSS flex and grid, styling is Tailwind classes that read the shared theme tokens, and richer pieces are Spartan helm components.
+HTML first means new UI is plain HTML. A page is a template made of ordinary elements. Layout is CSS flex and grid, styling is Tailwind classes that read the shared theme tokens, and richer pieces are Spartan helm components.
 
 ```html live
 <section hlmCard class="max-w-md">

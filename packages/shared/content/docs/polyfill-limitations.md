@@ -2,7 +2,7 @@
 title: Polyfill limitations
 section: NativeScript views
 order: 56
-description: What web-polyfills does not do, taken from its source.
+description: What web-polyfills does not do.
 ---
 
 # Polyfill limitations
@@ -10,7 +10,7 @@ description: What web-polyfills does not do, taken from its source.
 > [!NOTE]
 > **A NativeScript view.** These are the limits of the web polyfills for NativeScript tags. They do not apply to HTML-first code. See [NativeScript views](/docs/nativescript-views).
 
-`packages/web-polyfills` exists so NativeScript markup renders in a browser. It is a fallback, not a port of NativeScript. These limits come from reading its source.
+`packages/web-polyfills` exists so NativeScript markup renders in a browser. It is a fallback, not a port of NativeScript.
 
 ## Not custom elements
 
@@ -21,7 +21,7 @@ You must import the component where you use the tag. `NS_ELEMENTS` is a map from
 ## Tags that do not exist
 
 - `Button` and `TextField`. See [Button and TextField](/docs/button-and-text-field).
-- `Page` and `Frame`. The source says they are not registered.
+- `Page` and `Frame`, which are not registered.
 - Anything not in the `NS_ELEMENTS` map.
 
 `ns-tab`, `ns-page` and `ns-segmented-bar-item` are plain child elements that their parent reads. They are not components.

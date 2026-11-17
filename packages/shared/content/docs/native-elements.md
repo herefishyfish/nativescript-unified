@@ -85,7 +85,7 @@ Install the package for each widget you use. The last column is the core view fo
 npm install @nativescript-community/ui-textfield @nativescript-community/ui-textview @nativescript-community/ui-switch @nativescript-community/ui-checkbox @nativescript-community/ui-slider @nativescript-community/ui-dialogs -w apps/native
 ```
 
-The Android widgets use Material 3. This app's theme already extends `Theme.Material3.DayNight.NoActionBar`.
+The Android widgets use Material 3, so the app's theme must extend a Material 3 theme. The native app's theme extends `Theme.Material3.DayNight.NoActionBar`.
 
 ## HTML tags
 
@@ -118,7 +118,7 @@ import { NativeButton } from '../../../packages/ui/native/native-elements/button
 registerNativeElements({ input: NativeTextField, textarea: NativeTextView, button: NativeButton });
 ```
 
-It draws text only, so an `ng-icon` or other element inside the button does not show. In a test on the docs' drawer demo, the drawer's button did not render at all. This app does not map `button`.
+It draws text only, so an `ng-icon` or other element inside the button does not show, and inside a drawer it does not render. The native app leaves `button` to MasonKit.
 
 ### Your own views
 

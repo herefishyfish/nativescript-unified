@@ -30,6 +30,25 @@ npx nx run native:android         # needs the NativeScript CLI + Android SDK
 cd apps/native && ns run ios      # needs a Mac with Xcode (no native:ios Nx target yet)
 ```
 
+## Blank app template
+
+The `blank` branch is a ready-to-run app without the docs site and the demos. Start an app from it:
+
+```
+git clone -b blank --single-branch --origin template https://github.com/herefishyfish/nativescript-unified.git my-app
+```
+
+In the app, `npm run update:template` merges the latest template.
+
+The branch is generated, so never commit to it. `tools/blank-template.mjs` copies the files listed in its `COPY` from
+this repo, drops the lines between `template:demo` and `template:end` comments, and lays `templates/blank` on top.
+`.github/workflows/blank-template.yml` generates and checks the app on every pull request, and publishes it on each push
+to `main`. To generate it locally, run `npm run template:blank -- ../blank`.
+
+- Put demo-only code in a file that `COPY` copies between `template:demo` and `template:end`.
+- Add new app-level files that a blank app needs to `COPY`. Files under `packages/ui`, `packages/analog-native` and
+  `packages/web-polyfills` are copied already.
+
 ## Theme
 
 `packages/ui/styles/tokens.css` is the single source of colour tokens (shadcn-style names, plain hex): background

@@ -1,17 +1,31 @@
-import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+// template:demo
+import { readdirSync } from 'node:fs';
 import { docsPlugin, highlightPlugin } from './tools/docs-plugin.ts';
+// template:end
 
+// template:demo
 const docsDir = resolve(import.meta.dirname, '../../packages/shared/content/docs');
 
 /** Every Markdown file in packages/shared/content/docs becomes a prerendered /docs/:slug route. */
 const docSlugs = readdirSync(docsDir)
   .filter((file) => file.endsWith('.md'))
   .map((file) => file.replace(/\.md$/, ''));
+// template:end
+
+/** Routes prerendered to static HTML and listed in sitemap.xml. */
+const siteRoutes = [
+  '/',
+  // template:demo
+  ...docSlugs.map((slug) => `/docs/${slug}`),
+  // template:end
+];
+
 
 const siteUrl = (process.env.VITE_SITE_URL || 'https://nativescript-unified.example').replace(/\/+$/, '');
 
@@ -37,18 +51,20 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     // Angular's router resolves routes and routerLinks against <base href>, so it follows `base`.
     { name: 'base-href', transformIndexHtml: (html: string) => html.replace('<base href="/" />', `<base href="${base}" />`) },
+    // template:demo
     docsPlugin(docsDir),
     highlightPlugin(),
+    // template:end
     analog({
       ssr: true,
       static: true,
       prerender: {
-        routes: ['/', '/404', ...docSlugs.map((slug) => `/docs/${slug}`)],
+        routes: [...siteRoutes, '/404'],
         // Static hosts serve /404.html for unknown URLs. The catch-all route is prerendered at /404, so copy it there.
         postRenderingHooks: [
           async (page) => {
             if (page.route !== '/404' || !page.contents) return;
-            writeSeoFiles(['/', ...docSlugs.map((slug) => `/docs/${slug}`)]);
+            writeSeoFiles(siteRoutes);
             const out = resolve(import.meta.dirname, '../../dist/apps/web/analog/public/404.html');
             mkdirSync(dirname(out), { recursive: true });
             writeFileSync(out, page.contents);

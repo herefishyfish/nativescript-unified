@@ -20,6 +20,19 @@ nativescript-unified is an Nx workspace. Run the commands below from its root.
 npm install
 ```
 
+## Start a blank app
+
+The `blank` branch has the web app, the native app and the components, without this docs site and the demos:
+
+```bash
+git clone -b blank --single-branch --origin template https://github.com/herefishyfish/nativescript-unified.git my-app
+cd my-app
+npm install
+npm run web
+```
+
+To merge the latest template into your app, commit your work and run `npm run update:template`.
+
 ## Run the web docs
 
 ```bash

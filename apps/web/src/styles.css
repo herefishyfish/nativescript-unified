@@ -1,10 +1,14 @@
 @import '../../../packages/ui/styles/index.css';
+/* template:demo */
 /* The shared example screens on the home page. Every rule is scoped under .example-<slug> or .example-tile-*. */
 @import '../../../packages/shared/src/lib/examples/examples.css';
+/* template:end */
 @source '../../../packages/shared/src';
 @source '../../../packages/web-polyfills/src';
 @source '.';
+/* template:demo */
 @source '../../../packages/shared/content';
+/* template:end */
 
 @layer base {
   * { border-color: var(--border); }
@@ -27,6 +31,7 @@
   }
 }
 
+/* template:demo */
 :root { --callout-note: var(--primary); --callout-tip: oklch(0.62 0.14 150); --callout-warning: oklch(0.72 0.15 75); }
 
 /* Prose rules skip live demos (.docs-demo-preview), which show components as an app would, without the docs' list,
@@ -154,6 +159,8 @@ a.home-store-link:hover { opacity: 0.85; }
 /* Platform status. */
 .home-status { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 2rem; height: 2rem; border: 1px dashed var(--border); border-radius: 999px; color: var(--muted-foreground); }
 .home-status-done { border: 0; background: color-mix(in oklab, var(--primary) 14%, var(--card)); color: var(--primary); }
+/* template:end */
+
 /* Themed scrollbars. Thumb/track come from the cream/teal tokens; thumb is >= 3:1 against background, card, sidebar, muted and popover (see tools/contrast.mjs).
    `scrollbar-color` inherits, so it also reaches scrollers inside the polyfills' shadow roots; their `scrollbar-width` is set in the polyfill styles. */
 :root { --scrollbar-thumb: #7d7157; --scrollbar-thumb-hover: var(--primary); --scrollbar-track: transparent; --scrollbar-size: 0.6rem; }

@@ -10,10 +10,15 @@ import { bootstrapApplication, registerElement, runNativeScriptAngularApp } from
 import { BottomNavigation } from '@nativescript-community/ui-bottom-navigation';
 import { TabContentItem, TabStrip, TabStripItem } from '@nativescript-community/ui-core-tabs';
 import { Tabs } from '@nativescript-community/ui-tabs';
-import { provideFileRouter, provideMarkdownLiveCode } from '@nativescript-unified/analog-native';
+import { provideFileRouter } from '@nativescript-unified/analog-native';
+// template:demo
+import { provideMarkdownLiveCode } from '@nativescript-unified/analog-native';
+// template:end
 import { installMasonKit } from '@triniwiz/nativescript-masonkit/angular';
 import { AppComponent } from './app/app.component';
+// template:demo
 import { NsLiveDemo } from './app/markdown/live-demo';
+// template:end
 import { provideSpartanNativeScript, registerSpartanNativeElements } from '../../../packages/ui/native/spartan-native';
 import { registerCommaSeparatedItems, registerCoreElementAliases } from '../../../packages/ui/native/core-elements';
 import { installSelectionHaptics } from '../../../packages/ui/native/selection-haptics';
@@ -31,7 +36,12 @@ installMasonKit({
   componentHosts: {
     // Page roots and hosts whose template is a fill-parent `<scroll>` stay transparent, so the
     // scroller is measured by the Page or tab instead of growing with its content.
-    passthrough: [/-page$/, /^(demo-code-tabs|ui-demo|ui-demo-body|guide-list)$/],
+    passthrough: [
+      /-page$/,
+      // template:demo
+      /^(demo-code-tabs|ui-demo|ui-demo-body|guide-list)$/,
+      // template:end
+    ],
   },
 });
 registerSpartanNativeElements();
@@ -56,7 +66,9 @@ runNativeScriptAngularApp({
         provideFileRouter(),
         provideZonelessChangeDetection(),
         provideSpartanNativeScript(),
+        // template:demo
         provideMarkdownLiveCode(NsLiveDemo),
+        // template:end
       ],
     }),
 });

@@ -12,6 +12,7 @@
     "build:web": "nx build web",
     "preview:web": "nx run web:preview",
     "audit:web": "node tools/audit-web.mjs",
+    "template:blank": "node tools/blank-template.mjs",
     "android": "nx run native:android",
     "ios": "nx run native:ios",
     "test": "nx run-many -t test",

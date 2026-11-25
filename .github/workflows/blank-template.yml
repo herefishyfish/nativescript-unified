@@ -1,0 +1,72 @@
+name: Blank app template
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Publishing runs one at a time, so each commit lands on top of the last.
+concurrency:
+  group: blank-template-${{ github.ref }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: node tools/blank-template.mjs "$RUNNER_TEMP/blank"
+
+      # As a separate repository, which is what an app is. The postinstall patches go through `git apply`.
+      - name: Install and check the generated app
+        run: |
+          cd "$RUNNER_TEMP/blank"
+          git init -q
+          npm ci
+          npm run typecheck
+          npm test
+          npm run build:web
+
+  publish:
+    needs: check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # Commits on top of the published branch and never rewrites it, because apps merge from its history.
+      - name: Publish the blank branch
+        run: |
+          out="$RUNNER_TEMP/blank"
+          if git ls-remote --exit-code origin refs/heads/blank; then
+            git fetch origin blank
+            git worktree add -B blank "$out" FETCH_HEAD
+            git -C "$out" rm -rfq .
+          else
+            git worktree add --orphan -b blank "$out"
+          fi
+          node tools/blank-template.mjs "$out"
+          cd "$out"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "The template did not change."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qm "Update from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+          git push origin blank

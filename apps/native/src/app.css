@@ -5,16 +5,20 @@
 @import '../../../packages/ui/styles/tokens.css';
 @import '../../../packages/ui/native/native-overrides.css';
 @import '@nativescript-unified/analog-native/markdown.css';
+/* template:demo */
 @import '../../../packages/shared/src/lib/examples/examples.css';
+/* template:end */
 
 /* Tailwind only scans the app by default; the shared HTML and helm variant functions carry classes too. */
 @source '../../../packages/shared/src';
 @source '../../../packages/analog-native/src';
 @source '../../../packages/ui/helm';
 @source '../../../packages/ui/native';
+/* template:demo */
 /* The docs' live demos are templates in Markdown; without this, classes only they use (bg-primary on a div,
    grid-cols-[80px_1fr], w-[90px]) are never generated. */
 @source '../../../packages/shared/content';
+/* template:end */
 
 /* NativeScript stamps ns-dark on the root view instead of the web's .dark. */
 @custom-variant dark (&:is(.ns-dark *));
@@ -50,11 +54,13 @@ ActionBar {
   background-color: var(--card);
 }
 
+/* template:demo */
 /* Fill the page. A content-sized tab shell clips the Guide list and nothing can scroll it. */
 .main-tabs,
 .demo-code-tabs {
   height: 100%;
 }
+/* template:end */
 
 /*
  * `<scroll>` content-sizes, so the page or tab clips everything below the fold and nothing scrolls.
@@ -66,12 +72,14 @@ Scroll {
   min-height: 0;
 }
 
+/* template:demo */
 guide-list,
 ui-demo-body {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
+/* template:end */
 
 /* Plain-HTML pages from the analog-native demo, now on theme tokens. */
 .page {
@@ -81,17 +89,20 @@ ui-demo-body {
   padding: 16;
 }
 
+/* template:demo */
 nav {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 16;
 }
+/* template:end */
 
 a {
   color: var(--primary);
 }
 
+/* template:demo */
 .card {
   display: flex;
   flex-direction: column;
@@ -110,6 +121,7 @@ a {
   padding: 12 16;
   background-color: var(--secondary);
 }
+/* template:end */
 
 .page h1,
 .page h2,
@@ -199,6 +211,7 @@ a {
   border-color: var(--border);
 }
 
+/* template:demo */
 /* Live docs demos (ns-live-demo, apps/native/src/app/markdown/live-demo.ts) on theme tokens.
    Plain MasonKit elements: the material Tabs ViewPager does not render inside the markdown scroll container. */
 .live-demo {
@@ -249,6 +262,7 @@ a {
   margin: 0;
   padding: 12 16;
 }
+/* template:end */
 
 /*
  * Code token colors on theme tokens, the web docs' mapping (apps/web/src/styles.css). Runs are flat
@@ -310,6 +324,7 @@ BottomNavigation {
   background-color: var(--background);
 }
 
+/* template:demo */
 /* Code and Styles tabs (demo-code-tabs): lines keep their breaks and the box scrolls sideways. */
 .source-code {
   overflow-x: auto;
@@ -328,6 +343,7 @@ BottomNavigation {
 .source-code code {
   white-space: pre;
 }
+/* template:end */
 
 .tab-icon {
   width: 24;
@@ -346,7 +362,9 @@ b {
   font-weight: bold;
 }
 
+/* template:demo */
 /* Native-only gallery tile (pages/examples/overlays.page.ts). Shared tiles are styled in packages/shared examples.css. */
 .example-tile-overlays {
   background: linear-gradient(135deg, #1f6f66, #3fa796);
 }
+/* template:end */
